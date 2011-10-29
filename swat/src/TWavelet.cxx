@@ -19,11 +19,7 @@
 
 #include <iostream>
 #include <complex>
-
-// ROOT
-
-#include "TArrayD.h"
-#include "TMath.h"
+#include <vector>
 
 // SWAT
 
@@ -35,7 +31,7 @@
 using namespace std;
 
 //___________________________________________________________________
-void TWavelet::fill_wav(TAlm& alm,Int_t j,Int_t N)
+void TWavelet::fill_wav(TAlm& alm,int j,int N)
 {
     //  Fills alm with wavelet SH defined in:
     //
@@ -48,11 +44,11 @@ void TWavelet::fill_wav(TAlm& alm,Int_t j,Int_t N)
    TSlm Direc(N);
    TDKernel ker(j,alm.GetJmax());
    
-   TArrayD vec = ker.GetKernel();
+   vector<double> vec = ker.GetKernel();
 
-   for(Int_t l = ker.Begin(); l < ker.End(); ++l){
-      Int_t lim = TMath::Min(l,N-1);
-      for (Int_t m = 0; m <= lim; ++m){
+   for(int l = ker.Begin(); l < ker.End(); ++l){
+      int lim = (l < N) ? l: (N - 1);
+      for (int m = 0; m <= lim; ++m){
          alm(l,m) = vec[l]*Direc(l,m);
       }
    }

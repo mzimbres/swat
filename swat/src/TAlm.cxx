@@ -44,7 +44,7 @@ void TAlm::Add(const TAlm& alm)
 {
    // Add alm to this
 
-   for (int i = 0; i < fSize; ++i)
+   for (size_t i = 0; i < fSize; ++i)
       fAlm[i] += alm.fAlm[i];
 }
 
@@ -53,7 +53,7 @@ void TAlm::Conjugate()
 {
    // Conjugates harmonic coefficients
 
-   for (int i = 0; i < fSize; ++i)
+   for (size_t i = 0; i < fSize; ++i)
       fAlm[i] = conj(fAlm[i]);
    
 }
@@ -66,8 +66,8 @@ void TAlm::ScaleL(const vector<double>& d)
    // Multiplies all elements with a given l by d[l]
    // alm(l,m) = d[l]*alm(l,m)
 
-   for (size_t l=0;l < fL;++l)
-      for (size_t m = 0;m <= l; ++m)
+   for (size_t l = 0; l < fL; ++l)
+      for (size_t m = 0 ; m <= l; ++m)
          fAlm[fIndex(l,m)] *= d[l];
 }
 
@@ -78,7 +78,7 @@ void TAlm::Scale(double factor)
    // alm(l,m) = factor*alm(l,m)
 
    for(size_t l = 0; l < fL; ++l)
-      for(size_t m = 0; m <= l;++m)
+      for(size_t m = 0; m <= l; ++m)
          fAlm[fIndex(l,m)] *= factor;
 }
 

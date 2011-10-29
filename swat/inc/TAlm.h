@@ -24,9 +24,9 @@
 
 class TAlm {
    private:
-   int    fJmax;   // Maximum number of Scales.
-   size_t    fL;      // Band limit: l < fL
-   int    fSize;   // Size necessary to store data.
+   int     fJmax;      // Maximum number of Scales.
+   size_t  fL;         // Band limit: l < fL
+   size_t  fSize;      // Size necessary to store data.
    std::vector<std::complex<double> > fAlm;  // Stores real part
    int    fIndex(size_t l,size_t m) const {return ((l*(l+1) >> 1) + m);} // Global index
 

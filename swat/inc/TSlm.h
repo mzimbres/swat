@@ -26,11 +26,11 @@
 
 class TSlm {
    private:
-   Int_t    fN;
+   int    fN;
 
    public:
-   explicit TSlm(Int_t N): fN(N) {}
-   std::complex<Double_t> operator()(Int_t l,Int_t m) const;
+   explicit TSlm(int N): fN(N) {}
+   std::complex<double> operator()(int l,int m) const;
 };
 
 #endif

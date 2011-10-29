@@ -20,19 +20,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
-// ROOT
-
-#include "TMath.h"
-#include "TArrayD.h"
+#include <cmath>
 
 // SWAT
 
-#include "swat.h"
 #include "TSFunc.h"
 #include "TDKernel.h"
 
-using namespace TMath;
+using namespace std;
 
    ///////////////////////////////////////////////////////////
    //                                                       //
@@ -43,48 +38,31 @@ using namespace TMath;
    ///////////////////////////////////////////////////////////
 
 //_________________________________________________________________________
-TDKernel::TDKernel(Int_t j,Int_t J):fScale(j),fJmax(J),
-fBandLim(Power(kAlpha,fJmax)),fBegin(Power(kAlpha,J-fScale-1)),
-fEnd(kAlpha << (J-fScale))
-{
-   // Constructor
-   // j: Will calculate the kernel in this scale 
-   // jmax: Maximum number of scales
-
-   if (fEnd > fBandLim) fEnd = fBandLim;
-
-   if (fScale > fJmax)
-      throw "TDKernel j <= J";
-   
-}
-
-
-//_________________________________________________________________________
-TArrayD TDKernel::GetKernel() const
+std::vector<double> TDKernel::GetKernel() const
 {
    // Returns a vector containing kernel values for all frequencies
    // in the range (0,B) where B is the band limit.
 
    TSFunc sf(fJmax);
 
-   std::vector<Double_t> vec;
+   std::vector<double> vec;
    vec.resize(fBandLim);
 
    if(fScale==0){
       vec = sf.GetSquaredAtScale(fScale);
-      for(Int_t i=0;i<fBandLim;++i){
+      for(int i = 0; i < fBandLim; ++i){
          vec[i] = 1-vec[i];
       } 
    } else { 
-      std::vector<Double_t> a = sf.GetSquaredAtScale(fScale);
-      std::vector<Double_t> b = sf.GetSquaredAtScale(fScale-1);
-      for(Int_t i=0;i<fBandLim;++i){ 
-         vec[i] = Abs(a[i]-b[i]); 
+      std::vector<double> a = sf.GetSquaredAtScale(fScale);
+      std::vector<double> b = sf.GetSquaredAtScale(fScale-1);
+      for(int i=0; i < fBandLim; ++i){ 
+         vec[i] = abs(a[i]-b[i]); 
       }
    }
-   std::transform(vec.begin(),vec.end(),vec.begin(),Sqrt);
-   TArrayD arr(fBandLim,&vec[0]);
-   return arr;
+   std::transform(vec.begin(),vec.end(),vec.begin(),
+                  std::ptr_fun<double, double>(sqrt));
+   return vec;
 }
 
 //______________________________________________________
@@ -98,9 +76,4 @@ void TDKernel::Copy(TDKernel& kernel) const
    kernel.fBegin = fBegin;
    kernel.fEnd = fEnd;
 }
-
-
-
-
-
 

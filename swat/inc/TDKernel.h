@@ -20,26 +20,33 @@
 #ifndef SWAT_TDKernel
 #define SWAT_TDKernel
 
-// ROOT
+#include <vector>
 
-#include "TArrayD.h"
+// SWAT
+
+#include "swat.h"
 
 class TDKernel {
-   protected:
-   Int_t fScale; // The scale to construct the kernel. Range [0,fJmax]
    private:
-   Int_t fJmax;  // Number of scales that will be used
-   Int_t fBandLim;     // This is the band limit. Is determined by fJmax
-   Int_t fBegin; // Support begin
-   Int_t fEnd;   // Support end
+   int fJmax;  // Number of scales that will be used
+   protected:
+   int fScale; // The scale to construct the kernel. Range [0,fJmax]
+   private:
+   int fBandLim;     // This is the band limit. Is determined by fJmax
+   int fBegin; // Support begin
+   int fEnd;   // Support end
    
    public:
-           TDKernel(Int_t j,Int_t J);
-   void    Copy(TDKernel& kernel) const;
-   Int_t   GetLmax() const {return fBandLim;}
-   Int_t   Begin() const {return fBegin;}
-   Int_t   End() const {return fEnd;}
-   TArrayD GetKernel() const;
+           TDKernel(int j,int J):fJmax(J), 
+	      fScale((j <= fJmax) ? j : throw "TDKernel: j > J."),
+	      fBandLim((kAlpha << (fJmax - 1))),
+              fBegin(((J - fScale < 2)) ? 0 : kAlpha << (J-fScale-2)),
+	      fEnd((j == 0) ? fBandLim : (kAlpha << (J - fScale))) { }
+   void  Copy(TDKernel& kernel) const;
+   int   GetLmax() const {return fBandLim;}
+   int   Begin() const {return fBegin;}
+   int   End() const {return fEnd;}
+   std::vector<double> GetKernel() const;
 };
 
 #endif

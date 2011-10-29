@@ -73,11 +73,6 @@ void TSphHarmF::SetPoints(const TAlm& alm)
 {
    // Set harmonic coefficients to be transformed
 
-   if(fInfo.GetL() != alm.GetL()){
-      Error("SetPoints","Signal not compatible with the transform.");
-      return;
-   }
-
    vector<double> re(fInfo.SizeFourier());
    vector<double> im(fInfo.SizeFourier());
 

@@ -20,14 +20,12 @@
 #ifndef SWAT_TWavelet
 #define SWAT_TWavelet
 
-// ROOT
-
 // SWAT
 
 class TAlm;
 
 namespace TWavelet{
-   void fill_wav(TAlm& alm,Int_t j,Int_t N);
+   void fill_wav(TAlm& alm,int j,int N);
 }
 
 #endif

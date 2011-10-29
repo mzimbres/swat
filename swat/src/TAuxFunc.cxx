@@ -160,8 +160,8 @@ bool TAuxFunc::compare_alm(const TAlm& alm1,const TAlm& alm2)
        
    Double_t rei,imi,reo,imo,maxr = 0,maxi = 0;
 
-   for(Int_t l = 1;l < alm1.GetL(); ++l){
-      for(Int_t m = 0;m <= l; ++m){
+   for(size_t l = 1;l < alm1.GetL(); ++l){
+      for(size_t m = 0;m <= l; ++m){
 	 rei = real(alm1(l,m));
 	 reo = real(alm2(l,m));
 	 imi = imag(alm1(l,m));
