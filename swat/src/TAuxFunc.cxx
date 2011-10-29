@@ -46,6 +46,19 @@
 #include "TSourcesFinder.h"
 #include "TAnalysis.h"
 #include "TSwatF.h"
+#include "THealpixMap.h" 
+#include "TSphHarmF.h" 
+
+// Healpix
+
+#include "Healpix_Map.h"
+#include "arr.h"
+#include "alm_map_tools.h"
+#include "Alm.h"
+#include "pointing.h"
+#include "xcomplex.h"
+#include "alm_healpix_tools.h"
+
 
    ////////////////////////////////////////////////////////////////
    //
@@ -82,26 +95,6 @@ bool TAuxFunc::valid_file(const TFile& file,const char* classname)
    }
 
    return kTRUE;
-}
-
-//___________________________________________________________________
-TObject* TAuxFunc::retrieve(TFile* f,const char* classname)
-{
-   // Brings object of class classname on file into memory and returns 
-   // a pointer to it. If object is not a classname object, 
-   // returns a null pointer.
-
-   TObject *obj = NULL;
-   if (!TAuxFunc::valid_file(*f,classname) || f->IsZombie())
-      return obj;
-   
-   TList *list = f->GetListOfKeys();
-   TKey *key = (TKey*)list->First();
-   TString cl(key->GetClassName());
-   obj = f->Get(key->GetName());
-   f->Close();
-
-   return obj;
 }
 
 //___________________________________________________________________
@@ -142,12 +135,12 @@ TAlm* TAuxFunc::rand_gaus_alm(Int_t J,Double_t mean,Double_t sigma)
    TAlm* alm = new TAlm(J);
 
    TRandom3 r;
-   for(Int_t l = 1;l < alm->GetL();++l)
-      for(Int_t m = 1;m <= l;++m)
+   for(size_t l = 1;l < alm->GetL();++l)
+      for(size_t m = 1;m <= l;++m)
          (*alm)(l,m) = complex<Double_t>(r.Gaus(mean,sigma),r.Gaus(mean,sigma));
       
 
-   for(Int_t l = 1;l < alm->GetL();++l) // No imaginary part for m = 0.
+   for(size_t l = 1;l < alm->GetL();++l) // No imaginary part for m = 0.
          (*alm)(l,0) = complex<Double_t>(r.Gaus(mean,sigma),0);
 
    return alm;
@@ -282,3 +275,40 @@ TWavMap* TAuxFunc::SWAT(const TAlm& alm,int j,int N)
    return forward.GetPoints();
 }
 
+//________________________________________________________
+TVMap* TAuxFunc::SHT(const TAlm& alm,bool healpixmap)
+{
+   // Performs a spherical harmonic transform. If healpixmap is true
+   // create a THealpixMap, otherwise a TSkyMap.
+
+   size_t L = alm.GetL();
+   int J = alm.GetJmax();
+
+   if (healpixmap) {
+
+      Alm<xcomplex<double> > alm1(L-1,L-1);
+
+      xcomplex<double> c;
+      for (size_t l = 0; l < L; ++l){
+	 for (size_t m = 0; m <= l; ++m){
+	    c.real() = real(alm(l,m));
+	    c.imag() = imag(alm(l,m));
+	    alm1(l,m) = c;
+	 }
+      }
+
+      Healpix_Map<double> map(L,RING,SET_NSIDE);
+      alm2map<double>(alm1,map);
+
+      THealpixMap* mapa = new THealpixMap(J);
+      mapa->Set(mapa->GetNPix(),&map[0]);
+
+      return mapa;
+   } else {
+      TSphHarmF forward(J);
+      forward.SetPoints(alm);
+      forward.Transform();
+      return forward.GetPoints();
+   }
+
+}

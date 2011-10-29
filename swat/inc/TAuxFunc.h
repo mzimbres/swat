@@ -22,40 +22,39 @@
 
 // ROOT
 
-#include "TFile.h"
-#include "TWavMap.h"
-#include "TArrayD.h"
+class TFile;
 
 // SWAT
 
 #include "TAlm.h"
+class TWavMap;
 class TVMap;
 
 namespace TAuxFunc {
-   TAlm*    alm2wav2alm(const TAlm& alm,Int_t N,
-			Int_t jmin = 0,
-			Int_t jmax = -1);
+   TAlm*    alm2wav2alm(const TAlm& alm,int N,
+			int jmin = 0,
+			int jmax = -1);
    void     find_sources(const char* emin = "15.",
                          const char* emax = "40.",
-                         Int_t N = 1,
-			 Int_t j = 2,
-			 Int_t nsources = 15, 
-			 Double_t w = 3.,
+                         int N = 1,
+			 int j = 2,
+			 int nsources = 15, 
+			 double w = 3.,
 			 const char* filename = "chain.root");
-   void     find_multiplets(Double_t l = 6.,
-			    Double_t w = 1.,
+   void     find_multiplets(double l = 6.,
+			    double w = 1.,
 			    const char* sourcesfile = "sources.root",
 			    const char* filename = "chain.root");
-   void     n_vs_gamma(Double_t l = 6.,
-		       Double_t w = 1.,
+   void     n_vs_gamma(double l = 6.,
+		       double w = 1.,
 		       const char* sourcesfile = "sources.root",
 		       const char* filename = "chain.root");
 			    
-   TObject* retrieve(TFile* f,const char* classname);
    bool     valid_file(const TFile& file,const char* classname);
    bool     compare_alm(const TAlm& alm1,const TAlm& alm2);
-   TAlm*    rand_gaus_alm(Int_t J,Double_t mean,Double_t sigma);
+   TAlm*    rand_gaus_alm(int J,double mean,double sigma);
    TWavMap* SWAT(const TAlm& alm,int j,int N);
+   TVMap* SHT(const TAlm& alm,bool healpixmap = false);
 }
 
 #endif

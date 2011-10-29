@@ -41,7 +41,7 @@ int main(int argv,char* argc[])
 
    TAlm alm2(*alm1);
 
-   TVMap* tot = alm2.SHT();
+   TVMap* tot = TAuxFunc::SHT(alm2);
    tot->CreateAlm(*alm1);
    delete tot;
 

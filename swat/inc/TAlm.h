@@ -22,12 +22,6 @@
 #include <vector>
 #include <complex>
 
-// SWAT
-
-#include "swat.h" 
-
-class TVMap;
-
 class TAlm {
    private:
    int    fJmax;   // Maximum number of Scales.
@@ -37,16 +31,15 @@ class TAlm {
    int    fIndex(size_t l,size_t m) const {return ((l*(l+1) >> 1) + m);} // Global index
 
    public:
-   explicit TAlm(int J): fJmax(J), fL(kAlpha << (fJmax - 1)), fSize(((fL*(fL+1)) >> 1) + fL), fAlm(fSize) { };
+   explicit TAlm(int J): fJmax(J), fL(2 << (fJmax - 1)), fSize(((fL*(fL+1)) >> 1) + fL), fAlm(fSize) { };
    std::complex<double>  operator()(int l,int m) const {return fAlm[fIndex(l,m)];}
    std::complex<double>& operator()(int l,int m) {return fAlm[fIndex(l,m)];}
    void   Add(const TAlm& alm);
    int    GetJmax() const {return fJmax;}
-   int    GetL() const {return fL;}
+   size_t GetL() const {return fL;}
    void   Conjugate();
    void   ScaleL(const std::vector<double>& d);
    void   Scale(double factor);
-   TVMap* SHT(bool healpixmap = false) const;
 };
 
 #endif

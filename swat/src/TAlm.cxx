@@ -18,29 +18,11 @@
  */
 
 #include <iostream>
-#include <exception>
 #include <vector>
-
-// ROOT
-
-#include "TVirtualFFT.h"
 
 // SWAT
 
 #include "TAlm.h" 
-#include "TSkyMap.h" 
-#include "THealpixMap.h" 
-#include "TSphHarmF.h" 
-
-// Healpix
-
-#include "Healpix_Map.h"
-#include "arr.h"
-#include "alm_map_tools.h"
-#include "Alm.h"
-#include "pointing.h"
-#include "xcomplex.h"
-#include "alm_healpix_tools.h"
 
 using namespace std;
 
@@ -98,40 +80,5 @@ void TAlm::Scale(double factor)
    for(size_t l = 0; l < fL; ++l)
       for(size_t m = 0; m <= l;++m)
          fAlm[fIndex(l,m)] *= factor;
-}
-
-//________________________________________________________
-TVMap* TAlm::SHT(bool healpixmap) const
-{
-   // Performs a spherical harmonic transform. If healpixmap is true
-   // create a THealpixMap, otherwise a TSkyMap.
-
-   if (healpixmap) {
-
-      Alm<xcomplex<double> > alm1(fL-1,fL-1);
-
-      xcomplex<double> c;
-      for (size_t l = 0; l < fL; ++l){
-	 for (size_t m = 0; m <= l; ++m){
-	    c.real() = real(fAlm[fIndex(l,m)]);
-	    c.imag() = imag(fAlm[fIndex(l,m)]);
-	    alm1(l,m) = c;
-	 }
-      }
-
-      Healpix_Map<double> map(fL,RING,SET_NSIDE);
-      alm2map<double>(alm1,map);
-
-      THealpixMap* mapa = new THealpixMap(fJmax);
-      mapa->Set(mapa->GetNPix(),&map[0]);
-
-      return mapa;
-   } else {
-      TSphHarmF forward(fJmax);
-      forward.SetPoints(*this);
-      forward.Transform();
-      return forward.GetPoints();
-   }
-
 }
 
