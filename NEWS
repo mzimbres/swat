@@ -1,0 +1,11 @@
+I hope this package to be usefull for analyse of signals that leave on
+the surface of a sphere. Even though it has been designed for wavelet 
+analysis the code is sufficiently general to be used for a wider 
+class of functions than just wavelets. Refer to tutorials directory 
+for some examples on how to use it.
+
+Spherical harmonic calculations are now available too.
+
+Please, mail me if you have any comments. I will apreciate any
+feedback on this.
+

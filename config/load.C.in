@@ -1,0 +1,10 @@
+{
+   gSystem->AddIncludePath(" -Iincdir");
+   gSystem->Load("libdir/libfftpack.so");
+   gSystem->Load("libdir/libhealpix.so");
+   gSystem->Load("libdir/libswat.so");
+   gROOT->ProcessLine(".x pkgdatadir/mystyle.C");
+   gROOT->ProcessLine(".L pkgdatadir/show_angles.C");
+   gROOT->ProcessLine(".L pkgdatadir/graph_view.C");
+}
+

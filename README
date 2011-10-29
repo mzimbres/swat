@@ -1,0 +1,10 @@
+To install SWAT you just need ROOT and fftw installed on your machine.
+
+./configure
+make 
+make check
+make install
+make pdf
+
+The last command will generate the swat.pdf manual, read it for more information.
+For more details, refer to INSTALL file.
