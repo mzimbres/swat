@@ -47,7 +47,6 @@ class TAlm {
    void   ScaleL(const std::vector<double>& d);
    void   Scale(double factor);
    TVMap* SHT(bool healpixmap = false) const;
-   TVMap* SWAT(int j,int N) const;
 };
 
 #endif

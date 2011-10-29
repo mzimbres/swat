@@ -33,13 +33,11 @@
 
 #include "THealpixMap.h"
 #include "TAlm.h"
-#include "TVMap.h"
+#include "TWavMap.h"
+#include "TAuxFunc.h"
 #include "TSourcesFinder.h"
 #include "TMapSelector.h"
 #include "TMapSelectorCRPropa.h"
-
-ClassImp(TSourcesFinder);
-
 
  ///////////////////////////////////////////////////////////////////////
  //                                                    
@@ -150,7 +148,7 @@ void TSourcesFinder::FindSources()
    TAlm alm(hmap->GetJ());
    hmap->CreateAlm(alm);
    std::cout << "Transforming to wavelet space ...\n";
-   std::auto_ptr<TVMap> wav(alm.SWAT(fScale,fN));
+   std::auto_ptr<TWavMap> wav(TAuxFunc::SWAT(alm,fScale,fN));
 
    TFile f(fSourcesFile.c_str(),"recreate");
    std::cout << "Finding sources ...\n";

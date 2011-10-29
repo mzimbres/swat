@@ -29,10 +29,8 @@
 
 #include "TAlm.h" 
 #include "TSkyMap.h" 
-#include "TWavMap.h" 
 #include "THealpixMap.h" 
 #include "TSphHarmF.h" 
-#include "TSwatF.h" 
 
 // Healpix
 
@@ -135,19 +133,5 @@ TVMap* TAlm::SHT(bool healpixmap) const
       return forward.GetPoints();
    }
 
-}
-
-//________________________________________________________
-TVMap* TAlm::SWAT(int j,int N) const
-{
-   // Transform alm to wavelet domain, using wavelet with azimuthal
-   // band limit N > 0 at scale j.
-   // Only cylindrical pixelization is provided.
-
-   TSwatF forward(fJmax,N,"M");
-   forward.SetPoints(*this,j);
-   forward.Transform();
-
-   return forward.GetPoints();
 }
 

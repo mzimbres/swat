@@ -61,7 +61,6 @@ class TSourcesFinder {
    void         SetScale(Int_t j) { fScale = j; }
    void         SetNSources(Int_t n) { fNSources = n; }
    void         FindSources();
-   ClassDef(TSourcesFinder,1); // Facade for finding sources.
 };
 
 #endif // SWAT_TSourcesFinder

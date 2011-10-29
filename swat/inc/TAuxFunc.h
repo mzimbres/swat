@@ -23,12 +23,13 @@
 // ROOT
 
 #include "TFile.h"
-#include "TVMap.h"
+#include "TWavMap.h"
 #include "TArrayD.h"
 
 // SWAT
 
 #include "TAlm.h"
+class TVMap;
 
 namespace TAuxFunc {
    TAlm*    alm2wav2alm(const TAlm& alm,Int_t N,
@@ -54,7 +55,8 @@ namespace TAuxFunc {
    bool     valid_file(const TFile& file,const char* classname);
    bool     compare_alm(const TAlm& alm1,const TAlm& alm2);
    TAlm*    rand_gaus_alm(Int_t J,Double_t mean,Double_t sigma);
-}  // Auxiliar functions.
+   TWavMap* SWAT(const TAlm& alm,int j,int N);
+}
 
 #endif
 

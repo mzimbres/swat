@@ -42,9 +42,10 @@
 #include "TWavelet.h"
 #include "TAlm.h"
 #include "TSkyMap.h"
-#include "TVMap.h"
+#include "TWavMap.h"
 #include "TSourcesFinder.h"
 #include "TAnalysis.h"
+#include "TSwatF.h"
 
    ////////////////////////////////////////////////////////////////
    //
@@ -123,7 +124,7 @@ TAlm* TAuxFunc::alm2wav2alm(const TAlm& alm,Int_t N,Int_t jmin,Int_t jmax)
    TAlm* alm2 = new TAlm(J);
 
    for(Int_t i=jmin;i<=jmax;++i){
-      TVMap* wav = alm.SWAT(i,N);
+      TVMap* wav = TAuxFunc::SWAT(alm,i,N);
       TAlm tmp(alm.GetJmax());
       wav->CreateAlm(tmp);
       delete wav;
@@ -265,5 +266,19 @@ void TAuxFunc::find_sources(const char* emin,
       cout << message << endl;
       return;
    }
+}
+
+//________________________________________________________
+TWavMap* TAuxFunc::SWAT(const TAlm& alm,int j,int N)
+{
+   // Transform alm to wavelet domain, using wavelet with azimuthal
+   // band limit N > 0 at scale j.
+   // Only cylindrical pixelization is provided.
+
+   TSwatF forward(alm.GetJmax(),N,"M");
+   forward.SetPoints(alm,j);
+   forward.Transform();
+
+   return forward.GetPoints();
 }
 

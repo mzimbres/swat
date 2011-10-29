@@ -61,7 +61,7 @@ fSize(fNPhi*fNTheta),fWeightVal(fNTheta >> 1),fShift(fNPhi-1)
    ss.Append(" K");
    B.reset(TVirtualFFT::FFT(2,dim,ss.Data()));
 
-   for(int u=0; u < fWeightVal.size(); ++u)
+   for(size_t u=0; u < fWeightVal.size(); ++u)
       fWeightVal[u] = fWeights(u);
    
    for (int u= -(fL-1);u < fL;++u){
