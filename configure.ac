@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([Swat], [1.35], [mzimbres@gmail.com],[],[http://www.ifi.unicamp.br/~mzimbres])
+AC_INIT([Swat], [1.36], [mzimbres@gmail.com],[],[http://www.ifi.unicamp.br/~mzimbres])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([-Wall -Werror])
