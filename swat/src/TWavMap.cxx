@@ -87,9 +87,6 @@ class CompareResolution {
    }
 };
 
-
-ClassImp(TWavMap);
-
  ///////////////////////////////////////////////////////////////////////
  //                                                    
  //                                                      
@@ -200,20 +197,5 @@ void TWavMap::Fill(const TF1& f)
       for (Int_t k = 0; k < fNPhi; ++k)
 	 for (Int_t j = 0; j < fNQui; ++j)
 	    fArray[Coordinate(i,k,j)] = f.Eval(i*2*Pi()/fNPhi,(2*k+1)*Pi()/fNTheta,j*2*Pi()/fNQui);
-}
-
-//________________________________________________________________
-void TWavMap::Copy(TObject& rhs) const
-{
-   // Copy this Alm to new one
-
-   TArrayD& arr = dynamic_cast<TArrayD&>(rhs);
-   TCoeffInfo& info = dynamic_cast<TCoeffInfo&>(rhs);
-   TDKernel& kernel = dynamic_cast<TDKernel&>(rhs);
-
-   TVMap::Copy(rhs);
-   TCoeffInfo::Copy(info);
-   TDKernel::Copy(kernel);
-   TArrayD::Copy(arr);
 }
 

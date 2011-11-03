@@ -117,7 +117,7 @@ TAlm* TAuxFunc::alm2wav2alm(const TAlm& alm,Int_t N,Int_t jmin,Int_t jmax)
    TAlm* alm2 = new TAlm(J);
 
    for(Int_t i=jmin;i<=jmax;++i){
-      TVMap* wav = TAuxFunc::SWAT(alm,i,N);
+      TWavMap* wav = TAuxFunc::SWAT(alm,i,N);
       TAlm tmp(alm.GetJmax());
       wav->CreateAlm(tmp);
       delete wav;

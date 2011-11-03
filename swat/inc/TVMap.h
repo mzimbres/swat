@@ -20,7 +20,6 @@
 #ifndef SWAT_TVMap
 #define SWAT_TVMap
 
-#include <cmath>
 #include <functional>
 
 // ROOT
@@ -40,16 +39,10 @@ class TAlm;
 class TVMap: public TNamed {
    protected:
    virtual void      Copy(TObject& rhs) const;
-   template <typename T>
-   struct less_abs: std::binary_function<T,T,bool>{
-      bool operator()(T x,T y) const { return std::abs(x) < std::abs(y); }
-   };
-   Int_t fOrientation;
 
    public:
-                 TVMap(): TNamed(), fOrientation(0) {}
+                 TVMap(): TNamed(){}
    virtual       ~TVMap() {}
-           void  SetOrientation(Int_t i) {fOrientation = i;}
    virtual void  Filter(Double_t factor) = 0;
    virtual void  FindSources(Int_t nsources = 10,Double_t r = 3.) const = 0;
    virtual void  CreateAlm(TAlm& alm) const = 0;
