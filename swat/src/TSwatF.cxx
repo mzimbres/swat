@@ -75,7 +75,8 @@ TWavMap* TSwatF::GetPoints() const
    // Get wavelet Coefficients. 
 
    TWavMap* wav = new TWavMap(fCurrentScale,fInfo.GetJ(),fInfo.GetN());
-   wav->Set(fInfo.SizeCoordinate(),B->GetPointsReal());
+   double* first = B->GetPointsReal();
+   std::copy(first,first + fInfo.SizeCoordinate(),wav->fArray.begin());
 
    return wav;
 }

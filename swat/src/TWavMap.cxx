@@ -23,11 +23,9 @@
 
 // ROOT
 
-#include "TArrayD.h"
 #include "TMath.h"
 #include "TH2D.h"
 #include "TF1.h"
-#include "TObject.h"
 #include "TDirectory.h" 
 
 // SWAT
@@ -46,18 +44,18 @@ using namespace std;
 
 class coord {
    private:
-   Int_t    fPhiIndex;
-   Int_t    fThetaIndex;
-   Int_t    fQuiIndex;
-   Double_t fVal;
+   int    fPhiIndex;
+   int    fThetaIndex;
+   int    fQuiIndex;
+   double fVal;
 
    public:
    coord(){}
-   coord(Int_t i,Int_t k,Int_t j,Double_t val):fPhiIndex(i),fThetaIndex(k),fQuiIndex(j),fVal(val){}
-   Int_t    GetPhiIndex() const {return fPhiIndex;}
-   Int_t    GetThetaIndex() const {return fThetaIndex;}
-   Int_t    GetQuiIndex() const {return fQuiIndex;}
-   Double_t GetVal() const {return fVal;}
+   coord(int i,int k,int j,double val):fPhiIndex(i),fThetaIndex(k),fQuiIndex(j),fVal(val){}
+   int    GetPhiIndex() const {return fPhiIndex;}
+   int    GetThetaIndex() const {return fThetaIndex;}
+   int    GetQuiIndex() const {return fQuiIndex;}
+   double GetVal() const {return fVal;}
 };
 
 class CompareAbs { 
@@ -70,13 +68,13 @@ class CompareAbs {
 class CompareResolution { 
    private:
    TCoeffInfo fInfo;
-   Double_t fRes;
-   Int_t fPhiPos;
-   Int_t fThetaPos;
+   double fRes;
+   int fPhiPos;
+   int fThetaPos;
 
    public:
-   CompareResolution(Int_t J,Int_t N,Double_t r): fInfo(J,N), fRes(r), fPhiPos(0), fThetaPos(0) {}
-   void SetPhiTheta(Int_t iphi,Int_t itheta) { fPhiPos = iphi; fThetaPos = itheta;}
+   CompareResolution(int J,int N,double r): fInfo(J,N), fRes(r), fPhiPos(0), fThetaPos(0) {}
+   void SetPhiTheta(int iphi,int itheta) { fPhiPos = iphi; fThetaPos = itheta;}
    bool operator()(const coord& i) const
    { 
       // returns false if i2 is less that 5 degrees of i1
@@ -102,18 +100,16 @@ class CompareResolution {
  ///////////////////////////////////////////////////////////////////////
 
 //______________________________________________________________
-void TWavMap::Filter(Double_t factor)
+void TWavMap::Filter(double factor)
 {
    // Will zero all coefficients which absolute values are 
    // less than factor
 
-   //abs_less pred(factor);
-   std::replace_if(&fArray[0],&fArray[0]+fSizeCoordinate,
-                   bind2nd(less_abs<double>(),factor),0);
+   std::replace_if(fArray.begin(),fArray.end(), bind2nd(less_abs<double>(),factor),0);
 }
 
 //_____________________________________________________________________
-void TWavMap::FindSources(Int_t nsources,Double_t r) const
+void TWavMap::FindSources(int nsources,double r) const
 {
    // Adds TEulerAngles found to the current directory.
    // All coefficients that are withing r(in degrees) 
@@ -122,9 +118,9 @@ void TWavMap::FindSources(Int_t nsources,Double_t r) const
    std::vector<coord> ind;
    ind.reserve(fSizeCoordinate/4);
 
-   for (Int_t n = 0; n < TCoeffInfo::fN; ++n)
-      for (Int_t u = 0;u < fNTheta/2; ++u)
-	 for (Int_t m = 0; m < fNPhi; ++m){
+   for (int n = 0; n < TCoeffInfo::fN; ++n)
+      for (int u = 0;u < fNTheta/2; ++u)
+	 for (int m = 0; m < fNPhi; ++m){
 	    coord tmp(m,u,n,fArray[Coordinate(m,u,n)]);
 	    ind.push_back(tmp);
 	 }
@@ -136,7 +132,7 @@ void TWavMap::FindSources(Int_t nsources,Double_t r) const
    CompareResolution tmp(fJ,TCoeffInfo::fN,r);
 
    std::ostringstream os;
-   Int_t i = 0;
+   int i = 0;
    TEulerAngle *euler = NULL;
    while (( i < nsources ) && (middle != tail)) {
       std::partial_sort(head, ++middle, tail, CompareAbs() );
@@ -166,18 +162,18 @@ void TWavMap::CreateAlm(TAlm& alm) const
 }
 
 //_________________________________________________
-TH2D* TWavMap::CreateHist(Int_t n) const
+TH2D* TWavMap::CreateHist(int n) const
 {
    // Creates Histogram. Angle gamma should be providee in degrees.
 
    TH2D* h = new TH2D("","histogram",fL,0,2*Pi(),fL,0,Pi());
 
-   Double_t xcon = 2*Pi()/fNPhi;
-   Double_t ycon = 2*Pi()/fNTheta;
+   double xcon = 2*Pi()/fNPhi;
+   double ycon = 2*Pi()/fNTheta;
 
-   for (Int_t u = 0; u < fNPhi; ++u)
-      for (Int_t m = 0; m < fNPhi; ++m){
-	 Int_t bin = h->FindBin(xcon*m,ycon*u);
+   for (int u = 0; u < fNPhi; ++u)
+      for (int m = 0; m < fNPhi; ++m){
+	 int bin = h->FindBin(xcon*m,ycon*u);
 	 if (h->At(bin) == 0.)
 	    h->SetBinContent(bin,fArray[Coordinate(m,u,n)]);
       }
@@ -193,9 +189,9 @@ void TWavMap::Fill(const TF1& f)
 {
    // f is used to plot the function
 
-   for (Int_t i = 0; i < fNPhi; ++i)
-      for (Int_t k = 0; k < fNPhi; ++k)
-	 for (Int_t j = 0; j < fNQui; ++j)
+   for (int i = 0; i < fNPhi; ++i)
+      for (int k = 0; k < fNPhi; ++k)
+	 for (int j = 0; j < fNQui; ++j)
 	    fArray[Coordinate(i,k,j)] = f.Eval(i*2*Pi()/fNPhi,(2*k+1)*Pi()/fNTheta,j*2*Pi()/fNQui);
 }
 
