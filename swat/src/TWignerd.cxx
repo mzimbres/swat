@@ -19,16 +19,12 @@
 
 #include <iostream>
 #include <complex>
-
-// ROOT
-
-#include "TMath.h"
+#include <cmath>
 
 // SWAT
 
 #include "TWignerd.h"
 
-using namespace TMath;
 using namespace std;
 
  ///////////////////////////////////////////////////////////////////////
@@ -46,15 +42,6 @@ using namespace std;
  //                                                                   //
  ///////////////////////////////////////////////////////////////////////
 
-//____________________________________________________________________
-TWignerd::TWignerd(Int_t lbandlim): fLBandLim(lbandlim+1), fL(0), 
-fSize(fLBandLim*(fLBandLim+1)/2 + fLBandLim),fMatrix(fSize)
-{
-   // lbandlim: Band limit of the signal to be analysed.
-
-   fMatrix[fIndex(0,0)] = 1;
-}
-
 //_______________________________________________________________
 void TWignerd::Recurse()
 {
@@ -63,30 +50,30 @@ void TWignerd::Recurse()
    ++fL;
    std::vector<double> fTemp(fSize); 
 
-   fTemp[fIndex(fL,0)] = -Sqrt((2*fL-1)/(2*fL))*fMatrix[fIndex(fL-1,0)];
+   fTemp[fIndex(fL,0)] = -sqrt(1 - 0.5/fL)*fMatrix[fIndex(fL-1,0)];
 
-   for (Int_t n = 1; n <= fL; ++n){
-      Double_t a = Sqrt(((fL/2)*(2*fL-1))/((fL+n)*(fL+n-1)));
+   for (int n = 1; n <= fL; ++n){
+      double a = sqrt((fL*(fL - 0.5))/((fL+n)*(fL+n-1)));
       fTemp[fIndex(fL,n)] = a*fMatrix[fIndex(fL-1,n-1)];
    }
    
-   for(Int_t m=fL-1;m>=0;--m){
-      for(Int_t n=0;n<=m;++n){
-         Double_t a = static_cast<Double_t>(n << 1)/Sqrt((fL-m)*(fL+m+1));
-         Double_t b = -Sqrt((fL-m-1)*(fL+m+2)/((fL-m)*(fL+m+1)));
+   for(int m=fL-1;m>=0;--m){
+      for(int n=0;n<=m;++n){
+         double a = static_cast<double>(n << 1)/sqrt((fL-m)*(fL+m+1));
+         double b = -sqrt((fL-m-1)*(fL+m+2.)/((fL-m)*(fL+m+1)));
    	 fTemp[fIndex(m,n)] = a*fTemp[fIndex(m+1,n)] + b*fTemp[fIndex(m+2,n)];
-         }
+      }
    }
 
    fMatrix = fTemp;
 }
 
 //__________________________________________________________________________
-void TWignerd::Advance(Int_t l)
+void TWignerd::Advance(int l)
 {
    // Advances using a loop in Recurse(), so that fL = l.
 
-   for (Int_t i = 0; i < l; ++i)
+   for (int i = 0; i < l; ++i)
       Recurse();
 }
 

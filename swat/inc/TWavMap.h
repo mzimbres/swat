@@ -47,7 +47,7 @@ class TWavMap: public TCoeffInfo, public TDKernel {
    public:
 	     std::vector<double> fArray; // The Data
              TWavMap(int j,int J,int N = 1): 
-	     TCoeffInfo(J,N), TDKernel(j,J), fArray(fSizeCoordinate), fOrientation(0)  {}
+	     TCoeffInfo(J,N), TDKernel(j,J), fOrientation(0), fArray(fSizeCoordinate) {}
    double& operator()(int i,int j,int k) {return fArray[Coordinate(i,j,k)];}
    double  operator()(int i,int j,int k) const {return fArray[Coordinate(i,j,k)];}
    void      Filter(double factor);

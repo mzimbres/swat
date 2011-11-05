@@ -25,27 +25,27 @@
 
 // ROOT
 
-#include "TMath.h"
- 
 class TWignerd {
    private:
-   Int_t fLBandLim;         // Band limit of the signal to be analised.
-   Double_t fL;             // Value of l in each step of the recursion.
-   Int_t fSize;                    // Size of container with deltas.
+   int fB;         // Band limit of the signal to be analised.
+   int fL;             // Value of l in each step of the recursion.
+   int fSize;                    // Size of container with deltas.
    std::vector<double>   fMatrix;  // Delta coefficients. 		   
-   Int_t    fIndex(Int_t m,Int_t n) const {return (((m*(m+1)) >> 1) + n);} // Global index
+   int fIndex(int m,int n) const {return (((m*(m+1)) >> 1) + n);} // Global index
 
    public:
-            TWignerd(Int_t lbandlim); 
+   explicit TWignerd(int B): fB(B+1), fL(0), 
+   fSize(((fB*(fB+1)) >> 1) + fB),fMatrix(fSize) { fMatrix[fIndex(0,0)] = 1; }
+
    void     Recurse(); 
-   std::complex<Double_t> operator()(Int_t m,Int_t n,Int_t u) const;
-   Double_t Delta(Int_t m,Int_t n) const;
-   void     Advance(Int_t l);
-   Int_t    GetL() const {return fL;}
+   std::complex<double> operator()(int m,int n,int u) const;
+   double Delta(int m,int n) const;
+   void   Advance(int l);
+   int    GetL() const {return fL;}
 };
 
 //_____________________________________________________________________
-inline std::complex<Double_t> TWignerd::operator()(Int_t m,Int_t n,Int_t u) const
+inline std::complex<double> TWignerd::operator()(int m,int n,int u) const
 {
    // Returns Fourier coefficients of the wigner d-function d^l_mn.
    // If module of m or n or u greater than l returns zero instead of 
@@ -53,12 +53,12 @@ inline std::complex<Double_t> TWignerd::operator()(Int_t m,Int_t n,Int_t u) cons
    // u: frequency
 
    if ( (m - n) & 1) 
-      return ((m - n + 1) & 3) ? -std::complex<Double_t>(0,1)*Delta(u,m)*Delta(u,n): std::complex<Double_t>(0,1)*Delta(u,m)*Delta(u,n);
-   return ((m - n) & 3) ? -std::complex<Double_t>(1,0)*Delta(u,m)*Delta(u,n): std::complex<Double_t>(1,0)*Delta(u,m)*Delta(u,n) ;
+      return ((m - n + 1) & 3) ? -std::complex<double>(0,1)*Delta(u,m)*Delta(u,n): std::complex<double>(0,1)*Delta(u,m)*Delta(u,n);
+   return ((m - n) & 3) ? -std::complex<double>(1,0)*Delta(u,m)*Delta(u,n): std::complex<double>(1,0)*Delta(u,m)*Delta(u,n) ;
 }
 
 //__________________________________________________________________________
-inline Double_t TWignerd::Delta(Int_t m,Int_t n) const
+inline double TWignerd::Delta(int m,int n) const
 {
    // Returns delta using symmetry relations.
 
@@ -66,21 +66,21 @@ inline Double_t TWignerd::Delta(Int_t m,Int_t n) const
       if (n < 0) {
          if (m >= n)
             return fMatrix[fIndex(-n,-m)];
-         return TMath::Even(n-m) ? fMatrix[fIndex(-m,-n)]: -fMatrix[fIndex(-m,-n)];
+         return ((n-m) & 1) ? -fMatrix[fIndex(-m,-n)]: fMatrix[fIndex(-m,-n)];
       } else {
-         if (n <= TMath::Abs(m))
-            return TMath::Even(fL-n) ? fMatrix[fIndex(-m,n)]: -fMatrix[fIndex(-m,n)];
-	 return TMath::Even(fL-m) ? fMatrix[fIndex(n,-m)]: -fMatrix[fIndex(n,-m)];
+         if ((n + m) <= 0)
+            return ((fL-n) & 1) ? -fMatrix[fIndex(-m,n)]: fMatrix[fIndex(-m,n)];
+	 return ((fL-m) & 1) ? -fMatrix[fIndex(n,-m)]: fMatrix[fIndex(n,-m)];
       }
    }
    if (n < 0) {
-      if (m >= TMath::Abs(n))
-         return TMath::Even(fL-m) ? fMatrix[fIndex(m,-n)]: -fMatrix[fIndex(m,-n)];
-      return TMath::Even(fL-n) ? fMatrix[fIndex(-n,m)]: -fMatrix[fIndex(-n,m)];
+      if ((m + n) >= 0)
+         return ((fL-m) & 1) ? -fMatrix[fIndex(m,-n)]: fMatrix[fIndex(m,-n)];
+      return ((fL-n) & 1) ? -fMatrix[fIndex(-n,m)]: fMatrix[fIndex(-n,m)];
    } else {
       if (m >= n)
          return fMatrix[fIndex(m,n)];
-      return TMath::Even(n-m) ? fMatrix[fIndex(n,m)]: -fMatrix[fIndex(n,m)];
+      return ((n-m) & 1) ? -fMatrix[fIndex(n,m)]: fMatrix[fIndex(n,m)];
    }
 }
 
