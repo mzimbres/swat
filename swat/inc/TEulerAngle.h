@@ -51,6 +51,9 @@ class TEulerAngle: public TNamed {
    Int_t BetaInd() const {return fBetaInd;}
    Int_t GammaInd() const {return fGammaInd;}
    Double_t Value() const {return fValue;}
+   bool IsEqual(const TEulerAngle& ang) const {
+      return ((fAlphaInd == ang.fAlphaInd) && (fBetaInd == ang.fBetaInd) && (fGammaInd == ang.fGammaInd));
+   }
    void SetAnglesValue(Int_t alpha,Int_t beta,Int_t gamma,Double_t value);
    void Show(Int_t t = 0) const;
    friend ostream& operator<<(ostream& out, const TEulerAngle& ang);

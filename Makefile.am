@@ -216,6 +216,7 @@ dist_pkgdata_DATA = $(MACRODIR)/DrawLatitudesLongitudes.C \
                     $(MACRODIR)/wav_view.C                \
                     $(MACRODIR)/show_angles.C             \
                     $(MACRODIR)/graph_view.C              \
+                    $(MACRODIR)/swat.C                    \
 	            $(MACRODIR)/wig_graph.C
 #________________________________________________________________
 

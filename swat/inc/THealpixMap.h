@@ -51,7 +51,7 @@ class THealpixMap: public TVMap, public TArrayD {
    Int_t GetJ() const {return fJ;}
    void  Filter(Double_t factor);
    void  FindSources(Int_t nsources, Double_t r) const;
-   void CreateAlm(TAlm& harm) const;
+   void  CreateAlm(TAlm& harm) const;
    void  Fill(const TF1& f);
    void  Fill(Double_t& theta,Double_t& phi);
    TH2D* CreateHist(Int_t /*n*/) const;

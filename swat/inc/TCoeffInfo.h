@@ -22,7 +22,11 @@
 
 // ROOT
 
+#include "Rtypes.h"
+
 // SWAT
+
+
 
 #include "swat.h" 
 
@@ -56,6 +60,7 @@ class TCoeffInfo {
            int SizeCoordinate() const {return fSizeCoordinate;}
            int Fourier(int m,int u,int n = 0) const;
            int Coordinate(int m,int u,int n = 0) const {return  m+((u+(n << fJ2)) << fJ1);} // Global index
+   ClassDef(TCoeffInfo,1); // Information
 };
 
 //______________________________________________________________
