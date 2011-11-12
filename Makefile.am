@@ -69,82 +69,74 @@ libhealpix_la_SOURCES = $(HEALPIXS)
 
 #________________________________________________________________
 
-SWATDIR  = $(top_srcdir)/swat
-SWATDIRI = $(SWATDIR)/inc
-SWATDIRS = $(SWATDIR)/src
-
-SWATNDH = $(SWATDIRI)/swat.h
-
 # headers for which dictionaries must be generated.
-SWATDH = $(SWATDIRI)/TWignerd.h              \
-         $(SWATDIRI)/TSmallWignerd.h         \
-	 $(SWATDIRI)/TSlm.h                  \
-	 $(SWATDIRI)/TSFunc.h                \
-	 $(SWATDIRI)/TDKernel.h              \
-	 $(SWATDIRI)/TAlm.h                  \
-	 $(SWATDIRI)/TCoeffInfo.h            \
-	 $(SWATDIRI)/TSwatF.h                \
-	 $(SWATDIRI)/TSwatB.h                \
-	 $(SWATDIRI)/TVMap.h                 \
-	 $(SWATDIRI)/TSkyMap.h               \
-	 $(SWATDIRI)/THealpixMap.h           \
-	 $(SWATDIRI)/TWavMap.h               \
-	 $(SWATDIRI)/TSphHarmB.h             \
-	 $(SWATDIRI)/TSphHarmF.h             \
-	 $(SWATDIRI)/TWavelet.h              \
-         $(SWATDIRI)/TParser.h               \
-	 $(SWATDIRI)/TShift.h                \
-	 $(SWATDIRI)/TEulerAngle.h           \
-	 $(SWATDIRI)/TAngDistance.h          \
-	 $(SWATDIRI)/TCorrSelector.h         \
-	 $(SWATDIRI)/TCorrSelectorCRPropa.h  \
-	 $(SWATDIRI)/TCounter.h              \
-	 $(SWATDIRI)/TCounterCRPropa.h       \
-	 $(SWATDIRI)/TMapSelector.h          \
-	 $(SWATDIRI)/TMapSelectorCRPropa.h   \
-	 $(SWATDIRI)/TStripeAnalysis.h       \
-	 $(SWATDIRI)/TSourcesFinder.h        \
-	 $(SWATDIRI)/TAnalysis.h             \
-	 $(SWATDIRI)/TAuxFunc.h
+SWATDH = $(top_srcdir)/TWignerd.h              \
+         $(top_srcdir)/TSmallWignerd.h         \
+	 $(top_srcdir)/TSlm.h                  \
+	 $(top_srcdir)/TSFunc.h                \
+	 $(top_srcdir)/TDKernel.h              \
+	 $(top_srcdir)/TAlm.h                  \
+	 $(top_srcdir)/TCoeffInfo.h            \
+	 $(top_srcdir)/TSwatF.h                \
+	 $(top_srcdir)/TSwatB.h                \
+	 $(top_srcdir)/TVMap.h                 \
+	 $(top_srcdir)/TSkyMap.h               \
+	 $(top_srcdir)/THealpixMap.h           \
+	 $(top_srcdir)/TWavMap.h               \
+	 $(top_srcdir)/TSphHarmB.h             \
+	 $(top_srcdir)/TSphHarmF.h             \
+	 $(top_srcdir)/TWavelet.h              \
+         $(top_srcdir)/TParser.h               \
+	 $(top_srcdir)/TShift.h                \
+	 $(top_srcdir)/TEulerAngle.h           \
+	 $(top_srcdir)/TAngDistance.h          \
+	 $(top_srcdir)/TCorrSelector.h         \
+	 $(top_srcdir)/TCorrSelectorCRPropa.h  \
+	 $(top_srcdir)/TCounter.h              \
+	 $(top_srcdir)/TCounterCRPropa.h       \
+	 $(top_srcdir)/TMapSelector.h          \
+	 $(top_srcdir)/TMapSelectorCRPropa.h   \
+	 $(top_srcdir)/TStripeAnalysis.h       \
+	 $(top_srcdir)/TSourcesFinder.h        \
+	 $(top_srcdir)/TAnalysis.h             \
+	 $(top_srcdir)/TAuxFunc.h
 
-SWATS = $(SWATDIRS)/TWignerd.cxx               \
-        $(SWATDIRS)/TSmallWignerd.cxx          \
-	$(SWATDIRS)/TSlm.cxx                   \
-	$(SWATDIRS)/TSFunc.cxx                 \
-	$(SWATDIRS)/TDKernel.cxx               \
-	$(SWATDIRS)/TAlm.cxx                   \
-	$(SWATDIRS)/TCoeffInfo.cxx             \
-	$(SWATDIRS)/TSwatF.cxx                 \
-	$(SWATDIRS)/TVMap.cxx                  \
-	$(SWATDIRS)/TSkyMap.cxx                \
-	$(SWATDIRS)/THealpixMap.cxx            \
-	$(SWATDIRS)/TSwatB.cxx                 \
-	$(SWATDIRS)/TWavMap.cxx                \
-	$(SWATDIRS)/TEulerAngle.cxx            \
-	$(SWATDIRS)/TSphHarmB.cxx              \
-	$(SWATDIRS)/TSphHarmF.cxx              \
-	$(SWATDIRS)/TWavelet.cxx               \
-        $(SWATDIRS)/TParser.cxx                \
-	$(SWATDIRS)/TShift.cxx                 \
-	$(SWATDIRS)/TAngDistance.cxx           \
-	$(SWATDIRS)/TCorrSelector.cxx          \
-	$(SWATDIRS)/TCorrSelectorCRPropa.cxx   \
-	$(SWATDIRS)/TCounter.cxx               \
-	$(SWATDIRS)/TCounterCRPropa.cxx        \
-	$(SWATDIRS)/TMapSelector.cxx           \
-	$(SWATDIRS)/TMapSelectorCRPropa.cxx    \
-	$(SWATDIRS)/TSourcesFinder.cxx         \
-	$(SWATDIRS)/TAnalysis.cxx              \
-	$(SWATDIRS)/TAuxFunc.cxx
-
-#SWATS = $(SWATDH:.h=.cxx)
+SWATS = $(top_srcdir)/TWignerd.cxx               \
+        $(top_srcdir)/TSmallWignerd.cxx          \
+	$(top_srcdir)/TSlm.cxx                   \
+	$(top_srcdir)/TSFunc.cxx                 \
+	$(top_srcdir)/TDKernel.cxx               \
+	$(top_srcdir)/TAlm.cxx                   \
+	$(top_srcdir)/TCoeffInfo.cxx             \
+	$(top_srcdir)/TSwatF.cxx                 \
+	$(top_srcdir)/TVMap.cxx                  \
+	$(top_srcdir)/TSkyMap.cxx                \
+	$(top_srcdir)/THealpixMap.cxx            \
+	$(top_srcdir)/TSwatB.cxx                 \
+	$(top_srcdir)/TWavMap.cxx                \
+	$(top_srcdir)/TEulerAngle.cxx            \
+	$(top_srcdir)/TSphHarmB.cxx              \
+	$(top_srcdir)/TSphHarmF.cxx              \
+	$(top_srcdir)/TWavelet.cxx               \
+        $(top_srcdir)/TParser.cxx                \
+	$(top_srcdir)/TShift.cxx                 \
+	$(top_srcdir)/TAngDistance.cxx           \
+	$(top_srcdir)/TCorrSelector.cxx          \
+	$(top_srcdir)/TCorrSelectorCRPropa.cxx   \
+	$(top_srcdir)/TCounter.cxx               \
+	$(top_srcdir)/TCounterCRPropa.cxx        \
+	$(top_srcdir)/TMapSelector.cxx           \
+	$(top_srcdir)/TMapSelectorCRPropa.cxx    \
+	$(top_srcdir)/TSourcesFinder.cxx         \
+	$(top_srcdir)/TAnalysis.cxx              \
+	$(top_srcdir)/TAuxFunc.cxx
 
 ## Generates dictionary
 dictionary.cxx: $(SWATDH)
 	@echo "Generating dictionary $@..."
 	$(ROOTCINT) -f $@ -c $^
 
-include_HEADERS += $(SWATDH) $(SWATNDH) 
+include_HEADERS += $(SWATDH) swat.h
 
 lib_LTLIBRARIES += libswat.la
 
@@ -168,9 +160,9 @@ AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(SWATDIRI)
 
 #________________________________________________________________
 
-bin_PROGRAMS      = smfilter
+bin_PROGRAMS      = swat
 
-smfilter_SOURCES  = $(top_srcdir)/utils/src/smfilter.cxx
+swat_SOURCES  = $(top_srcdir)/swat.cxx
 
 #________________________________________________________________
 
@@ -180,7 +172,7 @@ alm2map2alm_SOURCES  = $(top_srcdir)/tests/alm2map2alm.cxx
 
 parser_SOURCES  = $(top_srcdir)/tests/parser.cxx
 
-TESTS =  parser alm2map2alm smfilter 
+TESTS =  parser alm2map2alm swat 
 
 #________________________________________________________________
 

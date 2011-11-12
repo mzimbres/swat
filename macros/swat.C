@@ -37,7 +37,7 @@ void swat(int nevents = 1000, int repetition = 100)
    }
 
    cout << "Found to be equal: " << equal << endl;
-   cout << "Percentage of unequal: " << (1 - static_cast<double>(equal)/repetition)*100 << endl;
+   cout << "Percentage of unequal: " << (1 - static_cast<double>(equal)/repetition)*100 << "%" << endl;
 }
 
 TEulerAngle* nonoise()
