@@ -312,3 +312,4 @@ TVMap* TAuxFunc::SHT(const TAlm& alm,bool healpixmap)
    }
 
 }
+

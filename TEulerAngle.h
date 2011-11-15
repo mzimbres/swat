@@ -25,6 +25,7 @@
 // ROOT
 
 #include "Rtypes.h"
+#include "TMath.h"
 #include "TNamed.h"
 
 // SWAT
@@ -51,8 +52,10 @@ class TEulerAngle: public TNamed {
    Int_t BetaInd() const {return fBetaInd;}
    Int_t GammaInd() const {return fGammaInd;}
    Double_t Value() const {return fValue;}
-   bool IsEqual(const TEulerAngle& ang) const {
-      return ((fAlphaInd == ang.fAlphaInd) && (fBetaInd == ang.fBetaInd) && (fGammaInd == ang.fGammaInd));
+   bool IsEqual(const TEulerAngle& ang,int sep1,int sep2) const {
+      return ((TMath::Abs(fAlphaInd - ang.fAlphaInd) <= sep1)  && 
+              (TMath::Abs(fBetaInd - ang.fBetaInd)  <= sep1)  &&
+	      (TMath::Abs(fGammaInd - ang.fGammaInd) <= sep2));
    }
    void SetAnglesValue(Int_t alpha,Int_t beta,Int_t gamma,Double_t value);
    void Show(Int_t t = 0) const;

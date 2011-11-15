@@ -143,7 +143,7 @@ void TWavMap::FindSources(int nsources,double r) const
       euler->SetAnglesValue(head->GetPhiIndex(),head->GetThetaIndex(),head->GetQuiIndex(),head->GetVal());
       euler->SetName(os.str().c_str());
       os.str("");
-      gDirectory->Add(euler);
+      gDirectory->Add(euler,true);
       ++head;
       ++i;
    }
