@@ -11,59 +11,51 @@ CLEANFILES      =
 
 #________________________________________________________________
 
-FFTPACKDIR  = $(top_srcdir)/fftpack
-FFTPACKDIRI = $(FFTPACKDIR)/inc
-FFTPACKDIRS = $(FFTPACKDIR)/src
+FFTPACKH =  $(top_srcdir)/bluestein.h   \
+            $(top_srcdir)/ls_fft.h      \
+	    $(top_srcdir)/fftpack.h
 
-FFTPACKH =  $(FFTPACKDIRI)/bluestein.h   \
-            $(FFTPACKDIRI)/ls_fft.h      \
-	    $(FFTPACKDIRI)/fftpack.h
-
-FFTPACKS =  $(FFTPACKDIRS)/bluestein.c   \
-            $(FFTPACKDIRS)/ls_fft.c      \
-	    $(FFTPACKDIRS)/fftpack.c
+FFTPACKS =  $(top_srcdir)/bluestein.c   \
+            $(top_srcdir)/ls_fft.c      \
+	    $(top_srcdir)/fftpack.c
 
 include_HEADERS +=  $(FFTPACKH)
 
 lib_LTLIBRARIES += libfftpack.la
 
-libfftpack_la_CPPFLAGS = -I$(FFTPACKDIRI)
+libfftpack_la_CPPFLAGS = -I$(top_srcdir)
 
 
 libfftpack_la_SOURCES = $(FFTPACKS)
 
 #______________________________________________________
 
-HEALPIXDIR  = $(top_srcdir)/healpix
-HEALPIXDIRI = $(HEALPIXDIR)/inc
-HEALPIXDIRS = $(HEALPIXDIR)/src
-
-HEALPIXH = $(HEALPIXDIRI)/alm_healpix_tools.h  \
-           $(HEALPIXDIRI)/alm_map_tools.h      \
-           $(HEALPIXDIRI)/fftpack_support.h    \
-           $(HEALPIXDIRI)/lsconstants.h        \
-           $(HEALPIXDIRI)/message_error.h      \
-           $(HEALPIXDIRI)/cxxutils.h           \
-           $(HEALPIXDIRI)/vec3.h               \
-           $(HEALPIXDIRI)/ylmgen.h             \
-           $(HEALPIXDIRI)/geom_utils.h         \
-           $(HEALPIXDIRI)/pointing.h           \
-           $(HEALPIXDIRI)/Alm.h                \
-           $(HEALPIXDIRI)/xcomplex.h           \
-           $(HEALPIXDIRI)/arr.h                \
-           $(HEALPIXDIRI)/Healpix_Base.h       \
-           $(HEALPIXDIRI)/Healpix_Map.h
+HEALPIXH = $(top_srcdir)/alm_healpix_tools.h  \
+           $(top_srcdir)/alm_map_tools.h      \
+           $(top_srcdir)/fftpack_support.h    \
+           $(top_srcdir)/lsconstants.h        \
+           $(top_srcdir)/message_error.h      \
+           $(top_srcdir)/cxxutils.h           \
+           $(top_srcdir)/vec3.h               \
+           $(top_srcdir)/ylmgen.h             \
+           $(top_srcdir)/geom_utils.h         \
+           $(top_srcdir)/pointing.h           \
+           $(top_srcdir)/Alm.h                \
+           $(top_srcdir)/xcomplex.h           \
+           $(top_srcdir)/arr.h                \
+           $(top_srcdir)/Healpix_Base.h       \
+           $(top_srcdir)/Healpix_Map.h
 
 
-HEALPIXS = $(HEALPIXDIRS)/alm_healpix_tools.cc \
-           $(HEALPIXDIRS)/alm_map_tools.cc     \
-           $(HEALPIXDIRS)/healpix_base.cc
+HEALPIXS = $(top_srcdir)/alm_healpix_tools.cc \
+           $(top_srcdir)/alm_map_tools.cc     \
+           $(top_srcdir)/healpix_base.cc
 
 include_HEADERS += $(HEALPIXH)
 
 lib_LTLIBRARIES += libhealpix.la
 
-libhealpix_la_CPPFLAGS = -I$(HEALPIXDIRI) -I$(FFTPACKDIRI)
+libhealpix_la_CPPFLAGS = -I$(top_srcdir)
 
 libhealpix_la_SOURCES = $(HEALPIXS)
 
