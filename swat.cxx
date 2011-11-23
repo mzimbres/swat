@@ -18,53 +18,17 @@
 
 #include <iostream>
 #include <memory>
+#include <unistd.h>
+#include <stdlib.h>
 
 // SWAT
 
 #include "TAlm.h"
 #include "TVMap.h"
 #include "TAuxFunc.h"
-#include "TParser.h"
 
 using namespace std;
 using namespace TAuxFunc;
-
-void print_usage(const char* progname);
-
-int main(int argc,const char* argv[])
-{
-   TParser parser(argc,argv);
-
-   string help("--help");
-   if (parser.exist(help)){
-      print_usage(argv[0]);
-      return 0;
-   } 
-
-   int J = 6;
-   string Jmax("-J");
-   if (!parser.get<int>(J,Jmax)) {
-      //cout << "Using J = 6" << endl;
-   }
-
-   auto_ptr<TAlm> alm(TAuxFunc::rand_gaus_alm(J,1,0.5));
-
-   int N = 3; 
-   string bandlim("-N");
-   if (parser.get<int>(N,bandlim)) {
-      auto_ptr<TAlm> filtered(alm2wav2alm(*alm.get(),N,0,J));
-      if (!compare_alm(*alm.get(),*filtered.get()))
-         return 1;
-   } else {
-      TAlm alm2(*alm.get());
-      auto_ptr<TVMap> tot(TAuxFunc::SHT(alm2));
-      tot->CreateAlm(*alm.get());
-      if (!compare_alm(*alm.get(),alm2))
-         return 1;
-   }
-
-   return 0;
-}
 
 void print_usage(const char* progname)
 {
@@ -74,11 +38,50 @@ void print_usage(const char* progname)
    cout << "   Usage: " << progname << endl;
    cout << "   Options:\n";
    cout << "\n";
-   cout << "   --help: This menu.\n";
+   cout << "   -h:     This menu.\n";
    cout << "   -J:     TAlm object in root file. If not provided, the program \n"
         << "           will compare input and output for J = 7 and return true if\n"
 	<< "           diffrence less that 10e-10. \n";
    cout << "   -N:     Band limit of wavelet to be used.\n";
    cout << "\n";
+}
+
+int main(int argc,char* argv[])
+{
+   int J = 7, N = 0;
+   char opt;
+
+   while ((opt = getopt(argc,argv,"hJ:N:")) != -1) {
+      switch (opt) {
+         case 'J':
+	    J = atoi(optarg);
+	    break;
+         case 'N':
+	    if ((N = atoi(optarg)) == 0) {
+	       cerr << "N = " << N << ", N must be greaer than 0" << endl;;
+	       exit(EXIT_FAILURE);
+	    }
+	    break;
+         default:
+	    print_usage(argv[0]);
+	    exit(EXIT_SUCCESS);
+      }
+   }
+
+   auto_ptr<TAlm> alm(TAuxFunc::rand_gaus_alm(J,1,0.3));
+
+   if (N) {
+      auto_ptr<TAlm> filtered(alm2wav2alm(*alm.get(),N,0,J));
+      if (!compare_alm(*alm.get(),*filtered.get()))
+	 exit(EXIT_FAILURE);
+   } else {
+      TAlm alm2(*alm.get());
+      auto_ptr<TVMap> tot(TAuxFunc::SHT(alm2));
+      tot->CreateAlm(*alm.get());
+      if (!compare_alm(*alm.get(),alm2))
+	 exit(EXIT_FAILURE);
+   }
+
+   return 0;
 }
 

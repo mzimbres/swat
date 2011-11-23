@@ -78,7 +78,6 @@ SWATDH = $(top_srcdir)/TWignerd.h              \
 	 $(top_srcdir)/TSphHarmB.h             \
 	 $(top_srcdir)/TSphHarmF.h             \
 	 $(top_srcdir)/TWavelet.h              \
-         $(top_srcdir)/TParser.h               \
 	 $(top_srcdir)/TShift.h                \
 	 $(top_srcdir)/TEulerAngle.h           \
 	 $(top_srcdir)/TAngDistance.h          \
@@ -110,7 +109,6 @@ SWATS = $(top_srcdir)/TWignerd.cxx               \
 	$(top_srcdir)/TSphHarmB.cxx              \
 	$(top_srcdir)/TSphHarmF.cxx              \
 	$(top_srcdir)/TWavelet.cxx               \
-        $(top_srcdir)/TParser.cxx                \
 	$(top_srcdir)/TShift.cxx                 \
 	$(top_srcdir)/TAngDistance.cxx           \
 	$(top_srcdir)/TCorrSelector.cxx          \
@@ -158,13 +156,11 @@ swat_SOURCES  = $(top_srcdir)/swat.cxx
 
 #________________________________________________________________
 
-check_PROGRAMS    = alm2map2alm parser
+check_PROGRAMS    = alm2map2alm 
 
 alm2map2alm_SOURCES  = $(top_srcdir)/tests/alm2map2alm.cxx
 
-parser_SOURCES  = $(top_srcdir)/tests/parser.cxx
-
-TESTS =  parser alm2map2alm swat 
+TESTS =  alm2map2alm swat 
 
 #________________________________________________________________
 
