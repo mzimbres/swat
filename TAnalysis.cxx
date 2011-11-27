@@ -94,15 +94,32 @@ fLength(6), fWidth(1), fSourcesFile(sources), fDataFile(data)
 void TAnalysis::GenDeflectionGraphs()
 {
    // Calculates deflection versus 1/E graphs.
+   // Loops over objects in Memory and disk.
 
    Int_t count = 0;
 
    fSourcesFile->cd();
-   TListIter iter(fSourcesFile->GetListOfKeys());
-   while (TKey* key = (TKey*)iter.Next()){
+   TListIter iter(gDirectory->GetListOfKeys());
+   while (TKey* key = (TKey*)iter.Next()) {
       TClass tmp1(key->GetClassName());
       if (tmp1.InheritsFrom("TEulerAngle")){
          std::auto_ptr<TEulerAngle> ang(dynamic_cast<TEulerAngle*>(fSourcesFile->Get(key->GetName())));
+         fCorr->SetEulerAngles(ang.get());
+         fCorr->SetLengthWidth(fLength,fWidth); // Must be here.
+         TString gname = "g";
+         gname += count;
+         fCorr->SetGraphName(gname);
+         fDataTree->Process(fCorr.get());
+         ++count;
+      }
+   }
+
+   // Iterates over objects in memory
+   TListIter memory(gDirectory->GetList());
+   while (TObject* ob = memory.Next()) {
+      string obname(ob->ClassName());
+      if (obname == "TEulerAngle"){
+         std::auto_ptr<TEulerAngle> ang(dynamic_cast<TEulerAngle*>(fSourcesFile->Get(ob->GetName())));
          fCorr->SetEulerAngles(ang.get());
          fCorr->SetLengthWidth(fLength,fWidth); // Must be here.
          TString gname = "g";
@@ -118,6 +135,7 @@ void TAnalysis::GenDeflectionGraphs()
 void TAnalysis::CountEvents()
 {
    // Calculates number of events versus orientation graphs.
+   // WARNING: Does not loop over objects in memory.
 
    Double_t conv = 180./TMath::Pi();
    Int_t n = 180;

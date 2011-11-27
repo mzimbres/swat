@@ -35,6 +35,7 @@
 #include "TTree.h"
 #include "TEventList.h"
 #include "TRandom3.h"
+#include "TF1.h"
 
 // SWAT
 
@@ -329,5 +330,74 @@ TVMap* TAuxFunc::SHT(const TAlm& alm,bool healpixmap)
       return forward.GetPoints();
    }
 
+}
+
+void TAuxFunc::gensky(int n,TRandom& a,TF1* e)
+{
+   // Generate a TTree with name events and adds it to the current directory.
+   // The tree contains a CRPropa-like tree, that can be used in other
+   // analysis code. Algorithm sets only theta phi and energy, other branch
+   // are filled with not meaningfull values.
+
+   TTree* newt = new TTree("events","CRPropa 3D events");
+   float y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15;
+
+   newt->Branch("Particle_Type"         ,&y1 , "Particle_Type/F"         ); 
+   newt->Branch("Initial_Type"          ,&y2 , "Initial_Type/F"          );
+   newt->Branch("Initial_Position_X_Mpc",&y3 , "Initial_Position_X_Mpc/F");
+   newt->Branch("Initial_Position_Y_Mpc",&y4 , "Initial_Position_Y_Mpc/F");
+   newt->Branch("Initial_Position_Z_Mpc",&y5 , "Initial_Position_Z_Mpc/F");
+   newt->Branch("Initial_Momentum_E_EeV",&y6 , "Initial_Momentum_E_EeV/F");
+   newt->Branch("Initial_Momentum_theta",&y7 , "Initial_Momentum_theta/F");
+   newt->Branch("Initial_Momentum_phi"  ,&y8 , "Initial_Momentum_phi/F"  );
+   newt->Branch("Time_Mpc"              ,&y9 , "Time_Mpc/F"              );
+   newt->Branch("Position_X_Mpc"        ,&y10,"Position_X_Mpc/F"        );
+   newt->Branch("Position_Y_Mpc"        ,&y11,"Position_Y_Mpc/F"        );
+   newt->Branch("Position_Z_Mpc"        ,&y12,"Position_Z_Mpc/F"        );
+   newt->Branch("Momentum_E_EeV"        ,&y13,"Momentum_E_EeV/F"        );
+   newt->Branch("Momentum_theta"        ,&y14,"Momentum_theta/F"        );
+   newt->Branch("Momentum_phi"          ,&y15,"Momentum_phi/F"          );
+
+   double x,y,z;
+   for (int i = 0; i < n/2; ++i) {
+      y1  = 1;   
+      y2  = 1; 
+      y3  = 1; 
+      y4  = 1; 
+      y5  = 1; 
+      y6  = 1; 
+      y7  = 1; 
+      y8  = 1; 
+      y9  = 1; 
+      y10 = 10; 
+      y11 = 11; 
+      y12 = 12; 
+      y13 = e->GetRandom(); 
+      a.Sphere(x,y,z,1);
+      y14 = TMath::ACos(z);
+      y15 = TMath::ATan(y/x) + TMath::Pi()/2;
+      newt->Fill();
+   }
+
+   for (int i = 0; i < n/2; ++i) {
+      y1  = 1;   
+      y2  = 1; 
+      y3  = 1; 
+      y4  = 1; 
+      y5  = 1; 
+      y6  = 1; 
+      y7  = 1; 
+      y8  = 1; 
+      y9  = 1; 
+      y10 = 10; 
+      y11 = 11; 
+      y12 = 12; 
+      y13 = e->GetRandom(); 
+      a.Sphere(x,y,z,1);
+      y14 = TMath::ACos(z);
+      y15 = TMath::ATan(y/x) - TMath::Pi()/2;
+      newt->Fill();
+   }
+   gDirectory->Add(newt,kTRUE);
 }
 

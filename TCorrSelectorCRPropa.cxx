@@ -117,7 +117,6 @@ void TCorrSelectorCRPropa::Terminate()
 
    fGraph->SetNameTitle(fGraphName.Data(),title.c_str());
    //fGraph->Draw("AP");
-   fGraph->Fit("pol1");
    gDirectory->Add(fGraph,kTRUE);
 }
 

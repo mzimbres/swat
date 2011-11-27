@@ -23,6 +23,8 @@
 // ROOT
 
 class TFile;
+class TRandom;
+class TF1;
 
 // SWAT
 
@@ -54,7 +56,8 @@ namespace TAuxFunc {
    bool     compare_alm(const TAlm& alm1,const TAlm& alm2);
    TAlm*    rand_gaus_alm(int J,double mean,double sigma);
    TWavMap* SWAT(const TAlm& alm,int j,int N);
-   TVMap* SHT(const TAlm& alm,bool healpixmap = false);
+   TVMap*   SHT(const TAlm& alm,bool healpixmap = false);
+   void     gensky(int n,TRandom& a,TF1* e);
 }
 
 #endif
