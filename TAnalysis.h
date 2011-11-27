@@ -24,8 +24,9 @@
 
 // ROOT
 
-#include "TFile.h"
 #include "TTree.h"
+
+class TDirectory;
 
 // SWAT
 
@@ -34,16 +35,16 @@
 // SWAT
 class TAnalysis {
    private:
-   Double_t fLength;
-   Double_t fWidth;
-   TFile    fSourcesFile;
-   TFile    fDataFile;
+   Double_t    fLength;
+   Double_t    fWidth;
+   TDirectory* fSourcesFile;
+   TDirectory* fDataFile;
    std::auto_ptr<TTree>   fDataTree;
    std::auto_ptr<TStripeAnalysis> fCorr;  // For deflection calculation.
    std::auto_ptr<TStripeAnalysis> fCorr1; // For couting in stripes.
 
    public:
-   TAnalysis(const char* sources, const char* data);
+   TAnalysis(TDirectory* sources,TDirectory* data);
    void SetLength(Double_t l) {fLength = l;}
    void SetWidth(Double_t w) {fWidth = w;}
    void GenDeflectionGraphs();

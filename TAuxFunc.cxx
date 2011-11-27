@@ -168,11 +168,27 @@ void TAuxFunc::find_multiplets( Double_t l, Double_t w,
    // sources file. The same will be done to the graphs of number of events versus 
    // orientation.
 
+   TFile sources(sourcesfile,"update");
+
+   if (sources.IsZombie()) {
+      cerr << "TAuxFunc::find_multiplets(): File with sources not found\n";
+      return;
+   }
+
+   TFile data(filename);
+
+   if (data.IsZombie()) {
+      cerr << "TAuxFunc::find_multiplets(): File with data not found\n";
+      return;
+   }
+
    try {
-      TAnalysis analysis(sourcesfile,filename);
+      TAnalysis analysis(&sources,&data);
       analysis.SetLength(l);
       analysis.SetWidth(w);
       analysis.GenDeflectionGraphs();
+      sources.Write(0,TObject::kOverwrite);
+      sources.Close();
    } catch (const char* str) {
       cout << str << endl;
       terminate();
@@ -187,11 +203,27 @@ void TAuxFunc::n_vs_gamma( Double_t l, Double_t w,
    // sources file. The same will be done to the graphs of number of events versus 
    // orientation.
 
+   TFile sources(sourcesfile,"update");
+
+   if (sources.IsZombie()) {
+      cerr << "TAuxFunc::n_vs_gamma(): File with sources not found\n";
+      return;
+   }
+
+   TFile data(filename);
+
+   if (data.IsZombie()) {
+      cerr << "TAuxFunc::n_vs_gamma(): File with data not found\n";
+      return;
+   }
+
    try {
-      TAnalysis analysis(sourcesfile,filename);
+      TAnalysis analysis(&sources,&data);
       analysis.SetLength(l);
       analysis.SetWidth(w);
       analysis.CountEvents();
+      sources.Write(0,TObject::kOverwrite);
+      sources.Close();
    } catch (const char* str) {
       cout << str << endl;
       terminate();
@@ -221,6 +253,7 @@ void TAuxFunc::find_sources(const char* emin,
    // cut on the TTree.
 
    std::auto_ptr<TFile> fEventsFile(TFile::Open(filename));
+
    if (fEventsFile->IsZombie()) {
       std::cerr << "File "<< filename <<" not found.\n";
       return;
@@ -238,7 +271,7 @@ void TAuxFunc::find_sources(const char* emin,
       std::cout << "Finding sources ...\n";
       finder.FindSources();
       gDirectory->ls();
-      gDirectory->Write();
+      gDirectory->Write(0,TObject::kOverwrite);
       f.Close();
    } catch(const char* message) {
       cout << "Exception caught: " <<  message << endl;

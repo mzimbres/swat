@@ -24,6 +24,7 @@
 
 // ROOT
 
+#include "TDirectory.h"
 #include "TTree.h"
 #include "TMath.h"
 #include "TEventList.h"
@@ -53,31 +54,25 @@
 using namespace std;
 
 //_____________________________________________________________________
-TAnalysis::TAnalysis(const char* sources, const char* data): 
-fLength(6), fWidth(1), fSourcesFile(sources,"update"), fDataFile(data)
+TAnalysis::TAnalysis(TDirectory* sources,TDirectory* data): 
+fLength(6), fWidth(1), fSourcesFile(sources), fDataFile(data)
 {
    // This constructor assumes a TTree with name events list
    // is in the file fSourcesFile
 
-   if (fSourcesFile.IsZombie())
-      throw "TAnalysis::TAnalysis(): File with sources not found";
-
-   if (fDataFile.IsZombie())
-      throw "TAnalysis::TAnalysis(): File with data not found";
-
-   TObject* obj = fDataFile.Get("events");
+   TObject* obj = fDataFile->Get("events");
 
    if (obj == 0)
       throw "No TTree events in the sources file";
 
    fDataTree.reset(dynamic_cast<TTree*>(obj));
 
-   obj = fSourcesFile.Get("list");
+   obj = fSourcesFile->Get("list");
 
    if (obj == 0)
       throw "No events list in sources file.";
 
-   TEventList *list = dynamic_cast<TEventList*>(fSourcesFile.Get("list"));
+   TEventList *list = dynamic_cast<TEventList*>(fSourcesFile->Get("list"));
    fDataTree->SetEventList(list);
 
    std::string title(fDataTree->GetTitle());
@@ -102,12 +97,12 @@ void TAnalysis::GenDeflectionGraphs()
 
    Int_t count = 0;
 
-   fSourcesFile.cd();
-   TListIter iter(fSourcesFile.GetListOfKeys());
+   fSourcesFile->cd();
+   TListIter iter(fSourcesFile->GetListOfKeys());
    while (TKey* key = (TKey*)iter.Next()){
       TClass tmp1(key->GetClassName());
       if (tmp1.InheritsFrom("TEulerAngle")){
-         std::auto_ptr<TEulerAngle> ang(dynamic_cast<TEulerAngle*>(fSourcesFile.Get(key->GetName())));
+         std::auto_ptr<TEulerAngle> ang(dynamic_cast<TEulerAngle*>(fSourcesFile->Get(key->GetName())));
          fCorr->SetEulerAngles(ang.get());
          fCorr->SetLengthWidth(fLength,fWidth); // Must be here.
          TString gname = "g";
@@ -117,8 +112,6 @@ void TAnalysis::GenDeflectionGraphs()
          ++count;
       }
    }
-
-   fSourcesFile.Write(0,TObject::kOverwrite);
 }
 
 
@@ -131,11 +124,11 @@ void TAnalysis::CountEvents()
    Double_t rate = 180./n;
    Int_t count = 0;
 
-   TListIter iter(fSourcesFile.GetListOfKeys());
+   TListIter iter(fSourcesFile->GetListOfKeys());
    while (TKey* key = (TKey*)iter.Next()){
       TClass tmp1(key->GetClassName());
       if (tmp1.InheritsFrom("TEulerAngle")){
-         auto_ptr<TEulerAngle> ang(dynamic_cast<TEulerAngle*>(fSourcesFile.Get(key->GetName())));
+         auto_ptr<TEulerAngle> ang(dynamic_cast<TEulerAngle*>(fSourcesFile->Get(key->GetName())));
          ang->Show(1);
          fCorr1->SetEulerAngles(ang.get());
          fCorr1->SetLengthWidth(fLength,fWidth); // Must be here.
@@ -170,15 +163,10 @@ void TAnalysis::CountEvents()
          }
          out.close();
 
-         fSourcesFile.Add(g);
+         fSourcesFile->Add(g);
          ++count;
       }
    }
-
-   // Now graphs of correlation function are on the current directory.
-
-   //cout << "Writing directory: " << gDirectory->GetName() << endl;
-   fSourcesFile.Write(0,TObject::kOverwrite);
 }
 
 
