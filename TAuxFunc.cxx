@@ -73,31 +73,6 @@ using namespace TMath;
 using namespace std;
 
 //___________________________________________________________________
-bool TAuxFunc::valid_file(const TFile& file,const char* classname)
-{
-   // Check if all objects in file are of type classname.
-
-   Int_t nobjs = file.GetNkeys();
-
-   TListIter iter(file.GetListOfKeys());
-
-   Int_t count = 0;
-   while(TKey* key = (TKey*)iter.Next()){
-      TClass tmp(key->GetClassName());
-      if (tmp.InheritsFrom(classname))
-         ++count;
-   }
-
-   if (count != nobjs){
-      cout << (nobjs - count) << " objects in file " << file.GetName();
-      cout << " are not of type " << classname << endl;
-      return kFALSE;
-   }
-
-   return kTRUE;
-}
-
-//___________________________________________________________________
 TAlm* TAuxFunc::alm2wav2alm(const TAlm& alm,Int_t N,Int_t jmin,Int_t jmax)
 {
    // Transform alm to wavelet domain, using wavelet with azimuthal
@@ -245,18 +220,28 @@ void TAuxFunc::find_sources(const char* emin,
    // generate an event list for the cut provided and sets the 
    // cut on the TTree.
 
+   std::auto_ptr<TFile> fEventsFile(TFile::Open(filename));
+   if (fEventsFile->IsZombie()) {
+      std::cerr << "File "<< filename <<" not found.\n";
+      return;
+   }
+
    try {
-      TSourcesFinder finder(filename);
+      TSourcesFinder finder;
       finder.SetMinEnergy(emin);
       finder.SetMaxEnergy(emax);
       finder.SetN(N);
       finder.SetScale(j);
       finder.SetNSources(nsources);
       finder.SetSeparation(w);
+      TFile f("sources.root","recreate");
+      std::cout << "Finding sources ...\n";
       finder.FindSources();
+      gDirectory->ls();
+      gDirectory->Write();
+      f.Close();
    } catch(const char* message) {
-      cout << "No able to find sources, Exception message: "<< endl;
-      cout << message << endl;
+      cout << "Exception caught: " <<  message << endl;
       return;
    }
 }

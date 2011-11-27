@@ -43,7 +43,6 @@ class TSourcesFinder {
    std::string fSourcesFile; //! File name
    std::string fCut; //! Cuts
    TTree* fEvents; //!
-   std::auto_ptr<TFile> fEventsFile; //!
    void fSetCutHerald(std::string max,std::string min);
    void fSetCutCRPropa(std::string max,std::string min);
    FileType fTypeId; //!
@@ -51,8 +50,7 @@ class TSourcesFinder {
    TSourcesFinder& operator=(const TSourcesFinder& obj);
 
    public:
-                TSourcesFinder(const char* eventsfile);
-	        ~TSourcesFinder() { };
+                TSourcesFinder();
    static const char* fHeraldCut;  
    void         SetMaxEnergy(const char* emax) { fMaxEnergy = emax; }
    void         SetMinEnergy(const char* emin) { fMinEnergy = emin; }

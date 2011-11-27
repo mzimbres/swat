@@ -23,7 +23,6 @@
 // ROOT
 
 #include "TObject.h"
-#include "TFile.h"
 #include "TTree.h"
 #include "TEventList.h"
 #include "TSelector.h"
@@ -50,29 +49,23 @@ const char* TSourcesFinder::fHeraldCut = "(three < 60.) && (twentythree > 1.) &&
 
 
 //_________________________________________________________________
-TSourcesFinder::TSourcesFinder(const char* eventsfile): 
-fNSources(15), fN(1), fScale(2), fSep(3.), fMaxEnergy("40."), 
+TSourcesFinder::TSourcesFinder(): 
+fNSources(15), fN(1), fScale(1), fSep(3.), fMaxEnergy("40."), 
 fMinEnergy("15."), fSourcesFile("sources.root")
 {
    // Will openfile and get a pointer to the TTree called events.
    // Very important: This function must be called after setting cuts.
 
-   fEventsFile.reset(TFile::Open(eventsfile));
-   if (fEventsFile->IsZombie()){
-      std::cerr << "File "<< eventsfile <<" not found.";
-      throw "TSourcesFile: Events file does not exist.";
-   }
-
    TObject* obj = gDirectory->Get("events");
 
    if (obj == NULL){
-      std::cout << "Events object not in the current directory." << std::endl;
+      std::cerr << "Events object not in the current directory." << std::endl;
       throw "TSourcesFile: File type not supported.";
    }
 
    if (!obj->InheritsFrom("TTree")){
-      std::cout << "Object with name events is not a TTree." << std::endl;
-      throw "TSourcesFile: File type not supported.";
+      std::cerr << "Object with name events is not a TTree." << std::endl;
+      throw "TSourcesFile: No TTree in the directory.";
    }
 
    fEvents = dynamic_cast<TTree*>(obj);
@@ -91,7 +84,6 @@ fMinEnergy("15."), fSourcesFile("sources.root")
       std::cerr << "File not supported" << std::endl;
       throw "TSourcesFile: File type not supported.";
    }
-
 }
 
 //__________________________________________________________
@@ -114,9 +106,7 @@ void TSourcesFinder::fSetCutCRPropa(std::string max,std::string min)
 //______________________________________________
 void TSourcesFinder::FindSources()
 {
-   // Find sources algorithm. A TTree with name events
-   // will be looked for in the current directory
-   // and events will be read from it.
+   // Find sources algorithm. 
 
    std::auto_ptr<TSelector> fMapSelector;
 
@@ -150,13 +140,6 @@ void TSourcesFinder::FindSources()
    std::cout << "Transforming to wavelet space ...\n";
    std::auto_ptr<TWavMap> wav(TAuxFunc::SWAT(alm,fScale,fN));
 
-   TFile f(fSourcesFile.c_str(),"recreate");
-   std::cout << "Finding sources ...\n";
    wav->FindSources(fNSources,fSep);
-   list->Write();
-   hmap->Write();
-
-   std::cout << "Saving the sources file ...\n";
-   f.Write();
 }
 

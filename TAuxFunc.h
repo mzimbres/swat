@@ -51,7 +51,6 @@ namespace TAuxFunc {
 		       const char* sourcesfile = "sources.root",
 		       const char* filename = "chain.root");
 			    
-   bool     valid_file(const TFile& file,const char* classname);
    bool     compare_alm(const TAlm& alm1,const TAlm& alm2);
    TAlm*    rand_gaus_alm(int J,double mean,double sigma);
    TWavMap* SWAT(const TAlm& alm,int j,int N);
