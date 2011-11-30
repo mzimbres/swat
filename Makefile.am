@@ -199,6 +199,7 @@ dist_pkgdata_DATA = $(MACRODIR)/DrawLatitudesLongitudes.C \
                     $(MACRODIR)/swat.C                    \
                     $(MACRODIR)/add_background.C          \
                     $(MACRODIR)/mais.C                    \
+                    $(MACRODIR)/read_rafael.C             \
 	            $(MACRODIR)/wig_graph.C
 #________________________________________________________________
 
