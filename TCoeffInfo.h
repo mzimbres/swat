@@ -26,8 +26,6 @@
 
 // SWAT
 
-
-
 #include "swat.h" 
 
 class TCoeffInfo {
