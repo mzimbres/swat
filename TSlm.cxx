@@ -52,7 +52,7 @@ complex<double> TSlm::operator()(int l,int m) const
       int beta = ((fN + m) & 1) ? 1 : 0;
       int ll = l - (((fN + l) & 1) ? 0 : 1);
       int gamma = ((fN - 1) < ll) ? (fN - 1): ll;
-      double a = pow(2,-gamma);
+      double a = pow(2.,-gamma);
       double b = Binomial(gamma,(gamma-m) >> 1);
       return beta*sqrt(a*b)*eta;
    }  
