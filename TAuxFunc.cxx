@@ -401,3 +401,94 @@ void TAuxFunc::gensky(int n,TRandom& a,TF1* e)
    gDirectory->Add(newt,kTRUE);
 }
 
+void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)
+{
+   // Adds events from TTree called events in file.
+   // The tree contains a CRPropa-like tree, that can be used in other
+   // analysis code. Algorithm sets only theta phi and energy, other branch
+   // are filled with not meaningfull values.
+
+   TTree* newt = (TTree*) gDirectory->Get("events");
+
+   if (newt == 0) {
+      cerr << "Not TTree events in directory." << endl;
+      return;
+   }
+
+   float y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15;
+
+   TBranch        *b_y1; 
+   TBranch        *b_y2;
+   TBranch        *b_y3;
+   TBranch        *b_y4;
+   TBranch        *b_y5;
+   TBranch        *b_y6;
+   TBranch        *b_y7;
+   TBranch        *b_y8;
+   TBranch        *b_y9;
+   TBranch        *b_y10;
+   TBranch        *b_y11;
+   TBranch        *b_y12;
+   TBranch        *b_y13;
+   TBranch        *b_y14;
+   TBranch        *b_y15;
+
+   newt->SetBranchAddress("Particle_Type"         ,&y1 ,&b_y1 ); 
+   newt->SetBranchAddress("Initial_Type"          ,&y2 ,&b_y2 );
+   newt->SetBranchAddress("Initial_Position_X_Mpc",&y3 ,&b_y3 );
+   newt->SetBranchAddress("Initial_Position_Y_Mpc",&y4 ,&b_y4 );
+   newt->SetBranchAddress("Initial_Position_Z_Mpc",&y5 ,&b_y5 );
+   newt->SetBranchAddress("Initial_Momentum_E_EeV",&y6 ,&b_y6 );
+   newt->SetBranchAddress("Initial_Momentum_theta",&y7 ,&b_y7 );
+   newt->SetBranchAddress("Initial_Momentum_phi"  ,&y8 ,&b_y8 );
+   newt->SetBranchAddress("Time_Mpc"              ,&y9 ,&b_y9 );
+   newt->SetBranchAddress("Position_X_Mpc"        ,&y10,&b_y10);
+   newt->SetBranchAddress("Position_Y_Mpc"        ,&y11,&b_y11);
+   newt->SetBranchAddress("Position_Z_Mpc"        ,&y12,&b_y12);
+   newt->SetBranchAddress("Momentum_E_EeV"        ,&y13,&b_y13);
+   newt->SetBranchAddress("Momentum_theta"        ,&y14,&b_y14);
+   newt->SetBranchAddress("Momentum_phi"          ,&y15,&b_y15);
+
+   double x,y,z;
+   for (int i = 0; i < n/2; ++i) {
+      y1  = 1;   
+      y2  = 1; 
+      y3  = 1; 
+      y4  = 1; 
+      y5  = 1; 
+      y6  = 1; 
+      y7  = 1; 
+      y8  = 1; 
+      y9  = 1; 
+      y10 = 10; 
+      y11 = 11; 
+      y12 = 12; 
+      y13 = e->GetRandom(); 
+      a.Sphere(x,y,z,1);
+      y14 = TMath::ACos(z);
+      y15 = TMath::ATan(y/x) + TMath::Pi()/2;
+      newt->Fill();
+   }
+
+   for (int i = 0; i < n/2; ++i) {
+      y1  = 1;   
+      y2  = 1; 
+      y3  = 1; 
+      y4  = 1; 
+      y5  = 1; 
+      y6  = 1; 
+      y7  = 1; 
+      y8  = 1; 
+      y9  = 1; 
+      y10 = 10; 
+      y11 = 11; 
+      y12 = 12; 
+      y13 = e->GetRandom(); 
+      a.Sphere(x,y,z,1);
+      y14 = TMath::ACos(z);
+      y15 = TMath::ATan(y/x) - TMath::Pi()/2;
+      newt->Fill();
+   }
+
+}
+

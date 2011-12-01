@@ -25,6 +25,7 @@
 class TFile;
 class TRandom;
 class TF1;
+class TDirectory;
 
 // SWAT
 
@@ -58,6 +59,7 @@ namespace TAuxFunc {
    TWavMap* SWAT(const TAlm& alm,int j,int N);
    TVMap*   SHT(const TAlm& alm,bool healpixmap = false);
    void     gensky(int n,TRandom& a,TF1* e);
+   void     gensky_from(int n,TRandom& a,TF1* e);
 }
 
 #endif
