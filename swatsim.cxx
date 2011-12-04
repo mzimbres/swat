@@ -117,10 +117,8 @@ int main(int argc,char* argv[])
       analysis.SetWidth(width/2);
       analysis.GenDeflectionGraphs();
       TGraph* g = (TGraph*)gDirectory->Get("g0");
-      if (!g) {
-	 cerr << "Graph has not been produced." << endl;
-	 exit(EXIT_FAILURE);
-      }
+      if (!g) 
+         continue;
       double corr = abs(g->GetCorrelationFactor());
       double npoints = g->GetN();
       gDirectory->Clear();
