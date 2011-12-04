@@ -13,16 +13,15 @@
 
 using namespace std;
 
-template<typename T>
-T mean(vector<T>& vec)
+double mean(vector<double>& vec)
 {
    // Mean of a vector, meant for double of float.
 
    if (vec.empty())
       throw "I do no want to calculate the mean of an empty vector.";
 
-   typename vector<T>::iterator iter = vec.begin();
-   T total = T(0);
+   vector<double>::iterator iter = vec.begin();
+   double total = 0;
    do {
       total += *++iter;
    } while (iter != vec.end());
@@ -30,16 +29,15 @@ T mean(vector<T>& vec)
    return total/vec.size();
 }
 
-template<typename T>
-double stddev(vector<T>& vec, T mean)
+double stddev(vector<double>& vec, double mean)
 {
    // Standard deviation, given a mean.
 
    if (vec.empty())
       throw "I do no want to calculate the mean of an empty vector.";
 
-   typename vector<T>::iterator iter = vec.begin();
-   T total = T(0);
+   vector<double>::iterator iter = vec.begin();
+   double total = 0;
    do {
       double tmp = *++iter - mean;
       total += tmp*tmp;
@@ -126,16 +124,22 @@ int main(int argc,char* argv[])
 
    TF1 f("f","pow(x,-3)",min,max);
 
-   TFile ff(file.c_str(),"update");
+   TFile ff(file.c_str());
 
    if (ff.IsZombie()) {
       cerr << "Error: zombie file" << endl;
       exit(EXIT_FAILURE);
    }
+   TTree* readt = (TTree*)ff.Get("events");
 
-   vector<double> corrs(s);
-   vector<double> nevents(s);
+   TGraph* g = 0;
+   vector<double> corrs;
+   vector<double> nevents;
+
    for (int sky = 0; sky < s; ++sky) {
+      TFile newfile("swatsim2-tmp.root","recreate");
+      TTree* newtree = readt->CloneTree();
+
       TRandom a(sky);
       gensky_from(n,a,&f);
 
@@ -152,13 +156,10 @@ int main(int argc,char* argv[])
       analysis.SetLength(length/2);
       analysis.SetWidth(width/2);
       analysis.GenDeflectionGraphs();
-      TGraph* g = (TGraph*)gDirectory->Get("g0");
-      if (!g) {
-	 cerr << "Graph has not been produced." << endl;
-	 exit(EXIT_FAILURE);
+      if ((g = (TGraph*)gDirectory->Get("g0")) != 0) {
+	 corrs.push_back(abs(g->GetCorrelationFactor()));
+	 nevents.push_back(static_cast<double>(g->GetN()));
       }
-      corrs[sky] = abs(g->GetCorrelationFactor());
-      nevents[sky] = g->GetN();
       gDirectory->Clear();
    }
 
