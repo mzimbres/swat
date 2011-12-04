@@ -74,11 +74,11 @@ fMinEnergy("15."), fSourcesFile("sources.root")
 
    if (title == "Data from herald file"){
       fTypeId = Herald;
-      std::cout << "Processing Herald file\n";
+      //std::cout << "Processing Herald file\n";
 
    } else if (title == "CRPropa 3D events"){
       fTypeId = CRPropa;
-      std::cout << "Processing CRProa file\n";
+      //std::cout << "Processing CRProa file\n";
 
    } else {
       std::cerr << "File not supported" << std::endl;
@@ -112,32 +112,32 @@ void TSourcesFinder::FindSources()
 
    switch ( fTypeId ) {
       case Herald: 
-	 std::cout << "Setting Cuts ...\n";
+	 //std::cout << "Setting Cuts ...\n";
 	 fSetCutHerald(fMaxEnergy,fMinEnergy);
-	 std::cout << "Creating a selector ...\n";
+	 //std::cout << "Creating a selector ...\n";
 	 fMapSelector.reset(new TMapSelector);
 	 break;
       case CRPropa:
-	 std::cout << "Setting Cuts ...\n";
+	 //std::cout << "Setting Cuts ...\n";
 	 fSetCutCRPropa(fMaxEnergy,fMinEnergy);
-	 std::cout << "Creating a selector ...\n";
+	 //std::cout << "Creating a selector ...\n";
 	 fMapSelector.reset(new TMapSelectorCRPropa);
 	 break;
    }
 
-   std::cout << "Creating an events list ...\n";
+   //std::cout << "Creating an events list ...\n";
    fEvents->Draw(">>list",fCut.c_str());
 
    TEventList* list = dynamic_cast<TEventList*>(gDirectory->Get("list"));
    fEvents->SetEventList(list);
-   std::cout << "Creating the sky map ...\n";
+   //std::cout << "Creating the sky map ...\n";
    fEvents->Process(fMapSelector.get());
 
    THealpixMap* hmap = dynamic_cast<THealpixMap*>(gDirectory->Get("hmap"));
-   std::cout << "Transforming to harmonic space ...\n";
+   //std::cout << "Transforming to harmonic space ...\n";
    TAlm alm(hmap->GetJ());
    hmap->CreateAlm(alm);
-   std::cout << "Transforming to wavelet space ...\n";
+   //std::cout << "Transforming to wavelet space ...\n";
    std::auto_ptr<TWavMap> wav(TAuxFunc::SWAT(alm,fScale,fN));
 
    wav->FindSources(fNSources,fSep);

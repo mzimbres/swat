@@ -84,7 +84,7 @@ fLength(6), fWidth(1), fSourcesFile(sources), fDataFile(data)
    } else if (title == "CRPropa 3D events"){
       fCorr.reset(new TCorrSelectorCRPropa);
       fCorr1.reset(new TCounterCRPropa);
-      std::cout << "Processing CRPropa file" << endl;
+      //std::cout << "Processing CRPropa file" << endl;
    } else {
       throw "File type not supported";
    }

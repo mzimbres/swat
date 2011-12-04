@@ -13,7 +13,6 @@ using namespace std;
 
 void mais()
 {
-
    //TFile aa("stuff.root","recreate");
    int N = 1, j = 1;
    double w = 3;

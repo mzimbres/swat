@@ -75,7 +75,7 @@ void TMapSelectorCRPropa::SlaveTerminate()
 
 void TMapSelectorCRPropa::Terminate()
 {
-   cout << "Number of events in the map: " << fCount << endl;
+   //cout << "Number of events in the map: " << fCount << endl;
 
    out.close();
 

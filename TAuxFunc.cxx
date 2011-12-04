@@ -152,10 +152,10 @@ bool TAuxFunc::compare_alm(const TAlm& alm1,const TAlm& alm2)
    }
 
    if ((maxr <= 10e-10) && (maxi <= 10e-10)) {
-      cout << "Ok, maximum error: (" << maxr << "," << maxi << ")" << endl;
+      //cout << "Ok, maximum error: (" << maxr << "," << maxi << ")" << endl;
       return true;
    } else {
-      cout << "Not ok, maximum error: (" << maxr << "," << maxi << ")" << endl;
+      cerr << "Not ok, maximum error: (" << maxr << "," << maxi << ")" << endl;
    }
 
    return false;
@@ -398,7 +398,6 @@ void TAuxFunc::gensky(int n,TRandom& a,TF1* e)
       y15 = TMath::ATan(y/x) - TMath::Pi()/2;
       newt->Fill();
    }
-   gDirectory->Add(newt,kTRUE);
 }
 
 void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)
