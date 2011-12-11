@@ -95,12 +95,12 @@ void TCorrSelectorCRPropa::Terminate()
    out.close();
    delete fAngle;
 
-   Int_t size = fEnergy.size();
+   //Int_t size = fEnergy.size();
 
-   if (size == 0) {
-      cout << "No points selected." << endl;
-      return;
-   }
+   //if (size == 0) {
+   //   cout << "No points selected." << endl;
+   //   return;
+   //}
 
    fGraph = new TGraph(fEnergy.size(),&fEnergy[0],&fAngle2[0]);
 

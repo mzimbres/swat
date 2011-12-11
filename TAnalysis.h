@@ -39,7 +39,7 @@ class TAnalysis {
    Double_t    fWidth;
    TDirectory* fSourcesFile;
    TDirectory* fDataFile;
-   std::auto_ptr<TTree>   fDataTree;
+   TTree*   fDataTree;
    std::auto_ptr<TStripeAnalysis> fCorr;  // For deflection calculation.
    std::auto_ptr<TStripeAnalysis> fCorr1; // For couting in stripes.
 

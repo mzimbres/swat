@@ -332,7 +332,7 @@ TVMap* TAuxFunc::SHT(const TAlm& alm,bool healpixmap)
 
 }
 
-void TAuxFunc::gensky(int n,TRandom& a,TF1* e)
+TTree* TAuxFunc::gensky(int n,TRandom& a,TF1* e)
 {
    // Generate a TTree with name events and adds it to the current directory.
    // The tree contains a CRPropa-like tree, that can be used in other
@@ -398,6 +398,7 @@ void TAuxFunc::gensky(int n,TRandom& a,TF1* e)
       y15 = TMath::ATan(y/x) - TMath::Pi()/2;
       newt->Fill();
    }
+   return newt;
 }
 
 void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)

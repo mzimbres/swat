@@ -7,7 +7,9 @@
 #include "TSourcesFinder.h"
 #include "TAnalysis.h"
 #include "TGraph.h"
+#include "TTree.h"
 #include "TDirectory.h"
+#include "TH1D.h"
 #include <stdlib.h>
 
 using namespace std;
@@ -16,11 +18,11 @@ using namespace TAuxFunc;
 void print_usage(const char* prog)
 {
    cout << "\n\n\
-   Monte Carlo simulation. It calculates the probability\n\
-   of a multiplet happen by chance on an isotropic sky.\n\
-   The probability of a mltiplet happen by chance will be \n\
-   the number of multiplet candidates passing crterium divided\n\
-   by total number of skies simulated.\n\n\
+   Calculates the probability of a multiplet happen by chance on an\n\
+   isotropic sky. The probability of a multiplet happen by chance will be\n\
+   the number of multiplet candidates passing criterium divided by total\n\
+   number of skies simulated. It also calculates the histogram of the\n\
+   correlation function and saves it the root file\n\ correlation.root.\n\n\
    Usage: " << prog << " [ -j scale] [-N number] [-n nevents] \n\
            [-i emin] [-e emax] [-w width] [-l length] \n\
    Options:\n\n\
@@ -53,7 +55,7 @@ int main(int argc,char* argv[])
 
    char opt;
 
-   while ((opt = getopt(argc,argv,"hj:m:N:n:i:e:w:l:c:s:")) != -1) {
+   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:")) != -1) {
       switch (opt) {
          case 'j':
 	    j = atoi(optarg);
@@ -97,11 +99,15 @@ int main(int argc,char* argv[])
    }
 
    TF1 f("f","pow(x,-3)",min,max);
+   TH1D hist("corr","Correlation",50,0,1);
+   TH1D hist2("n","Number of events hitting plane",12,0,12);
 
    int tmp = 0;
    for (int sky = 0; sky < s; ++sky) {
+      TFile temp("temp.root","recreate");
       TRandom a(sky);
-      gensky(n,a,&f);
+      TTree* t = gensky(n,a,&f);
+      gDirectory->Add(t);
 
       TSourcesFinder finder;
       finder.SetMinEnergy(emin.c_str());
@@ -117,15 +123,28 @@ int main(int argc,char* argv[])
       analysis.SetWidth(width/2);
       analysis.GenDeflectionGraphs();
       TGraph* g = (TGraph*)gDirectory->Get("g0");
-      if (!g) 
+      if (!g) {
+         hist2.Fill(0);
+         gDirectory->Clear();
          continue;
+      }
+
       double corr = abs(g->GetCorrelationFactor());
       double npoints = g->GetN();
-      gDirectory->Clear();
+      hist2.Fill(npoints);
+      gDirectory->DeleteAll();
       //cout << "C = " << corr << ", m = " << npoints << endl;
+      if (npoints >= m) 
+         hist.Fill(corr);
+
       if (corr >= C && npoints >= m)
          ++tmp;
+
    }
+   TFile fff("correlation.root","recreate");
+   hist.Write();
+   hist2.Write();
+   fff.Close();
 
    cout << "P = " << (tmp*100./s) << "%" << endl;
    return 0;

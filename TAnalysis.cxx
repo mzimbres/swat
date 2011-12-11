@@ -65,7 +65,7 @@ fLength(6), fWidth(1), fSourcesFile(sources), fDataFile(data)
    if (obj == 0)
       throw "No TTree events in the sources file";
 
-   fDataTree.reset(dynamic_cast<TTree*>(obj));
+   fDataTree = dynamic_cast<TTree*>(obj);
 
    obj = fSourcesFile->Get("list");
 
