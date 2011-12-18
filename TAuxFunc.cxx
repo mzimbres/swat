@@ -489,6 +489,5 @@ void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)
       y15 = TMath::ATan(y/x) - TMath::Pi()/2;
       newt->Fill();
    }
-
 }
 

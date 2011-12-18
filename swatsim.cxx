@@ -9,6 +9,7 @@
 #include "TGraph.h"
 #include "TTree.h"
 #include "TDirectory.h"
+#include "TTree.h"
 #include "TH1D.h"
 #include <stdlib.h>
 
@@ -22,9 +23,9 @@ void print_usage(const char* prog)
    isotropic sky. The probability of a multiplet happen by chance will be\n\
    the number of multiplet candidates passing criterium divided by total\n\
    number of skies simulated. It also calculates the histogram of the\n\
-   correlation function and saves it the root file\n\ correlation.root.\n\n\
+   correlation function and saves it the root file correlation.root.\n\n\
    Usage: " << prog << " [ -j scale] [-N number] [-n nevents] \n\
-           [-i emin] [-e emax] [-w width] [-l length] \n\
+           [-i emin] [-e emax] [-w width] [-l length] [-f file.root]\n\
    Options:\n\n\
    -h:     This menu.\n\
    -j:     The scale, it is a number in the range 0 <= j <= 8.\n\
@@ -34,6 +35,7 @@ void print_usage(const char* prog)
    -i:     Minimum energy of events, defaults to 20 EeV.\n\
    -e:     Maximum energy of events, defaults to 40 EeV.\n\
    -s:     Number of skies to simulate, defaults to 100.\n\
+   -f:     Add events in TTree stored in file.\n\
    -c:     Minimum correlation, defaults to 0.2\n\
    -m:     Minimum number of events hitting tangent plane, that will be used\n\
            to calculate the correlation, defaults to 4. If less than m, the sky\n\
@@ -51,14 +53,14 @@ int main(int argc,char* argv[])
 
    int N = 1, j = 1, n = 1000, m = 4, s = 100;
    double w = 3., width = 2., length = 10., min = 20., max = 40., C = 0.2;
-   string emin = "20", emax = "40";
+   string emin = "20", emax = "40", file;
+   bool add = false;
 
    char opt;
 
-   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:")) != -1) {
+   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:f:")) != -1) {
       switch (opt) {
-         case 'j':
-	    j = atoi(optarg);
+         case 'j': j = atoi(optarg);
 	    break;
          case 's':
 	    s = atoi(optarg);
@@ -73,6 +75,10 @@ int main(int argc,char* argv[])
          case 'e':
 	    emax = optarg;
 	    max = atof(optarg);
+	    break;
+         case 'f':
+	    file = optarg;
+	    add = true;
 	    break;
          case 'w':
 	    width = atof(optarg);
@@ -102,12 +108,34 @@ int main(int argc,char* argv[])
    TH1D hist("corr","Correlation",50,0,1);
    TH1D hist2("n","Number of events hitting plane",12,0,12);
 
+   TTree* addtree = 0;
+   if (add) {
+      TFile addfile(file.c_str());
+
+      if (addfile.IsZombie()) {
+         cerr << "TFile: Invalid file." << endl;
+	 exit(EXIT_FAILURE);
+      }
+
+      addtree = (TTree*) addfile.Get("events");
+      if (addtree == 0) {
+         cerr << "TFile: No Tree events in file." << endl;
+	 exit(EXIT_FAILURE);
+      }
+   }
+
    int tmp = 0;
    for (int sky = 0; sky < s; ++sky) {
       TFile temp("temp.root","recreate");
       TRandom a(sky);
       TTree* t = gensky(n,a,&f);
+
       gDirectory->Add(t);
+
+      if (add) {
+	 TList list(addtree);
+	 t->Merge(&list);
+      }
 
       TSourcesFinder finder;
       finder.SetMinEnergy(emin.c_str());
@@ -133,7 +161,6 @@ int main(int argc,char* argv[])
       double npoints = g->GetN();
       hist2.Fill(npoints);
       gDirectory->DeleteAll();
-      //cout << "C = " << corr << ", m = " << npoints << endl;
       if (npoints >= m) 
          hist.Fill(corr);
 
