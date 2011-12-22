@@ -414,7 +414,6 @@ void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)
       cerr << "Not TTree events in directory." << endl;
       return;
    }
-
    float y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15;
 
    TBranch        *b_y1; 
@@ -450,6 +449,7 @@ void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)
    newt->SetBranchAddress("Momentum_phi"          ,&y15,&b_y15);
 
    double x,y,z;
+
    for (int i = 0; i < n/2; ++i) {
       y1  = 1;   
       y2  = 1; 

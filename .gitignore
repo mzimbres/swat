@@ -1,4 +1,5 @@
 build/*
 Makefile.in
 configure
+myconfigure.sh
 
