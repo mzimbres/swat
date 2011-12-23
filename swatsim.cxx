@@ -114,7 +114,7 @@ int main(int argc,char* argv[])
 
    TF1 f("f","pow(x,-3)",min,max);
    TH1D hist("corr","Correlation",50,0,1);
-   TH1D hist2("n","Number of events hitting plane",20,0,20);
+   TH1D hist2("n","Number of events hitting plane",35,0,35);
 
    int tmp = 0;
    if (add) {
