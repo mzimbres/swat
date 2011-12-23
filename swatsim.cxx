@@ -114,7 +114,7 @@ int main(int argc,char* argv[])
 
    TF1 f("f","pow(x,-3)",min,max);
    TH1D hist("corr","Correlation",50,0,1);
-   TH1D hist2("n","Number of events hitting plane",12,0,12);
+   TH1D hist2("n","Number of events hitting plane",20,0,20);
 
    int tmp = 0;
    if (add) {
@@ -154,7 +154,8 @@ int main(int argc,char* argv[])
 	 analysis.GenDeflectionGraphs();
 	 TGraph* g = (TGraph*)gDirectory->Get("g0");
 	 if (!g) {
-	    hist2.Fill(0), gDirectory->Clear();
+	    hist2.Fill(0);
+	    gDirectory->Clear();
 	    continue;
 	 }
 
@@ -189,7 +190,8 @@ int main(int argc,char* argv[])
 	 analysis.GenDeflectionGraphs();
 	 TGraph* g = (TGraph*)gDirectory->Get("g0");
 	 if (!g) {
-	    hist2.Fill(0), gDirectory->Clear();
+	    hist2.Fill(0);
+	    gDirectory->Clear();
 	    continue;
 	 }
 
