@@ -1,0 +1,438 @@
+\documentclass[12pt]{report}
+\usepackage{tikz}
+\usepackage{verbatim}
+\usepackage{listings}
+   
+\lstset{ %
+language=C++,                % the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+keywordstyle=\color{black}\bfseries,
+%numbers=left,                   % where to put the line-numbers
+%numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+%stepnumber=2,                   % the step between two line-numbers. If it's 1, each line 
+%                                % will be numbered
+%numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{gray!20!white},  % choose the background color. You must add \usepackage{color}
+%showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,                   % adds a frame around the code
+%tabsize=2,                      % sets default tabsize to 2 spaces
+%captionpos=b,                   % sets the caption-position to bottom
+%breaklines=true,                % sets automatic line breaking
+%breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+title=\lstname,                 % show the filename of files included with \lstinputlisting;
+% also try caption instead of title
+%escapeinside={\%*}{*)},         % if you want to add a comment within your code
+%morekeywords={*,...}            % if you want to add more keywords to the set
+}
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{%
+   decorations.fractals%
+  ,decorations.pathmorphing%
+  ,shadows%
+}
+
+\usepackage{hyperref}
+\hypersetup{
+bookmarks=false,         % show bookmarks bar?
+unicode=false,          % non-Latin characters in Acrobat's bookmarks
+pdftoolbar=true,        % show Acrobat's toolbar?
+pdfmenubar=true,        % show Acrobat's menu?
+pdffitwindow=true,     % window fit to page when opened
+pdfstartview={FitH},    % fits the width of the page to the window
+pdftitle={O Framework ROOT},    % title
+pdfauthor={Marcelo Zimbres Silva},     % author
+pdfsubject={Encontro C++ Brasil},   % subject of the document
+pdfcreator={Marcelo Zimbres Silva},   % creator of the document
+pdfproducer={Marcelo Zimbres Silva}, % producer of the document
+pdfkeywords={C++} {ROOT}, % list of keywords
+pdfnewwindow=true,      % links in new window
+colorlinks=true,        % false: boxed links; true: colored links
+linkcolor=red,          % color of internal links
+citecolor=green,        % color of links to bibliography
+filecolor=magenta,      % color of file links
+urlcolor=cyan!50!black           % color of external links
+}
+
+% My definitions
+%______________________________________________________________________
+
+%\colorlet{swat}{yellow!50!black!50}
+\colorlet{swat}{brown!50!black!50} % box color
+\colorlet{textcolor}{brown!20!black} % text in box color
+\colorlet{swatred}{red!50!black}
+
+\tikzstyle{one}=[shade,top color=swat,fill=swat,rounded corners, textcolor,thick]
+\tikzstyle{onel}=[rotate=-10,shade,top color=swat,fill=swat,rounded corners, textcolor,thick]
+\tikzstyle{oner}=[rotate=10,shade,top color=swat,fill=swat,rounded corners, textcolor,thick]
+\tikzstyle{inherit}=[open triangle 45-,thick,textcolor]
+\tikzstyle{depend}=[draw,->,thick,textcolor,dashed]
+\tikzstyle{code}=[draw,shade,rounded corners,text width=9cm]
+
+
+\tikzstyle{two}=[anchor=north,shade,top color=swat,rectangle split, 
+                     rectangle split parts=2, draw, text width=2.0cm,
+		     fill=swat,rounded corners,textcolor,thick]
+
+\tikzstyle{twonowidth}=[anchor=north,shade,top color=swat,rectangle split, 
+                     rectangle split parts=2, draw, fill=swat,rounded corners,
+		     textcolor,thick]
+
+
+\tikzstyle{twored}=[anchor=north,shade,top color=swatred,rectangle split,
+                        rectangle split parts=2,draw,text width=2.0cm,fill=swatred]
+
+\tikzstyle{three}=[anchor=north,shade,top color=swat,rectangle split, rectangle split parts=3, draw, text width=3.0cm,fill=swat,
+rounded corners,textcolor,thick]
+
+\def\one{\node[style=one]}
+\def\onel{\node[style=onel]}
+\def\oner{\node[style=oner]}
+\def\two{\node[style=two]}
+\def\twonowidth{\node[style=twonowidth]}
+\def\code{\node[style=code]}
+
+\def\inherit{\draw[style=inherit]}
+\def\depend{\draw[style=depend]}
+
+\def\twored{\node[style=twored]}
+\def\three{\node[style=three]}
+
+%______________________________________________________________________
+\begin{document}
+
+  \parindent0pt
+  \null
+  \colorlet{mintgreen}{green!50!black!50}
+
+  \thispagestyle{empty}
+  \vskip3cm
+  \vfill
+  \hfil
+  \begin{tikzpicture}[overlay]
+    \coordinate (front) at (0,0);
+    \coordinate (horizon) at (0,.28\paperheight);
+    \coordinate (bottom) at (0,-.6\paperheight);
+    \coordinate (sky) at (0,.57\paperheight);
+    \coordinate (left) at (-.51\paperwidth,0);
+    \coordinate (right) at (.51\paperwidth,0);
+
+    \shade [bottom color=blue!30!black!10,top color=blue!30!black!50] ([yshift=-5mm]horizon -|  left) rectangle (sky -| right);
+    \shade [bottom color=black!70!green!25,top color=black!70!green!10] (front -| left) -- (horizon -| left)
+      decorate [decoration=random steps] { -- (horizon -| right) } -- (front -| right) -- cycle;
+    \shade [top color=black!70!green!25,bottom color=black!25] (front -| left) -- (horizon -| left)
+      decorate [decoration=random steps] { -- (horizon -| right) } -- (front -| right) -- cycle;
+    \shade [top color=black!70!green!25,bottom color=black!25] ([yshift=-0mm]front -| left) rectangle ([yshift=1pt]front -| right);
+    \fill [black!25] (bottom -| left) rectangle ([yshift=1mm]front -| right);
+
+    \def\nodeshadowed[#1]#2;{\node[scale=2,above,#1]{#2};\node[scale=2,
+        above,#1,yscale=-1,scope fading=south,opacity=0.4]{#2};}
+
+    \node[at={(-0,6  )}] {\Huge \textsc{\textcolor{red}{SWAT}}}; 
+    \node[at={(-0,4  )}] {\Huge {The \textcolor{red}{S}pherical \textcolor{red}{W}avelet \textcolor{red}{A}nalysis \textcolor{red}{T}ool}};
+    \node[at={( 0,2  )}] {\Large Manual for version 2.32};
+
+    \one (TObject) at (-8,15) {\Large TObject};
+    \one (TArrayD) at (-3,15) {\Large TArrayD};
+    \one (TDKernel) at (2,15) {\Large TDKernel};
+    \one (TCoeffInfo) at (7,15) {\Large TCoeffInfo};
+
+    \one (TNamed) at (-8,13) {\Large TNamed};
+    \one (TVMap) at (-3,13) {\Large TVMap};
+    \one (TEulerAngle) at (2,13) {\Large TEulerAngle};
+    \one (TAngDistance) at (7,13) {\Large TAngDistance};
+
+    \one (TSkyMap) at (-8,11) {\Large TSkyMap};
+    \one (TWignerd) at (-3,11) {\Large TWignerd};
+    \one (TWavMap) at (2,11) {\Large TWavMap};
+    \one (TAlm) at (7,11) {\Large TAlm};
+
+    \one (TSphHarmB) at (-8,9) {\Large TSphHarmB};
+    \one (TSwatB) at (-3,9) {\Large TSwatB};
+    \one (TSwatF) at (2,9) {\Large TSwatF};
+    \one (TSphHarmF) at (7,9) {\Large TSphHarmF};
+   
+   %_______________________________________________________
+   \draw[draw,-open triangle 45,thick,color=gray] (node cs:name=TNamed) -- (node cs:name=TObject);
+   \draw[open triangle 45-,thick,gray] (node cs:name=TDKernel,anchor=south) |- +(0,-1)  node (y) {};
+   \draw[open triangle 45-,thick,gray] (node cs:name=TCoeffInfo,anchor=south) |- +(0,-1)-- +(-10.0,-1);
+   \draw[open triangle 45-,thick,gray] (node cs:name=TArrayD,anchor=south) -- (node cs:name=TVMap);
+   \draw[draw,-open triangle 45,thick,gray] (node cs:name=TVMap) -- (node cs:name=TNamed);
+   \draw[draw,-open triangle 45,thick,gray] (node cs:name=TSkyMap) -- (node cs:name=TVMap);
+   \draw[draw,-open triangle 45,thick,gray] (node cs:name=TWavMap) -- (node cs:name=TVMap);
+   \draw[draw,->,thick,gray,dashed] (node cs:name=TWavMap) -- (node cs:name=TSwatB) node[midway,sloped,above]           {};
+   \draw[draw,->,thick,gray,dashed] (node cs:name=TWavMap) -- (node cs:name=TAlm) node[midway,sloped,above]             {};
+   \draw[draw,->,thick,gray,dashed] (node cs:name=TSkyMap) -- (node cs:name=TSphHarmB) node[midway,sloped,above]        {};
+   \draw[draw,->,thick,gray,dashed] (node cs:name=TSwatB) -- (node cs:name=TWignerd) node[midway,sloped,above]          {};
+   \draw[draw,->,thick,gray,dashed] (node cs:name=TSphHarmB) -- (node cs:name=TWignerd) node[midway,sloped,above]       {};
+   \draw[draw,->,thick,gray,dashed] (node cs:name=TWavMap) -- (node cs:name=TEulerAngle) node[midway,sloped,above]      {};
+   \draw[draw,->,thick,gray,dashed] (node cs:name=TAngDistance) -- (node cs:name=TEulerAngle) node[midway,sloped,above] {};
+   \draw[draw,->,thick,gray,dashed] (node cs:name=TAlm) -- (node cs:name=TSwatF) node[midway,sloped,above]              {};
+   \draw[draw,->,thick,gray,dashed] (node cs:name=TAlm) -- (node cs:name=TSphHarmF) node[midway,sloped,above]           {};
+
+   %_______________________________________________________
+
+    \node[text width=15cm] at (-1,-5.5) 
+    { \bf\small
+    Double\_t TWignerd::Delta(Int\_t m,Int\_t n) const \newline
+    \{ \newline 
+    \textcolor{white}{\ \ \ if} (m $<$ 0) \{\newline
+          \textcolor{white}{\ \ \ \ \ \ if} (n $<$ 0) \{\newline
+             \textcolor{white}{\ \ \ \ \ \ \ \ \ if} (m $>=$ n)\newline
+                \textcolor{white}{\ \ \ \ \ \ \ \ \ \ \ \ return} fMatrix[fIndex(-n,-m)];\newline
+             \textcolor{white}{\ \ \ \ \ \ \ \ \ return} Even(n-m) ? fMatrix[fIndex(-m,-n)]: -fMatrix[fIndex(-m,-n)];\newline
+        \textcolor{white}{\ \ \ \ \ \ }  \} else \{\newline
+             \textcolor{white}{\ \ \ \ \ \ \ \ \ if} (n $<=$ Abs(m))\newline
+                \textcolor{white}{\ \ \ \ \ \ \ \ \ \ \ \ return} Even(fL-n) ? fMatrix[fIndex(-m,n)]: -fMatrix[fIndex(-m,n)];\newline
+    	 \textcolor{white}{\ \ \ \ \ \ \ \ \ return} Even(fL-m) ? fMatrix[fIndex(n,-m)]: -fMatrix[fIndex(n,-m)];\newline
+        \textcolor{white}{\ \ \ \ \ \ }  \}\newline
+       \textcolor{white}{\ \ \ }\}\newline
+       \textcolor{white}{\ \ \ \ \ \ if} (n $<$ 0) \{\newline
+          \textcolor{white}{\ \ \ \ \ \ \ \ \ if} (m $>=$ Abs(n))\newline
+             \textcolor{white}{\ \ \ \ \ \ \ \ \ \ \ \ return} Even(fL-m) ? fMatrix[fIndex(m,-n)]: -fMatrix[fIndex(m,-n)];\newline
+          \textcolor{white}{\ \ \ \ \ \ \ \ \ return} Even(fL-n) ? fMatrix[fIndex(-n,m)]: -fMatrix[fIndex(-n,m)];\newline
+       \textcolor{white}{\ \ \ \ \ \ }\} else \{\newline
+          \textcolor{white}{\ \ \ \ \ \ \ \ \ if} (m $>=$ n)\newline
+             \textcolor{white}{\ \ \ \ \ \ \ \ \ \ \ \ return} fMatrix[fIndex(m,n)];\newline
+          \textcolor{white}{\ \ \ \ \ \ \ \ \ return} Even(n-m) ? fMatrix[fIndex(n,m)]: -fMatrix[fIndex(n,m)];\newline
+     \textcolor{white}{\ \ \ }  \}\newline
+    \}\newline
+
+    };
+  \end{tikzpicture}
+  \vfill
+
+
+\newpage
+\tableofcontents
+
+\chapter{Introduction} \label{ch::Introduction}
+
+The software \href{http://www.ifi.unicamp.br/~mzimbres}{SWAT} is a package 
+for analysis of function that live on the sphere. I have written it from
+scratch as part of my my Ph.D. project. It evolved from a simple ROOT macro and
+got bigger and bigger, since the code may be useful for other people I
+decided to organize, document it and make it public. The code is an C++ implementation of
+the spherical wavelet transform as presented in \cite{wiaux}. Some attractive
+features of SWAT are:
+
+\begin{itemize}
+\item Harmonic and Wavelet transform on the sphere.
+\item Easy calculation of Healpix maps form Herald data and CRPropa simulations.
+\item Easy selection of events hitting sky window.
+\item Calculation of deflection vs. $1/E$ graphs.
+\item Calculation of the Wigner-d functions via FFT.
+\item ROOT is the only prerequisite (with module FFTW enabled).
+\item You can load all the code in a ROOT session and call SWAT code in your ROOT macro.
+\item You can save SWAT objects to .root files.
+\end{itemize}
+
+The package includes some parts of the Healpix code. There are two reasons
+why I decided to include it here, instead of just link against Healpix
+libraries.
+\begin{enumerate}
+\item I do not need all Healpix routines and support to the fits format. 
+\item I usually need shared libraries the call Healpix code in a ROOT session, which is not built by
+Healpix build system since most of its code is C++ templates.
+\end{enumerate}
+
+Most of the theoretical datails of analysis of functions defined on $S^2$ and $S^3$ 
+were taken from \cite{wiaux,rockmore,navaza}. 
+
+The code has been tested in \textsc{Linux} and \textsc{MacBook}, but the code
+is portable enough to be built on other platforms.  In the following we provide
+some theoretical foundations which should be enough to the physicist wanting to
+understand the math behind the implementation, for more thoroughly description
+refer to the bibliography. Questions concerning the software can sent to
+Marcelo Zimbres \href{mailto:mzimbres@gmail.com}{mzimbres@gmail.com}
+\vspace{1cm}
+\newline
+\subsubsection{Acknowledgements}
+SWAT is being developed with financial support from CAPES.  Additionaly I would
+like to acknowledge the Institute of Physics at UNICAMP for finacial support,
+Brunel University for granting me scholarship to participate in the Cern School
+of Computing, the Ettore Majorana Foundation and Center for scientific Culture, the brasilian
+group of the Pierre Auger experiment, with special thanks to my supervisor
+Ernesto Kemp, for beliving in the project and Rafael Alves Batista for testing
+the code. The Pierre Auger Group at university of Wuppertal, with special
+thanks to Nils Niertenh\"ofer for helping me with CRPropa.
+
+\section{Installation} \label{ch::installation}
+As a prerequisite to install SWAT you need ROOT installed with FFTW module
+enabled, the configure script will complain if they are not installed. SWAT
+uses autotools to generate the configure and Makefile files, so you can
+expect all the standard configure options and makefile targets. The lines 
+bellow will install the libraries on {\color{brown}"/usr/local"}
+{ \color{brown}
+   \begin{lstlisting}
+   $ ./configure
+   $ make
+   $ make install
+   \end{lstlisting}
+}
+
+To use some of the features of the package, I am assuming you are able to
+build shared libraries on your platform.  To easy the task of loading
+swat libraries the macro load.C, macro will be installed on {\color{brown}"prefix/share/swat"}. To
+load the libraries in ROOT's C++ interpreter you just have to copy this macro
+to your working directory, or just add it to your code {\color{brown}.rootlogon.C} macro.
+
+{ \color{brown}
+\begin{lstlisting}
+$ cp /usr/local/shar/swat/load.C ~/.rootlogon.C
+\end{lstlisting}
+}
+
+All SWAT classes are now available in the Root session with syntax
+highlighting. You should also be able to generate documentation in html format
+with the macro {\color{brown}"prefix/share/swat/makehtml.C"}. You have to run
+this macro from the directory where you built SWAT. The documentation will be
+built in the directory{\color{brown}htmldoc}.
+
+\section{Getting ready to run the analysis} \label{ch::ready}
+To analise Herald data, you will have to convert the ascii file to a .root
+file, for that you should use the macro
+{\color{brown}prefix/share/swat/convert\_herald.C} where prefix is usually
+\textit{/usr/local}.  Copy this macro to the same directory where you have the
+herald data file. The macro will read a file with name
+{\color{brown}"herald.dat"}, so you may have to rename it. 
+
+For CRPropa simulations you can just configure CRPropa to output a .root file
+instaed of a text file.  The code uses the title of the TTree to diferentiate
+between a Herald and CRPropa file. The title of the TTree for CRPropa must be
+\textit{\color{brown}"CRPropa 3D events"}.
+
+\section{High Quality graphs with pgfplots} \label{ch::pgfplots}
+If you have pgfplots installed on your you can use the \LaTeX files installed in 
+{\color{brown}"prefix/share/swat"} to generate high quality graphs. You may have noted that 
+after running {\color{brown}TAuxFunc::find\_sources()} and {\color{brown}TAuxFunc::find\_multiplets()}
+you get many text files in your working directory. They are input files for the \LaTeX files. Here are some 
+example graphs \\
+\vspace{1cm}
+\includegraphics[scale=0.5]{fig/skymap-herald-f1.pdf} \hfill
+\includegraphics[scale=0.5]{fig/corr_graph_crpropa-f5.pdf} \hfill
+\includegraphics[scale=0.5]{fig/multiplicity-crpropa-f2.pdf} \\ 
+
+\chapter{Analysis algorithms}
+\section{Finding sources}
+
+A source here is a term used to mean something with a position on the sky, usualy described
+by $(\theta,\phi)$ and an orientation. We will use the three Euler angle $(\alpha,\beta,\gamma)$ to
+describe the source. You can use the following code to find sources in your data.
+{ \color{brown}
+   \begin{lstlisting}
+   //   Parameter description.
+   //
+   //   emin: char string with minimum energy, e. g. "15"
+   //   emax: char string with maximum energy, e. g. "40"
+   //   N: Wavelet band limit.                           
+   //   j: Wavelet scale                                 
+   //   nsource: Number of sources to look for.          
+   //   w: Source minimum separation in degrees.         
+   //   file: Herald file containing the TTree.          
+   $ root
+   root [1] TAuxFunc::find_sources(emin,emax,N,j,nsources,w,file)
+   \end{lstlisting}
+}
+For example:
+{ \color{brown}
+   \begin{lstlisting}
+   root [1] find_sources("15","40",111,2,10,5,"herald.root")
+   \end{lstlisting}
+}
+
+The algorithm goes as follows:
+\begin{enumerate}
+\item The TTree is read selecting events with energies in the range $emin < E < emax$.
+\item A Healpix map is generated and transformed to wavelet space. The parameter $N$
+gives the precision on the ability of the wavelet to find the angle $\gamma$ and $j$
+is the scale at witch the wavelet transform is performed. Refer to \cite{gap} for
+the meaning of these parameters.
+\item A partial sort is used to find the nsources first biggest wavelet coefficients.
+The position of the wavelet coefficient, described by the three euler angles is
+saved in a TEulerAngle object and saved in the file {\color{brown}"sources.root"}
+\end{enumerate}
+Once you have a file with the sources objectss, you can see the source position using
+the method {\color{brown}TEulerAngle::Show}
+{ \color{brown}
+\begin{lstlisting}
+$ root sources.root
+root[1] gDirectory->ls()
+TFile**		sources.root	
+TFile*		sources.root	
+KEY: THealpixMap	hmap;1	Healpix sky map
+KEY: TEulerAngle	source0;1	
+KEY: TEulerAngle	source1;1	
+KEY: TEulerAngle	source2;1	
+root [2] source0->Show(1)
+wav(137.812,-27.4219,159.638) = -0.035312
+root [3] 
+\end{lstlisting}
+}
+
+\subsection{Implementation}
+
+\section{Deflection vs. Energy} \label{ch::raios-cosmicos}
+You can also easily calculate graphs of deflection versus $1/E$ this way:
+{ \color{brown}
+   \begin{lstlisting}
+   root[1] TAuxFunc::find_multiplets(l,w,"sources.root","chain.root")
+   \end{lstlisting}
+}
+This code will:
+\begin{enumerate}
+\item Read the sources file {\color{brown}"sources.root"}
+\item For each source it will calculate the equations descibing a stripe of
+length $l$, width $w$ tangent to the sources and aligned with it.
+\item Read the Herald data, select all events hitting the stripe and calculate 
+the deflection versus $1/E$ graphs.
+\item The graphs will be added to the sources file.
+\end{enumerate}
+
+
+{ \color{brown}
+   \begin{lstlisting}
+   $ root sources.root
+   root[1] gDirectory->ls()
+   TFile**		sources.root	
+   TFile*		sources.root	
+   KEY: THealpixMap	hmap;1	Healpix sky map
+   KEY: TEulerAngle	source0;1	
+   KEY: TEulerAngle	source1;1	
+   KEY: TEulerAngle	source2;1	
+   KEY: TEulerAngle	source3;1	
+   KEY: TGraphErrors	g0;1	C = 0.216, N = 22
+   KEY: TGraphErrors	g1;1	C = 0.294, N = 15
+   KEY: TGraphErrors	g2;1	C = -0.013, N = 23
+   KEY: TGraphErrors	g3;1	C = -0.005, N = 42
+   root [2] g0->GetCorrelation()
+   root [2] g0->Fit("pol1")
+   root [2] g0->Draw("ap")
+   \end{lstlisting}
+}
+
+The graph with name $g0$ correspond to source $source0$ and so on.
+The function of the last section will also calculate the "Number of events vs. stripe orientation"
+and add to the sources.root file. The graphs will be named $g0$, $g1$ ...
+
+\subsection{Implementation}
+\section{Counting in stripes} \label{ch::raios-cosmicos}
+
+
+\chapter{More code}
+\section{Wigner-d functions}
+\section{Drawing Spherical harmonics}
+\section{Drawing wavelets}
+
+\begin{thebibliography}{99}
+\bibitem{frm} J Fourier Anal Appl (2008) 14: 145–179.
+\bibitem{wiaux} Mon. Not. R. Astron. Soc. 000, 1–22 (2007). 
+\bibitem{swat} \url{http://www.ifi.unicamp.br/~mzimbres/}
+\end{thebibliography}
+\end{document}
+
+
+

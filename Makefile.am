@@ -198,15 +198,13 @@ dist_pkgdata_DATA = $(MACRODIR)/DrawLatitudesLongitudes.C \
                     $(MACRODIR)/wav_view.C                \
                     $(MACRODIR)/show_angles.C             \
                     $(MACRODIR)/graph_view.C              \
-                    $(MACRODIR)/swat.C                    \
-                    $(MACRODIR)/add_background.C          \
-                    $(MACRODIR)/mais.C                    \
                     $(MACRODIR)/read_rafael.C             \
 	            $(MACRODIR)/wig_graph.C
 #________________________________________________________________
 
 EXTRA_DIST = $(CONFIGDIR)/load.C.in           \
              $(top_srcdir)/tests/map2alm.C    \
-             $(top_srcdir)/doc/swatguide.pdf
+             $(top_srcdir)/doc/swatguide.pdf  \
+             $(top_srcdir)/doc/swatguide.tex
 
 
