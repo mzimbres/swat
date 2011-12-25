@@ -61,31 +61,43 @@ int main(int argc,char* argv[])
 
    int N = 1, j = 1, n = 1000, m = 4, s = 100;
    double w = 3., width = 2., length = 10., min = 20., max = 40., C = 0.2;
-   string emin = "20", emax = "40", file;
+   string emin = "20", emax = "40", file, outfilename;
    bool add = false;
 
    char opt;
 
    while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:f:")) != -1) {
       switch (opt) {
-         case 'j': j = atoi(optarg);
+         case 'j': 
+	    j = atoi(optarg);
+	    outfilename += "j";
+	    outfilename += optarg;
 	    break;
          case 's':
+	    outfilename += "s";
+	    outfilename += optarg;
 	    s = atoi(optarg);
 	    break;
          case 'm':
+	    outfilename += "m";
+	    outfilename += optarg;
 	    m = atoi(optarg);
 	    break;
          case 'i':
 	    emin = optarg;
+	    outfilename += "i";
+	    outfilename += optarg;
 	    min = atof(optarg);
 	    break;
          case 'e':
 	    emax = optarg;
 	    max = atof(optarg);
+	    outfilename += "e";
+	    outfilename += optarg;
 	    break;
          case 'f':
 	    file = optarg;
+	    outfilename += "with";
 	    add = true;
 	    break;
          case 'w':
@@ -93,6 +105,8 @@ int main(int argc,char* argv[])
 	    break;
          case 'l':
 	    length = atof(optarg);
+	    outfilename += "l";
+	    outfilename += optarg;
 	    break;
          case 'c':
 	    C = atof(optarg);
@@ -102,9 +116,13 @@ int main(int argc,char* argv[])
 	       cerr << "N = " << N << ", N must be greaer than 0" << endl;
 	       exit(EXIT_FAILURE);
 	    }
+	    outfilename += "N";
+	    outfilename += optarg;
 	    break;
          case 'n':
 	    n = atoi(optarg);
+	    outfilename += "n";
+	    outfilename += optarg;
 	    break;
          default:
 	    print_usage(argv[0]);
@@ -205,7 +223,9 @@ int main(int argc,char* argv[])
 
       }
    }
-   TFile fff("correlation.root","recreate");
+   if (outfilename.empty()) outfilename = "outfile";
+   outfilename += ".root";
+   TFile fff(outfilename.c_str(),"recreate");
    hist.Write();
    hist2.Write();
    fff.Close();
