@@ -1,9 +1,9 @@
 {
-   gStyle->SetCanvasColor(kWhite);
-   gStyle->SetFrameFillColor(kWhite);
+   //gStyle->SetCanvasColor(kWhite);
+   //gStyle->SetFrameFillColor(kWhite);
    //gStyle->SetHistFillColor(kAzure-7);
    //gStyle->SetOptStat("emrsk");
-   gStyle->SetOptStat(0);
+   //gStyle->SetOptStat(0);
    //gStyle->SetStatBorderSize(0);
    //gStyle->SetStatColor(kWhite);
    gStyle->SetPadColor(kWhite);
