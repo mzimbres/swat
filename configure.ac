@@ -8,6 +8,7 @@ AC_PROG_LIBTOOL
 
 # Checks for programs.
 AC_PROG_CXX
+PKG_CHECK_MODULES(FFTW3, fftw3 >= 3.0)
 
 # Looking for ROOT
 ROOT_PATH(5.20, , AC_MSG_ERROR(Your ROOT version is too old))
