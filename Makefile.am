@@ -150,11 +150,11 @@ AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(SWATDIRI)
 
 #________________________________________________________________
 
-bin_PROGRAMS      = swat swatsim swatherald
+bin_PROGRAMS      = swat swatsim swatfind
 
 swat_SOURCES  = $(top_srcdir)/swat.cxx
 swatsim_SOURCES  = $(top_srcdir)/swatsim.cxx
-swatherald_SOURCES  = $(top_srcdir)/swatherald.cxx
+swatfind_SOURCES  = $(top_srcdir)/swatfind.cxx
 
 #________________________________________________________________
 
