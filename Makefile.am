@@ -205,12 +205,16 @@ dist_pkgdata_DATA = $(MACRODIR)/DrawLatitudesLongitudes.C \
 EXTRA_DIST = $(CONFIGDIR)/load.C.in                  \
              $(top_srcdir)/tests/map2alm.C           \
              $(top_srcdir)/pgfplots/skymap.tar.gz    \
+             $(top_srcdir)/pgfplots/wignerd.tar.gz   \
              $(top_srcdir)/pgfplots/corr_graph.tex   \
              $(top_srcdir)/pgfplots/multiplicity.tex \
              $(top_srcdir)/doc/swatguide.pdf         \
              $(top_srcdir)/doc/skymap.pdf            \
-             $(top_srcdir)/doc/corr_graph.pdf        \
-             $(top_srcdir)/doc/multiplicity.pdf      \
+             $(top_srcdir)/doc/skymap-sim.pdf        \
+             $(top_srcdir)/doc/wignerpolar.pdf       \
+             $(top_srcdir)/doc/wigner.pdf            \
+             $(top_srcdir)/doc/corr_graph-sim.pdf    \
+             $(top_srcdir)/doc/multiplicity-sim.pdf  \
              $(top_srcdir)/doc/swatguide.tex
 
 
