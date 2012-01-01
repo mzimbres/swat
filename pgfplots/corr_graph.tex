@@ -1,0 +1,147 @@
+\documentclass{article}
+\usepackage{graphics}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\pgfrealjobname{corr_graph}
+
+\begin{document}
+\beginpgfgraphicnamed{corr_graph-f0}
+   \begin{tikzpicture}[scale=1.0]
+      %\begin{axis}[colorbar sampled line,colorbar horizontal,xlabel= $1/E$,ylabel=$\delta$]
+      \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+       \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+          table[x=xcolname,y=ycolname,meta=colordata] {corr_graph0.dat};
+        %\addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] table[x=xcolname,y=ycolname,meta=colordata] {ascii/corr_graph0_sim.dat};
+      \end{axis}
+   \end{tikzpicture}
+\endpgfgraphicnamed
+
+%\beginpgfgraphicnamed{corr_graph-f1}
+%   \begin{tikzpicture}[scale=1.0]
+%      \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%        \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit]
+%         table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph1.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f2}
+%   \begin{tikzpicture}[scale=1.0]
+%      \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%        \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit]
+%         table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph2.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f3}
+%   \begin{tikzpicture}[scale=1.0]
+%      \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%        \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit]
+%         table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph3.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f4}
+%   \begin{tikzpicture}[scale=1.0]
+%      \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%        \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit]
+%         table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph4.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f5}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph5.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f6}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph6.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f7}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph7.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f8}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph8.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f9}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph9.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f10}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph10.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f11}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph11.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f12}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph12.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f13}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph13.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+%
+%\beginpgfgraphicnamed{corr_graph-f14}
+%   \begin{tikzpicture}[scale=1.0]
+%   \begin{axis}[xlabel= $1/E$,ylabel=$\delta$]
+%   \addplot+[scatter,only marks,mark size=2.0,scatter src=explicit] 
+%  table[x=xcolname,y=ycolname,meta=colordata] {herald/corr_graph14.dat};
+%      \end{axis}
+%   \end{tikzpicture}
+%\endpgfgraphicnamed
+
+\end{document}
+
