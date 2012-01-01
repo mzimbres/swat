@@ -202,9 +202,12 @@ dist_pkgdata_DATA = $(MACRODIR)/DrawLatitudesLongitudes.C \
 	            $(MACRODIR)/wig_graph.C
 #________________________________________________________________
 
-EXTRA_DIST = $(CONFIGDIR)/load.C.in           \
-             $(top_srcdir)/tests/map2alm.C    \
-             $(top_srcdir)/doc/swatguide.pdf  \
+EXTRA_DIST = $(CONFIGDIR)/load.C.in             \
+             $(top_srcdir)/tests/map2alm.C      \
+             $(top_srcdir)/doc/swatguide.pdf    \
+             $(top_srcdir)/doc/skymap.pdf       \
+             $(top_srcdir)/doc/corr_graph.pdf   \
+             $(top_srcdir)/doc/multiplicity.pdf \
              $(top_srcdir)/doc/swatguide.tex
 
 

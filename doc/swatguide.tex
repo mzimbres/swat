@@ -116,24 +116,27 @@ rounded corners,textcolor,thick]
     \coordinate (front) at (0,0);
     \coordinate (horizon) at (0,.28\paperheight);
     \coordinate (bottom) at (0,-.6\paperheight);
-    \coordinate (sky) at (0,.57\paperheight);
+    \coordinate (sky) at (0,.62\paperheight);
     \coordinate (left) at (-.51\paperwidth,0);
     \coordinate (right) at (.51\paperwidth,0);
 
     \shade [bottom color=blue!30!black!10,top color=blue!30!black!50] ([yshift=-5mm]horizon -|  left) rectangle (sky -| right);
-    \shade [bottom color=black!70!green!25,top color=black!70!green!10] (front -| left) -- (horizon -| left)
-      decorate [decoration=random steps] { -- (horizon -| right) } -- (front -| right) -- cycle;
+
+    %\shade [bottom color=black!70!green!25,top color=black!70!green!10] (front -| left) -- (horizon -| left)
+    %   decorate [decoration=random steps] { -- (horizon -| right) } -- (front -| right) -- cycle;
+
     \shade [top color=black!70!green!25,bottom color=black!25] (front -| left) -- (horizon -| left)
       decorate [decoration=random steps] { -- (horizon -| right) } -- (front -| right) -- cycle;
-    \shade [top color=black!70!green!25,bottom color=black!25] ([yshift=-0mm]front -| left) rectangle ([yshift=1pt]front -| right);
-    \fill [black!25] (bottom -| left) rectangle ([yshift=1mm]front -| right);
+
+    %\shade [top color=black!70!green!25,bottom color=black!25] ([yshift=-0mm]front -| left) rectangle ([yshift=1pt]front -| right);
+
+    \fill [black!25] (bottom -| left) rectangle ([yshift=3mm]front -| right);
 
     \def\nodeshadowed[#1]#2;{\node[scale=2,above,#1]{#2};\node[scale=2,
         above,#1,yscale=-1,scope fading=south,opacity=0.4]{#2};}
 
     \node[at={(-0,6  )}] {\Huge \textsc{\bf \textcolor{red!50!black!90}{SWAT}}}; 
     \node[at={(-0,4  )}] {\Huge {\bf\color{gray!70!black} The \textcolor{red!50!black!90}{S}pherical \textcolor{red!50!black!90}{W}avelet \textcolor{red!50!black!90}{A}nalysis \textcolor{red!50!black!90}{T}ool}};
-    \node[at={( 0,2  )}] {\Large\bf \color{gray!70!black}Manual for version 1.43};
 
     \one (TObject) at (-8,15) {\Large \bf\color{gray!70!black} TObject};
     \one (TArrayD) at (-3,15) {\Large \bf\color{gray!70!black}TArrayD};
@@ -175,7 +178,10 @@ rounded corners,textcolor,thick]
 
    %_______________________________________________________
 
-   \node[at={(0,-5)}] {\includegraphics[scale=1.5]{skymap-herald-f1.pdf}};
+   \node[at={(0,-3.0)}] {\includegraphics[scale=2.0]{skymap.pdf}};
+
+   \node[at={(0,-10)}] {\Large\bf \color{gray!70!black}Manual for version 1.44 - Marcelo Zimbres};
+   %\draw[-,very thick,gray] (-9,-10.5) -- (9,-10.5);
 
   \end{tikzpicture}
   \vfill
@@ -187,30 +193,29 @@ rounded corners,textcolor,thick]
 \section{Introduction} \label{ch::Introduction}
 
 \href{http://www.ifi.unicamp.br/~mzimbres}{SWAT} is a package for analysis of
-functions that live on the sphere, which I have used mostly to analyze data of the 
-Pierre Auger eperiment. I have written it from scratch as part of my
-my Ph.D. project. It evolved from a simple ROOT macro and got bigger and
-bigger, since the code may be useful for other people I decided to organize, 
-document it and make it public. The code is an C++ implementation of the
-spherical wavelet transform as presented in \cite{wiaux}. Some attractive
-features of SWAT are:
+functions that live on the sphere, which I have mostly used to analyze data of
+the Pierre Auger experiment and CRPropa simulations. I have written it from
+scratch as part of my my Ph.D. project. It evolved from a simple ROOT macro and
+got bigger and bigger, since the code may be useful for other people I decided
+to organize, document it and make it public. The code is an C++ implementation
+of the spherical wavelet transform as presented in \cite{wiaux}. Some
+attractive features of SWAT are:
 
 \begin{list}{\labelitemi}{}
 \item Harmonic and Wavelet transform on the sphere.
-\item Easy calculation of Healpix maps form Herald data and CRPropa simulations.
+\item Interface to Healpix code, which is included in the build system.
 \item Easy selection of events hitting sky window.
 \item Calculation of deflection vs. $1/E$ graphs.
 \item Calculation of the Wigner-d functions via FFT.
-\item ROOT is the only prerequisite (with module FFTW enabled).
+\item ROOT and FFTW are the only prerequisite.
 \end{list}
 
-The package includes some parts of the Healpix code. There are two reasons
-why I decided to include it here, instead of just link against Healpix
-libraries.
+The package includes some parts of the Healpix code. There are two reasons why
+I decided to include it here, instead of just link against Healpix libraries.
 \begin{enumerate}
 \item I do not need all Healpix routines and support to the fits format. 
 \item I usually need shared libraries to call Healpix code in a ROOT session, which is not built by
-Healpix build system since most of its code is C++ templates.
+Healpix build system since most of its code are C++ templates.
 \end{enumerate}
 
 Most of the theoretical datails of analysis of functions defined on $S^2$ and $S^3$ 
@@ -225,21 +230,22 @@ Zimbres \href{mailto:mzimbres@gmail.com}{mzimbres@gmail.com}
 {\bf \large Acknowledgements}
 \vspace{1cm}
 
-SWAT is being developed with financial support from CAPES.  Additionaly I would
-like to acknowledge the Institute of Physics at UNICAMP for finacial support,
-Brunel University for granting me scholarship to participate in the Cern School
-of Computing, the Ettore Majorana Foundation and Center for scientific Culture, the brasilian
-group of the Pierre Auger experiment, with special thanks to my supervisor
-Ernesto Kemp, for beliving in the project and Rafael Alves Batista for testing
-the code. The Pierre Auger Group at university of Wuppertal, with special
-thanks to Nils Niertenh\"ofer for helping me with CRPropa.
+Most of SWAT were developed with financial support from CAPES.  Additionaly I
+would like to acknowledge the Institute of Physics at UNICAMP and the Bergische
+Universit\"at Wuppertal for finacial support, Brunel University for granting me a
+scholarship to participate in the Cern School of Computing, the Ettore Majorana
+Foundation and Center for scientific Culture, the brasilian group of the Pierre
+Auger experiment, with special thanks to my supervisor Ernesto Kemp, for
+beliving in the project and Rafael Alves Batista for testing the code. The
+Pierre Auger Group at university of Wuppertal, with special thanks to Nils
+Niertenh\"ofer for helping me with CRPropa.
 
 \subsection{Installation} \label{ch::installation}
-As a prerequisite to install SWAT you need ROOT installed with FFTW module
-enabled, the configure script will complain if they are not installed. SWAT
-uses autotools to generate configure and the Makefile, so you can
-expect all the standard configure options and makefile targets. The lines 
-bellow will install the libraries on {\color{brown}"/usr/local"}
+As a prerequisite to install SWAT you need ROOT and FFTW installed, the
+configure script will complain if they are not installed. SWAT uses autotools
+to generate configure and the Makefile, so you can expect all the standard
+configure options and makefile targets. The lines bellow will install the
+libraries on {\color{brown}"/usr/local"}
 { \color{brown}
    \begin{lstlisting}
    $ ./configure
@@ -248,27 +254,29 @@ bellow will install the libraries on {\color{brown}"/usr/local"}
    \end{lstlisting}
 }
 
-To use some of the features of the package, I am assuming you are able to
-build shared libraries on your platform.  To easy the task of loading
-swat libraries the macro load.C, macro will be installed on {\color{brown}"prefix/share/swat"}. To
-load the libraries in ROOT's C++ interpreter you just have to copy this macro
-to your working directory, or just add it to your code {\color{brown}.rootlogon.C} macro.
+To use some of the features of the package, I am assuming you are able to build
+shared libraries on your platform.  To easy the task of loading swat libraries
+the macro load.C, macro will be installed on
+{\color{brown}"prefix/share/swat"}. To load the libraries in ROOT's C++
+interpreter you just have to execute it in your ROOT session, or just
+add it to your code {\color{brown}.rootlogon.C} macro.
 
 { \color{brown}
 \begin{lstlisting}
 $ cp /usr/local/shar/swat/load.C ~/.rootlogon.C
+$ root # The .so's are automatically loaded here.
 \end{lstlisting}
 }
 
-All SWAT classes are now available in the Root session with syntax
-highlighting. You should also be able to generate documentation in html format
+All SWAT classes are now available in the ROOT session with syntax
+highlighting. You should also be able to generate documentation in HTML format
 with the macro {\color{brown}"prefix/share/swat/makehtml.C"}. You have to run
 this macro from the directory where you built SWAT. The documentation will be
 built in the directory{\color{brown}htmldoc}.
 
-\subsection{Getting ready to run the analysis} \label{ch::ready}
-To analise Herald data, you will have to convert the ascii file to a .root
-file, for that you should use the macro
+\subsection{Getting ready} \label{ch::ready}
+To analise Herald data, you will have to convert the ascii file to a TTree and
+save it in a .root file, for that you should use the macro
 {\color{brown}prefix/share/swat/convert\_herald.C} where prefix is usually
 \textit{/usr/local}.  Copy this macro to the same directory where you have the
 herald data file. The macro will read a file with name
@@ -280,30 +288,25 @@ between a Herald and CRPropa file. The title of the TTree for CRPropa must be
 \textit{\color{brown}"CRPropa 3D events"}.
 
 \subsection{High Quality graphs with pgfplots} \label{ch::pgfplots}
-If you have pgfplots installed on your you can use the \LaTeX files installed
-in {\color{brown}"prefix/share/swat"} to generate high quality graphs. You may
-have noted that after running {\color{brown}swatherald}
-you get many text files in your working directory. They are input files for the \LaTeX files. Here are some
-example graphs \\
+If you have pgfplots installed on your machine, you can use the \LaTeX files
+which are available in the directory pgfplots to generate high quality
+graphs. You may have noted that after running {\color{brown}swatfind} you get
+many text files in your working directory. They are input files for the \LaTeX
+files. Here are some example graphs \\
 \vspace{1cm}
-%\includegraphics[scale=0.5]{fig/skymap-herald-f1.pdf} \hfill
-%\includegraphics[scale=0.5]{fig/corr_graph_crpropa-f5.pdf} \hfill
-%\includegraphics[scale=0.5]{fig/multiplicity-crpropa-f2.pdf} \\ 
+\includegraphics[scale=0.5]{skymap.pdf} \hfill
+\includegraphics[scale=0.5]{corr_graph.pdf} \hfill
+\includegraphics[scale=0.5]{multiplicity.pdf} \\ 
 
 \section{The three main programs}
 The main programs SWAT will install are:
-\begin{itemize}
-\item swat: This program only used to benchmark and test the algorithm. It can test
+\subsection{swat}
+swat: This program only used to benchmark and test the algorithm. It can test
 both the spherical harmonic transform and the spherical wavelet transform.
-\item swatfind: This is the main program. It can be used to find sources and for cosmic ray data
+\subsection{swatfind}
+swatfind: This is the main program. It can be used to find sources and for cosmic ray data
 also multiplets. It saves source locations and energy-deflection graphs in root format, that can
 be inspected later. Main output is printed on the screen.
-\item swatsim: Uses Monte Carlo simulations to calculate the probability of a multiplet happen by 
-chance on a isotropic sky. We still do not have means of simulating exposure.
-\end{itemize}
-
-\section{Finding sources}
-
 A source here is a term used to mean something with a position on the sky, usualy described
 by $(\theta,\phi)$ and an orientation. We will use the three Euler angle $(\alpha,\beta,\gamma)$ to
 describe the source. You can use the following code to find sources in your data.
@@ -338,7 +341,9 @@ root [3]
 \end{lstlisting}
 }
 
-\subsection{Implementation}
+\subsection{swatsim}
+swatsim: Uses Monte Carlo simulations to calculate the probability of a multiplet happen by 
+chance on a isotropic sky. We still do not have means of simulating exposure.
 
 \section{Deflection vs. Energy} \label{ch::raios-cosmicos}
 You can also easily calculate graphs of deflection versus $1/E$ this way:
@@ -383,11 +388,9 @@ The graph with name $g0$ correspond to source $source0$ and so on.
 The function of the last section will also calculate the "Number of events vs. stripe orientation"
 and add to the sources.root file. The graphs will be named $g0$, $g1$ ...
 
-\subsection{Implementation}
 \section{Counting in stripes} \label{ch::raios-cosmicos}
 
 
-\section{More code}
 \section{Wigner-d functions}
 \appendix
 \section{swatsim}
