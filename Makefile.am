@@ -208,7 +208,6 @@ EXTRA_DIST = $(CONFIGDIR)/load.C.in                  \
              $(top_srcdir)/pgfplots/wignerd.tar.gz   \
              $(top_srcdir)/pgfplots/corr_graph.tex   \
              $(top_srcdir)/pgfplots/multiplicity.tex \
-             $(top_srcdir)/doc/swatguide.pdf         \
              $(top_srcdir)/doc/skymap.pdf            \
              $(top_srcdir)/doc/skymap-sim.pdf        \
              $(top_srcdir)/doc/wignerpolar.pdf       \

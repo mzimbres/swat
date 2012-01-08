@@ -287,7 +287,7 @@ instaed of a text file.  The code uses the title of the TTree to diferentiate
 between a Herald and CRPropa file. The title of the TTree for CRPropa must be
 \textit{\color{brown}"CRPropa 3D events"}.
 
-\subsection{High Quality graphs with pgfplots} \label{ch::pgfplots}
+\subsection{High quality graphs with pgfplots} \label{ch::pgfplots}
 If you have pgfplots installed on your machine, you can use the \LaTeX files
 which are available in the directory pgfplots to generate high quality
 graphs. You may have noted that after running {\color{brown}swatfind} you get
@@ -308,6 +308,12 @@ $ pdflatex --jobname=skymap-f1 skymap.tex
 Example skies can be seem here:\\
 \includegraphics[scale=1.0]{skymap-sim.pdf} 
 \includegraphics[scale=1.0]{skymap.pdf}
+Usualy the energ of events is represented in skymaps as circles of varying size, where
+events with higher energy have biger circles. I do not 
+like these representations since the can give the false impression that 
+the angular resolution gets worse as the energy increaases, which is not true. Additionaly,
+the this circles polute the figure. In the representations I am using, colors are used to 
+differentiate energies which in my oppinion is a much clear way of representing the sky.
 \subsubsection{Energy deflection graphs}
 In addition to skymap.dat, the file corr\_graph0.dat will be also generated.
 This file contains the energy-deflection graphs. Refer to section
@@ -337,139 +343,169 @@ use the file pgfplots/wignerd.tar.gz to generate some nice graphs.
 \includegraphics[scale=1.0]{wigner.pdf} 
 
 \section{The three main programs}
-The main programs SWAT will install are:
-\subsection{swat}
-swat: This program only used to benchmark and test the algorithm. It can test
-both the spherical harmonic transform and the spherical wavelet transform.
+In the following sub-sections we will describe the three main programs which 
+SWAT installs and which provide an easy interface to the wavelet analysis.
 \subsection{swatfind}
-swatfind: This is the main program. It can be used to find sources and for cosmic ray data
-also multiplets. It saves source locations and energy-deflection graphs in root format, that can
-be inspected later. Main output is printed on the screen.
-A source here is a term used to mean something with a position on the sky, usualy described
-by $(\theta,\phi)$ and an orientation. We will use the three Euler angle $(\alpha,\beta,\gamma)$ to
-describe the source. You can use the following code to find sources in your data.
-For example:
+This is the main program. It can be used to find sources in Pierre Auger data
+of CRPropa simulations. Beyond that, it also can be used to test whether the
+events belong to a multiplet, calculting energy-deflections graphs for the
+sources found. All information is saved in .root format. A source here is a
+term used to mean something with a position on the sky, usualy described by
+$(\theta,\phi)$ and an orientation. We will use the three Euler angle
+$(\alpha,\beta,\gamma)$ to describe the source. 
 
-The algorithm goes as follows:
+It uses the folowing algorith:
 \begin{enumerate}
-\item The TTree is read selecting events with energies in the range $emin < E < emax$.
-\item A Healpix map is generated and transformed to wavelet space. The parameter $N$
-gives the precision on the ability of the wavelet to find the angle $\gamma$ and $j$
-is the scale at witch the wavelet transform is performed. Refer to \cite{gap} for
-the meaning of these parameters.
-\item A partial sort is used to find the nsources first biggest wavelet coefficients.
-The position of the wavelet coefficient, described by the three euler angles is
-saved in a TEulerAngle object and saved in the file {\color{brown}"sources.root"}
+\item The TTree is read from the file passed in the command line with option -f.
+\item Events with energy int the range $emin < E < emax$ are used to fill a Healpix map.
+The otions -i and -e are used to pass the energy range.
+\item The Healpix map generated is transformed to wavelet space. The parameter $N$,
+passed by the option -N gives the precision on the ability of the wavelet to find 
+the angle $\gamma$. The scale on which the analysis is performed is passed with option -j. 
+\item A partial sort is used to find the 15 first biggest wavelet coefficients.
+\item The euler angles found will be used to calculated the tangent plane equation for each
+source. The width and length of the plane are passed with options -w and -l respectively.
+\item A loop on the data is made to select all events hitting the tangent plane. The energ cut
+is used again.
+\item The energy-deflection graphs are calculated and the correlations found are 
+printed on the screen.
 \end{enumerate}
-Once you have a file with the sources objectss, you can see the source position using
-the method {\color{brown}TEulerAngle::Show}
+All the information is saved in the file {\color{brown}"sources.root"}. The exact
+source location can be seem. Lets see an example:
+
+{ \color{brown}
+\begin{lstlisting}
+$ swatfind -j 1 -N 1 -i 20 -e 40 -w 2 -l 10 -f chain.root
+TFile**		chain.root	CRPropa output data file
+ TFile*		chain.root	CRPropa output data file
+  OBJ: TNtuple	events	CRPropa 3D events
+  OBJ: TEventList	list	20 < Momentum_E_EeV && Momentum_E_EeV < 40 
+  OBJ: THealpixMap	hmap	Healpix sky map
+  OBJ: TGraph	g0	C = -0.993, N = 4
+  OBJ: TGraph	g1	C = -0.986, N = 5
+  OBJ: TGraph	g2	C = 0.000, N = 0
+  OBJ: TGraph	g3	C = -1.000, N = 2
+  ...
+\end{lstlisting}
+}
+
+Now, if you want to see the exact location of the source:
 { \color{brown}
 \begin{lstlisting}
 $ root sources.root
-root[1] gDirectory->ls()
+root[1] .ls
 TFile**		sources.root	
-TFile*		sources.root	
-KEY: THealpixMap	hmap;1	Healpix sky map
-KEY: TEulerAngle	source0;1	
-KEY: TEulerAngle	source1;1	
-KEY: TEulerAngle	source2;1	
+ TFile*		sources.root	
+  KEY: THealpixMap	hmap;1	Healpix sky map
+  KEY: TEulerAngle	source0;1	
+  KEY: TEulerAngle	source1;1	
+  KEY: TEulerAngle	source2;1	
 root [2] source0->Show(1)
 wav(137.812,-27.4219,159.638) = -0.035312
 root [3] 
 \end{lstlisting}
 }
-
-\subsection{swatsim}
-swatsim: Uses Monte Carlo simulations to calculate the probability of a multiplet happen by 
+\subsubsection{swatsim}
+This program uses Monte Carlo simulations to calculate the probability of a multiplet happen by 
 chance on a isotropic sky. We still do not have means of simulating exposure.
+\subsection{swat}
+swat: This program only used to benchmark and test the algorithm. It can test
+both the spherical harmonic transform and the spherical wavelet transform.
 
-\section{Deflection vs. Energy} \label{ch::raios-cosmicos}
-You can also easily calculate graphs of deflection versus $1/E$ this way:
-{ \color{brown}
-   \begin{lstlisting}
-   root[1] TAuxFunc::find_multiplets(l,w,"sources.root","chain.root")
-   \end{lstlisting}
-}
-This code will:
-\begin{enumerate}
-\item Read the sources file {\color{brown}"sources.root"}
-\item For each source it will calculate the equations descibing a stripe of
-length $l$, width $w$ tangent to the sources and aligned with it.
-\item Read the Herald data, select all events hitting the stripe and calculate 
-the deflection versus $1/E$ graphs.
-\item The graphs will be added to the sources file.
-\end{enumerate}
-
-
-{ \color{brown}
-   \begin{lstlisting}
-   $ root sources.root
-   root[1] gDirectory->ls()
-   TFile**		sources.root	
-   TFile*		sources.root	
-   KEY: THealpixMap	hmap;1	Healpix sky map
-   KEY: TEulerAngle	source0;1	
-   KEY: TEulerAngle	source1;1	
-   KEY: TEulerAngle	source2;1	
-   KEY: TEulerAngle	source3;1	
-   KEY: TGraphErrors	g0;1	C = 0.216, N = 22
-   KEY: TGraphErrors	g1;1	C = 0.294, N = 15
-   KEY: TGraphErrors	g2;1	C = -0.013, N = 23
-   KEY: TGraphErrors	g3;1	C = -0.005, N = 42
-   root [2] g0->GetCorrelation()
-   root [2] g0->Fit("pol1")
-   root [2] g0->Draw("ap")
-   \end{lstlisting}
-}
-
-The graph with name $g0$ correspond to source $source0$ and so on.
-The function of the last section will also calculate the "Number of events vs. stripe orientation"
-and add to the sources.root file. The graphs will be named $g0$, $g1$ ...
-
-\section{Counting in stripes} \label{ch::raios-cosmicos}
-
-
-\section{Wigner-d functions}
 \appendix
+\section{swatfind}
+{ \color{brown}
+   \begin{lstlisting}
+   Calculates sources from herald data, additionaly calculates
+   correlation of events hitting tangent plane and dispalys on
+   the screen. The results are saved to sources.root file. To
+   convert a Herald file to the format used by this progra use
+   the macro macros/convert_herald.C in swat source tree.
+   
+   Usage: " << prog << " [ -j scale] [-N number] [-i emin] [-e
+   emax] [-w width] [-l length] [-f file.root]
+
+   Options:
+
+   -h: This menu.
+   -j: Wavelet scale a number in the range 0 <= j <= 8,
+       defaults to 1.
+   -N: Band limit of wavelet, in the range 0 < N <= 128,
+       defaults to 1.
+   -i: Minimum energy of events, defaults to 20 EeV.
+   -e: Maximum energy of events, defaults to 40 EeV.
+   -w: Width of tangent plane, defaults to 2 degrees.
+   -l: Length of tangent plane, defaults to 10 degrees.
+   -f: Root file containing Tree with data, defaults to
+       chain.root.
+   \end{lstlisting}
+}
+
 \section{swatsim}
 { \color{brown}
    \begin{lstlisting}
-   Calculates the probability of a multiplet with minimum correlation C (see -c
-   option) and minimum number of events m (see -m option) happen by chance,
-   using wavelet analysis. First an isotropic sky is simulated and the wavelet
-   representation of the sky is calculated, the euler angles of the largest
-   coefficient is used to calculate the equations of the tangent plane at the
-   position found (the euler angles). The correlation C is calculated including
-   all events that hit the tangent plane, whose size is specified with the
-   options -l and -w. The probablility will be the number of multiplets with
-   correlation > C and number of events > m, diveded by the number of skies
-   simulated. Additionaly, two other quantities are calculated, the histogram
-   of the number of events that hit the tangent plane and the histogram of the
-   C's found for which the number of events is greater than m (passed in the
-   command line). If -f option is used, TTree in the file will be read and
-   events will be added to the analysis, this is useful to include a simulated
-   multiplet on the analysis, hiding it in the isotropic backgroung the test the
-   algorithm.
+   Calculates the probability of a multiplet with minimum
+   correlation C (see -c option) and minimum number of events m
+   (see -m option) happen by chance, using wavelet analysis.
+   First an isotropic sky is simulated and the wavelet
+   representation of the sky is calculated, the euler angles of
+   the largest coefficient is used to calculate the equations
+   of the tangent plane at the position found (the euler
+   angles). The correlation C is calculated including all
+   events that hit the tangent plane, whose size is specified
+   with the options -l and -w. The probablility will be the
+   number of multiplets with correlation > C and number of
+   events > m, diveded by the number of skies simulated.
+   Additionaly, two other quantities are calculated, the
+   histogram of the number of events that hit the tangent plane
+   and the histogram of the C's found for which the number of
+   events is greater than m (passed in the command line). If -f
+   option is used, TTree in the file will be read and events
+   will be added to the analysis, this is useful to include a
+   simulated multiplet on the analysis, hiding it in the
+   isotropic backgroung the test the algorithm.
 
-   Usage: swatsim [ -j scale] [-N number] [-n nevents] [-s skies] [-i emin] 
-          [-e emax] [-c corr] [-m mevents] [-w width] [-l length] [-f file.root]
+   Usage: swatsim [ -j scale] [-N number] [-n nevents] [-s
+   skies] [-i emin] [-e emax] [-c corr] [-m mevents] [-w width]
+   [-l length] [-f file.root]
 
       Options:
 
-    -h:     This menu.
-    -j:     Wavelet scale a number in the range 0 <= j <= 8, defaults to 1.
-    -N:     Band limit of wavelet, in the range 0 < N <= 128, defaults to 1.
-    -n:     Number of events in the simulated sky, defaults to n = 1000
-    -s:     Number of skies to simulate, defaults to 100.
-    -i:     Minimum energy of events, defaults to 20 EeV.
-    -e:     Maximum energy of events, defaults to 40 EeV.
-    -c:     Minimum correlation, defaults to 0.2.
-    -m:     Minimum number of events hitting tangent plane.
-    -w:     Width of tangent plane, defaults to 2 degrees.
-    -l:     Length of tangent plane, defaults to 10 degrees.
-    -f:     Add events in TTree stored in file to the simulated sky.
+    -h:  This menu.
+    -j:  Wavelet scale a number in the range 0 <= j <= 8,
+         defaults to 1.
+    -N:  Band limit of wavelet, in the range 0 < N <= 128,
+         defaults to 1.
+    -n:  Number of events in the simulated sky, defaults to n =
+         1000
+    -s:  Number of skies to simulate, defaults to 100.
+    -i:  Minimum energy of events, defaults to 20 EeV.
+    -e:  Maximum energy of events, defaults to 40 EeV.
+    -c:  Minimum correlation, defaults to 0.2.
+    -m:  Minimum number of events hitting tangent plane.
+    -w:  Width of tangent plane, defaults to 2 degrees.
+    -l:  Length of tangent plane, defaults to 10 degrees.
+    -f:  Add events in TTree stored in file to the simulated
+         sky.
    \end{lstlisting}
 }
+\section{swat}
+{ \color{brown}
+   \begin{lstlisting}
+    Tests the algorithm doing a forward an backward transform.
+
+    Usage: swat [-J scales] [-N band-limit]
+
+    Options:
+
+    -h:     This menu.
+    -J:     TAlm object in root file. If not provided, the program
+            will compare input and output for J = 7 and return true if
+            diffrence less that 10e-10.  
+    -N:     Band limit of wavelet to be used.
+   \end{lstlisting}
+}
+
 
 \begin{thebibliography}{99}
 \bibitem{frm} J Fourier Anal Appl (2008) 14: 145–179.
