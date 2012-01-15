@@ -210,10 +210,11 @@ EXTRA_DIST = $(CONFIGDIR)/load.C.in                  \
              $(top_srcdir)/pgfplots/multiplicity.tex \
              $(top_srcdir)/doc/skymap.pdf            \
              $(top_srcdir)/doc/skymap-sim.pdf        \
+             $(top_srcdir)/doc/mult-cand.pdf         \
+             $(top_srcdir)/doc/crpropa.pdf           \
              $(top_srcdir)/doc/wignerpolar.pdf       \
              $(top_srcdir)/doc/wigner.pdf            \
              $(top_srcdir)/doc/corr_graph-sim.pdf    \
              $(top_srcdir)/doc/multiplicity-sim.pdf  \
              $(top_srcdir)/doc/swatguide.tex
-
 
