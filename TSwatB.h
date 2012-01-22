@@ -34,9 +34,9 @@
 #include "swat.h"
 #include "TCoeffInfo.h"
 #include "TShift.h"
+#include "TWignerd.h"
 
 class TAlm;
-class TWignerd;
 class TWavMap;
  
 class TSwatB {
@@ -64,6 +64,24 @@ class TSwatB {
    void  SetPoints(const TWavMap& re);
    void  Transform();
 };
+
+//_________________________________________________________
+inline 
+std::complex<Double_t> TSwatB::fWigCoeff(TWignerd &w,Int_t m, Int_t n) const
+{
+   //
+
+   Int_t l = w.GetL();
+
+   Double_t re, im;
+   std::complex<Double_t> first(0,0);
+   for(Int_t u = -l ; u <= l; ++u){ 
+      fB->GetPointComplex(fInfo.Fourier(m,u,n),re,im);
+      std::complex<Double_t> e(re,im);
+      first += e*w(m,n,-u)*fShift(u);
+   }
+   return first;
+}
 
 #endif // SWAT_TSwatB
 

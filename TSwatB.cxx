@@ -122,23 +122,6 @@ void TSwatB::GetAlm(TAlm& alm,Int_t j) const
    }
 }
 
-//_________________________________________________________
-complex<Double_t> TSwatB::fWigCoeff(TWignerd &w,Int_t m, Int_t n) const
-{
-   //
-
-   Int_t l = w.GetL();
-
-   Double_t re, im;
-   complex<Double_t> first(0,0);
-   for(Int_t u = -l ; u <= l; ++u){ 
-      fB->GetPointComplex(fInfo.Fourier(m,u,n),re,im);
-      complex<Double_t> e(re,im);
-      first += e*w(m,n,-u)*fShift(u);
-   }
-   return first;
-}
-
 Double_t TSwatB::TQWCalc::operator()() 
 {
       // Returns the quadrature weights

@@ -43,12 +43,12 @@ pdftoolbar=true,        % show Acrobat's toolbar?
 pdfmenubar=true,        % show Acrobat's menu?
 pdffitwindow=true,     % window fit to page when opened
 pdfstartview={FitH},    % fits the width of the page to the window
-pdftitle={O Framework ROOT},    % title
+pdftitle={Swat guide},    % title
 pdfauthor={Marcelo Zimbres Silva},     % author
-pdfsubject={Encontro C++ Brasil},   % subject of the document
+pdfsubject={Spherical Wavelets},   % subject of the document
 pdfcreator={Marcelo Zimbres Silva},   % creator of the document
 pdfproducer={Marcelo Zimbres Silva}, % producer of the document
-pdfkeywords={C++} {ROOT}, % list of keywords
+pdfkeywords={Wavelets} {Cosmic Rays}, % list of keywords
 pdfnewwindow=true,      % links in new window
 colorlinks=true,        % false: boxed links; true: colored links
 linkcolor=red,          % color of internal links
@@ -196,7 +196,7 @@ rounded corners,textcolor,thick]
 \href{http://www.ifi.unicamp.br/~mzimbres}{SWAT} is a package for analysis of
 functions that live on the sphere, which I have mostly used to analyze data of
 the Pierre Auger experiment and CRPropa simulations. I have written it from
-scratch as part of my my Ph.D. project. It evolved from a simple ROOT macro and
+scratch as part of my my Ph.D. It evolved from a simple ROOT macro and
 got bigger and bigger, since the code may be useful to other people I decided
 to organize, document it and make it public. The code is an C++ implementation
 of the spherical wavelet transform as presented in \cite{wiaux}. Some
@@ -205,9 +205,8 @@ attractive features of SWAT are:
 \begin{list}{\labelitemi}{}
 \item Harmonic and Wavelet transform on the sphere.
 \item Interface to Healpix code, which is included in the build system.
-\item Easy selection of events hitting sky window.
+\item Easy selection of events hitting sky window. 
 \item Calculation of deflection vs. $1/E$ graphs.
-\item Calculation of the Wigner-d functions via FFT.
 \item ROOT and FFTW are the only prerequisites.
 \end{list}
 
@@ -221,16 +220,16 @@ templates.
 \end{enumerate}
 
 Most of the theoretical datails of analysis of functions defined on $S^2$ and $S^3$ 
-were taken from \cite{wiaux}. 
+were taken from \cite{wiaux} and references therein. 
 
 The code has been tested in \textsc{Linux} and \textsc{MacBook}, but the code
 is portable enough to be built on other platforms.  In the following we
 describe how to use SWAT. Questions concerning the software can sent to Marcelo
 Zimbres \href{mailto:mzimbres@gmail.com}{mzimbres@gmail.com}
-\vspace{0.8cm}
+\vspace{0.7cm}
 \newline
 {\bf \large Acknowledgements}
-\vspace{0.8cm}
+\vspace{0.7cm}
 
 Most of SWAT were developed with financial support from CAPES.  Additionaly I
 would like to acknowledge the Institute of Physics at UNICAMP and the Bergische
@@ -287,14 +286,15 @@ herald data file. The macro will read a file with name
 For CRPropa simulations you can just configure CRPropa to output a .root file
 instaed of a text file.  The code uses the title of the TTree to diferentiate
 between a Herald and CRPropa file. The title of the TTree for CRPropa must be
-\textit{\color{brown}"CRPropa 3D events"}.
+\textit{\color{brown}"CRPropa 3D events"}, as far as I know, this is the default.
 
 \subsection{High quality graphs with pgfplots} \label{ch::pgfplots}
 If you have pgfplots installed on your machine, you can use the \LaTeX files
 which are available in the directory pgfplots to generate high quality
-graphs. You may have noted that after running {\color{brown}swatfind} you get
-many text files in your working directory. They are input files for the \LaTeX
-files. In the following subsections we show how to use the material.
+graphs using some output of swat analysis. You may have noted that after
+running {\color{brown}swatfind} you get many text files in your working
+directory. They are input files for the \LaTeX files. In the following
+subsections we show how to use the material.
 \subsubsection{Skymaps}
 When you run the program swatfind or swatsim, they produce a file named
 skymap.dat. This file possess the events cooordinates and energy of events that
@@ -366,7 +366,7 @@ is a term used to mean something with a position on the sky, usualy described
 by $(\theta,\phi)$ and an orientation. We will use the three Euler angle
 $(\alpha,\beta,\gamma)$ to describe the source. 
 
-It uses the folowing algorith:
+It uses the folowing algorithm:
 \begin{enumerate}
 \item The TTree is read from the file passed in the command line with option
 -f.
@@ -390,19 +390,23 @@ source location can be seem. Lets see an example:
 
 {\bf \color{brown}
 \begin{lstlisting}
-$ swatfind -j 1 -N 1 -i 20 -e 40 -w 2 -l 10 -f chain.root
+$ swatfind -j 1 -N 127 -i 20 -e 40 -w 2 -l 10 -f chain.root
 TFile**		chain.root	CRPropa output data file
  TFile*		chain.root	CRPropa output data file
   OBJ: TNtuple	events	CRPropa 3D events
   OBJ: TEventList	list	20 < emin && emax < 40 
   OBJ: THealpixMap	hmap	Healpix sky map
-  OBJ: TGraph	g0	C = -0.993, N = 4
+  OBJ: TGraph	g0	C = -0.993, N = 4 
   OBJ: TGraph	g1	C = -0.986, N = 5
   OBJ: TGraph	g2	C = 0.000, N = 0
   OBJ: TGraph	g3	C = -1.000, N = 2
   ...
 \end{lstlisting}
 }
+
+The N in the TGraph title is the number of events in the graph (or the number of 
+events which hit the tangent plane) and is not to be confused with the N passed by command line
+option -N.
 
 Now, if you want to see the exact location of the source:
 {\bf \color{brown}
@@ -420,21 +424,23 @@ wav(137.812,-27.4219,159.638) = -0.035312
 root [3] 
 \end{lstlisting}
 }
-\subsubsection{swatsim}
+\subsection{swatsim}
 {\it swatsim} uses Monte Carlo simulations to calculate the probability of a multiplet happen by 
-chance on a isotropic sky. We still do not have means of simulating exposure.
-The probability is calculated as follows: 
+chance on a isotropic sky. We still do not have means of simulating exposure, a feature which should be 
+added in future versions. The probability is calculated as follows: 
 \begin{itemize}
-\item The program simulates n skies.
+\item The program simulates n isotropic skies. If you want to add your simulated events
+to each sky you can use the option -f and a TTree in CRPropa format will be read
+and added in each sky.
 \item For each sky simulated the analysis made by swatfind is used to calculate the
-correlation coefficinent, for the largest wavelet coefficient found.
-\item If the correlation is larger than C , passed with option -c and has more than n evnets, passed 
+correlation coefficient. The tangent plane is calculated for the largest wavelet coefficient found.
+\item If the correlation is larger than C , passed with option -c and has more than n events, passed 
 with option -m, then the multiplet has passed the criterium.
 \item The probability will be total number of multiplets passing the criterium divided by 
 number of skies simulated.
 \end{itemize}
 
-A root file is generated, which contains two histograms:
+Beyond the probability, the program outputs to additional histograms:
 \begin{enumerate}
 \item A histogram of the correlation coefficients found, for which the total number
 of events is larger than the value passed with -m.
