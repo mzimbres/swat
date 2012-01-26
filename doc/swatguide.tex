@@ -194,8 +194,8 @@ rounded corners,textcolor,thick]
 \section{Introduction} \label{ch::Introduction}
 
 \href{http://www.ifi.unicamp.br/~mzimbres}{SWAT} is a package for analysis of
-functions that live on the sphere, which I have mostly used to analyze data of
-the Pierre Auger experiment and CRPropa simulations. I have written it from
+functions that live on the sphere, which I have mostly used to analyze data 
+collected by the Pierre Auger experiment and CRPropa simulations. I have written it from
 scratch as part of my my Ph.D. It evolved from a simple ROOT macro and
 got bigger and bigger, since the code may be useful to other people I decided
 to organize, document it and make it public. The code is an C++ implementation
@@ -215,11 +215,11 @@ I decided to include it here, instead of just link against Healpix libraries.
 \begin{enumerate}
 \item I do not need all Healpix routines and support to the fits format. 
 \item I usually need shared libraries to call Healpix code in a ROOT session,
-which is not built by Healpix build system since most of its code are C++
+which are not built by Healpix build system since most of its code are C++
 templates.
 \end{enumerate}
 
-Most of the theoretical datails of analysis of functions defined on $S^2$ and $S^3$ 
+Most of the theoretical details of analysis of functions defined on $S^2$ and $S^3$ 
 were taken from \cite{wiaux} and references therein. 
 
 The code has been tested in \textsc{Linux} and \textsc{MacBook}, but the code
@@ -249,15 +249,15 @@ standard configure options and makefile targets. The lines bellow will install
 the libraries on {\color{brown}"/usr/local"}
 {\bf \color{brown}
    \begin{lstlisting}
-   $ ./configure
+   $ ./configure CXXFLAGS="-O3 -ffast-math"
    $ make
    $ make install
    \end{lstlisting}
 }
-
+The flags passed to the configure script are optional, but greatly improve performance.
 To use some of the features of the package, I am assuming you are able to build
-shared libraries on your platform.  To easy the task of loading swat libraries
-the macro load.C, macro will be installed on
+shared libraries on your platform. To easy the task of loading swat libraries
+the macro load.C, will be installed on
 {\color{brown}"prefix/share/swat"}. To load the libraries in ROOT's C++
 interpreter you just have to execute it in your ROOT session, or just add it to
 your code {\color{brown}.rootlogon.C} macro.
@@ -273,31 +273,30 @@ All SWAT classes are now available in the ROOT session with syntax
 highlighting. You should also be able to generate documentation in HTML format
 with the macro {\color{brown}"prefix/share/swat/makehtml.C"}. You have to run
 this macro from the directory where you built SWAT. The documentation will be
-built in the directory{\color{brown}htmldoc}.
+built in the directory {\color{brown}htmldoc}.
 
 \subsection{Getting ready} \label{ch::ready}
-To analise Herald data, you will have to convert the ascii file to a TTree and
+To use Herald data, you will have to convert the ascii file to a {TTree} and
 save it in a .root file, for that you should use the macro
 {\color{brown}prefix/share/swat/convert\_herald.C} where prefix is usually
-\textit{/usr/local}.  Copy this macro to the same directory where you have the
+{\color{brown}/usr/local}.  Copy this macro to the same directory where you have the
 herald data file. The macro will read a file with name
-{\color{brown}"herald.dat"}, so you may have to rename it. 
-
+{\color{brown}"herald.dat"}, so you may have to rename your file or edit the macro. 
 For CRPropa simulations you can just configure CRPropa to output a .root file
-instaed of a text file.  The code uses the title of the TTree to diferentiate
+instead of a text file.  The code uses the title of the TTree to differentiate
 between a Herald and CRPropa file. The title of the TTree for CRPropa must be
 \textit{\color{brown}"CRPropa 3D events"}, as far as I know, this is the default.
 
 \subsection{High quality graphs with pgfplots} \label{ch::pgfplots}
-If you have pgfplots installed on your machine, you can use the \LaTeX files
-which are available in the directory pgfplots to generate high quality
+If you have pgfplots installed on your machine, you can use the \LaTeX\,\,
+files which are available in the directory pgfplots to generate high quality
 graphs using some output of swat analysis. You may have noted that after
 running {\color{brown}swatfind} you get many text files in your working
-directory. They are input files for the \LaTeX files. In the following
+directory. They are input files for the \LaTeX\,\, files. In the following
 subsections we show how to use the material.
 \subsubsection{Skymaps}
 When you run the program swatfind or swatsim, they produce a file named
-skymap.dat. This file possess the events cooordinates and energy of events that
+skymap.dat. This file contains the coordinates and energy of the events that
 passed the cut. To generate a graph for an isotropic sky for example, one can
 use:
 {\bf \color{brown}
@@ -312,43 +311,47 @@ Example skies can be seem here:\\
 \includegraphics[scale=1.0]{skymap-sim.pdf} 
 \includegraphics[scale=1.0]{skymap.pdf}
 The program will also generate the file mult\_cand.tex, this file contains only
-the events which hit the tangent plane int the position found by the wavelet
-analysis. An example can be seem below and the left side. On the right side we
+the events which hit the tangent plane in the position found by the wavelet
+analysis. An example can be seem below on the left side. On the right side we
 see a skymap simulated with CRPropa. \\
 \includegraphics[scale=1.0]{mult-cand.pdf} 
 \includegraphics[scale=1.0]{crpropa.pdf}
 
-Usualy the energy of events is represented in skymaps as circles of varying
+Usually the energy of events is represented in skymaps as circles of varying
 size, where events with higher energy have larger circles. I do not like such
 representations since they can give the false impression that the angular
-resolution gets worse as the energy increases, which is not true. Additionaly,
-these circles polute the figure. In the representations I am using, colors
+resolution gets worse as the energy increases, which is not true. Additionally,
+these circles pollute the figure. In the representations I am using, colors
 are used to differentiate energies which in my opinion is a much clear way of
 representing the sky.
 
 \subsubsection{Energy deflection graphs}
-In addition to skymap.dat, the file corr\_graph0.dat will be also generated.
-This file contains the energy-deflection graphs. Refer to section
-\ref{algorithm} for the algorithm used. Here are some examples:\\
+In addition to skymap.dat, the files {\color{brown}corr\_graphN.dat} will be also generated, 
+with N varying from 0 to 15. These files contains the energy-deflection graphs,
+of the events the hit the tangent plane in the position found by the wavelet
+analysis. On the figure below, we see two examples. The graph on the left
+originates from a CRPropa simulation. \\
 \includegraphics[scale=0.8]{corr_graph.pdf} 
 \includegraphics[scale=0.8]{corr_graph-sim.pdf} \hfill
 
 \subsubsection{Number of events versus orientation}
 
 The number of events hitting stripes centered at the same point and
-whose orientation varies from 0 - 180 degree is also a useful observable
+whose orientation varies from 0 - 180 degrees is also a useful observable
 when interpreting the results. Some of these graphs can be seem below:
 
 \includegraphics[scale=0.8]{multiplicity.pdf}  
 \includegraphics[scale=0.8]{multiplicity-sim.pdf} 
 
-To generate them, just use the macro multiplicity.tex in the pgfplots directory
-and the file generated by swatfind of swatsim. Similar to what we have done for
-the energy deflection graphs.
+To generate them, use the macro {\color{brown}multiplicity.tex} in the pgfplots directory
+and the file {\color{brown}multiplicity0.dat} generated by swatfind of swatsim.
+One such file will be generated for each source found.
+Similar to what we have done for the energy deflection graphs.
+
 
 \subsubsection{Wigner-d functions}
 
-The calculations of the wigner-d functions in SWAT is based on \ref{navaza}.
+Swat implements the calculation of the wigner-d functions via FFT.
 You can use the file pgfplots/wignerd.tar.gz to generate some nice graphs.
 
 \includegraphics[scale=1.0]{wignerpolar.pdf}
@@ -360,22 +363,24 @@ SWAT installs and which provide an easy interface to the wavelet analysis.
 \subsection{swatfind}
 {\it swatfind} is the main program. It can be used to find sources in Pierre
 Auger data and CRPropa simulations. Beyond that, it can be also used to test
-whether the events belong to a multiplet, calculting energy-deflections graphs
+whether the events belong to a multiplet, calculating energy-deflections graphs
 for the sources found. All information is saved in .root format. A source here
-is a term used to mean something with a position on the sky, usualy described
+is a term used to mean something with a position on the sky, usually described
 by $(\theta,\phi)$ and an orientation. We will use the three Euler angle
 $(\alpha,\beta,\gamma)$ to describe the source. 
 
-It uses the folowing algorithm:
+It uses the following algorithm:
 \begin{enumerate}
-\item The TTree is read from the file passed in the command line with option
--f.
-\item Events with energy in the range $emin < E < emax$ are used to fill a
-Healpix map.  The otions -i and -e are used to pass the energy range.
+\item The TTree containing Pierre Auger data or CRPropa simulations
+is read from the file passed in the command line with option -f.
+\item Events with energy in the range $emin < E < emax$ are selected and used
+to fill a Healpix map.  The options -i and -e are used to pass the energy range.
 \item The Healpix map generated is transformed to wavelet space. The parameter
 $N$, passed by the option -N gives the precision on the ability of the wavelet
-to find the angle $\gamma$. The scale on which the analysis is performed is
-passed with option -j. 
+to find the angle $\gamma$, which can range from 1 - 128 in our implementation. 
+The precision in degrees are calculated with the formula $180/N$ The scale on
+which the analysis is performed is passed with option -j. It ranges from 0 - 8.
+We found out that the best results are achieved with j = 1.
 \item A partial sort is used to find the 15 largest wavelet coefficients.
 \item The euler angles found will be used to calculated the tangent plane
 equation for each source. The width and length of the plane are passed with
@@ -385,8 +390,7 @@ plane. The energy cut is used again.
 \item The energy-deflection graphs are calculated and the correlations found
 are printed on the screen.
 \end{enumerate}
-All the information is saved in the file {\color{brown}"sources.root"}. The exact
-source location can be seem. Lets see an example:
+All the information is saved in the file {\color{brown}"sources.root"}.  Lets see an example:
 
 {\bf \color{brown}
 \begin{lstlisting}
@@ -406,7 +410,7 @@ TFile**		chain.root	CRPropa output data file
 
 The N in the TGraph title is the number of events in the graph (or the number of 
 events which hit the tangent plane) and is not to be confused with the N passed by command line
-option -N.
+option -N. C is the correlation of the energy-deflection graphs.
 
 Now, if you want to see the exact location of the source:
 {\bf \color{brown}
@@ -435,12 +439,12 @@ and added in each sky.
 \item For each sky simulated the analysis made by swatfind is used to calculate the
 correlation coefficient. The tangent plane is calculated for the largest wavelet coefficient found.
 \item If the correlation is larger than C , passed with option -c and has more than n events, passed 
-with option -m, then the multiplet has passed the criterium.
-\item The probability will be total number of multiplets passing the criterium divided by 
+with option -m, then the multiplet has passed the criteria.
+\item The probability will be total number of multiplets passing the criteria divided by 
 number of skies simulated.
 \end{itemize}
 
-Beyond the probability, the program outputs to additional histograms:
+Beyond the probability, the program outputs two additional histograms:
 \begin{enumerate}
 \item A histogram of the correlation coefficients found, for which the total number
 of events is larger than the value passed with -m.
@@ -448,12 +452,12 @@ of events is larger than the value passed with -m.
 \end{enumerate}
 
 \subsection{swat}
-swat: This program only used to benchmark and test the algorithm. It can test
+swat: This program is only used to benchmark and test the algorithm. It can test
 both the spherical harmonic transform and the spherical wavelet transform.
 {\bf \color{brown}
 \begin{lstlisting}
 $ time swat -J 8 # Will test spherical harmonic transform.
-$ time swat -J 8 N 3 # Will test wavelet transform.
+$ time swat -J 8 -N 3 # Will test wavelet transform.
 \end{lstlisting}
 }
 
