@@ -229,23 +229,23 @@ template<typename T> void map2alm (const vector<ringpair> &pair,
     {
     int llim=chunk*chunksize, ulim=min(llim+chunksize,int(pair.size()));
 
-#pragma omp parallel
+////#pragma omp parallel
 {
     ringhelper helper;
 
     int ith;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (ith=llim; ith<ulim; ++ith)
       helper.pair2phase(mmax,pair[ith],map,phas1[ith-llim],phas2[ith-llim]);
 } // end of parallel region
 
-#pragma omp parallel
+//#pragma omp parallel
 {
     Ylmgen generator(lmax,mmax,1e-30);
     arr<double> Ylm;
     arr<xcomplex<double> > alm_tmp(lmax+1);
     int m;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (m=0; m<=mmax; ++m)
       {
       for (int l=m; l<=lmax; ++l) alm_tmp[l].Set(0.,0.);
@@ -338,12 +338,12 @@ template<typename T> void map2alm_pol
     {
     int llim=chunk*chunksize, ulim=min(llim+chunksize,int(pair.size()));
 
-#pragma omp parallel
+//#pragma omp parallel
 {
     ringhelper helper;
 
     int ith;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (ith=llim; ith<ulim; ++ith)
       {
       helper.pair2phase (mmax, pair[ith], mapT,
@@ -355,14 +355,14 @@ template<typename T> void map2alm_pol
       }
 } // end of parallel region
 
-#pragma omp parallel
+//#pragma omp parallel
 {
     Ylmgen generator(lmax,mmax,1e-30);
     arr<double> Ylm;
     arr<double> lam_fact(lmax+1);
     arr<xcomplex<double>[3] > alm_tmp(lmax+1);
     int m;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (m=0; m<=mmax; ++m)
       {
       init_lam_fact_1d (m,lam_fact);
@@ -460,13 +460,13 @@ template<typename T> void alm2map (const Alm<xcomplex<T> > &alm,
     {
     int llim=chunk*chunksize, ulim=min(llim+chunksize,int(pair.size()));
 
-#pragma omp parallel
+//#pragma omp parallel
 {
     Ylmgen generator(lmax,mmax,1e-30);
     arr<double> Ylm;
     arr<xcomplex<double> > alm_tmp(lmax+1);
     int m;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (m=0; m<=mmax; ++m)
       {
       for (int l=m; l<=lmax; ++l)
@@ -507,11 +507,11 @@ template<typename T> void alm2map (const Alm<xcomplex<T> > &alm,
       }
 } // end of parallel region
 
-#pragma omp parallel
+//#pragma omp parallel
 {
     ringhelper helper;
     int ith;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (ith=llim; ith<ulim; ++ith)
       helper.phase2pair (mmax,phas1[ith-llim],phas2[ith-llim],pair[ith],map);
 } // end of parallel region
@@ -560,14 +560,14 @@ template<typename T> void alm2map_pol (const Alm<xcomplex<T> > &almT,
     {
     int llim=chunk*chunksize, ulim=min(llim+chunksize,int(pair.size()));
 
-#pragma omp parallel
+//#pragma omp parallel
 {
     Ylmgen generator(lmax,mmax,1e-30);
     arr<double> Ylm;
     arr<double> lam_fact (lmax+1);
     arr<xcomplex<double>[3]> alm_tmp(lmax+1);
     int m;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (m=0; m<=mmax; ++m)
       {
       int m2 = m*m;
@@ -630,11 +630,11 @@ template<typename T> void alm2map_pol (const Alm<xcomplex<T> > &almT,
       }
 } // end of parallel region
 
-#pragma omp parallel
+//#pragma omp parallel
 {
     ringhelper helper;
     int ith;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (ith=llim; ith<ulim; ++ith)
       {
       helper.phase2pair(mmax,phas1T[ith-llim],phas2T[ith-llim],pair[ith],mapT);
@@ -683,13 +683,13 @@ template<typename T> void alm2map_der1 (const Alm<xcomplex<T> > &alm,
     {
     int llim=chunk*chunksize, ulim=min(llim+chunksize,int(pair.size()));
 
-#pragma omp parallel
+//#pragma omp parallel
 {
     Ylmgen generator(lmax,mmax,1e-30);
     arr<double> Ylm;
     arr<double> lam_fact (lmax+1);
     int m;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (m=0; m<=mmax; ++m)
       {
       const xcomplex<T> *alm_tmp=alm.mstart(m);
@@ -747,11 +747,11 @@ template<typename T> void alm2map_der1 (const Alm<xcomplex<T> > &alm,
       }
 } // end of parallel region
 
-#pragma omp parallel
+//#pragma omp parallel
 {
     ringhelper helper;
     int ith;
-#pragma omp for schedule(dynamic,1)
+//#pragma omp for schedule(dynamic,1)
     for (ith=llim; ith<ulim; ++ith)
       {
       helper.phase2pair(mmax,phas1[ith-llim],phas2[ith-llim],pair[ith],map);
