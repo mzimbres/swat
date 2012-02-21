@@ -48,7 +48,6 @@
  // versus stripe orientation graphs for all sources in sources file
  // and adds to the sources file.
  //                                                       
- //                                                 
  ///////////////////////////////////////////////////////////////////////
 
 using namespace std;

@@ -40,7 +40,7 @@
 
  ///////////////////////////////////////////////////////////////////////
  //                                                    
- // Class which implement the algorithm to find sources in a Sky map 
+ // Class which implements the algorithm to find sources in a Sky map 
  // using the wavelet transform.
  //                                                 
  ///////////////////////////////////////////////////////////////////////
@@ -50,16 +50,15 @@ const char* TSourcesFinder::fHeraldCut = "(two > 0) && (three < 60) && (twentytw
                                           (((twentysix > 0.5) && (thirtysix > 0.5)) || (twentythree > 1.1))";
 
 //_________________________________________________________________
-TSourcesFinder::TSourcesFinder(): 
-fNSources(15), fN(1), fScale(1), fSep(3.), fMaxEnergy("40."), 
-fMinEnergy("15."), fSourcesFile("sources.root")
+TSourcesFinder::TSourcesFinder(): fNSources(15), fN(1), fScale(1), 
+fSep(3.), fMaxEnergy("40."), fMinEnergy("15.")
 {
-   // Will openfile and get a pointer to the TTree called events.
+   // Will open file and get a pointer to the TTree called events.
    // Very important: This function must be called after setting cuts.
 
    TObject* obj = gDirectory->Get("events");
 
-   if (obj == NULL){
+   if (!obj) {
       std::cerr << "Events object not in the current directory." << std::endl;
       throw "TSourcesFile: File type not supported.";
    }
@@ -92,7 +91,7 @@ void TSourcesFinder::fSetCutHerald(std::string max,std::string min)
 {
    // Set the string fCuts to new values.
 
-   fCut = min + " < thirtyeight && thirtyeight < " + max 
+   fCut = min + " < thirtynine && thirtynine < " + max 
           + " && " + fHeraldCut;
 }
 

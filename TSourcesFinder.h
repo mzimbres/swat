@@ -40,7 +40,6 @@ class TSourcesFinder {
    Int_t fSep;      // Sources separation
    std::string fMaxEnergy;  //!
    std::string fMinEnergy;  //!
-   std::string fSourcesFile; //! File name
    std::string fCut; //! Cuts
    TTree* fEvents; //!
    void fSetCutHerald(std::string max,std::string min);

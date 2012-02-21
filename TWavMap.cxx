@@ -87,8 +87,6 @@ class CompareResolution {
 
  ///////////////////////////////////////////////////////////////////////
  //                                                    
- //                                                      
- //                                                       
  //  Stores coefficients of functions defined on SO(3) i.e. functions
  //  of the for f(a,b,c) where 0 <= a <= pi, 0 <= b,c <= 2*pi.
  //
@@ -133,7 +131,7 @@ void TWavMap::FindSources(int nsources,double r) const
 
    std::ostringstream os;
    int i = 0;
-   TEulerAngle *euler = NULL;
+   TEulerAngle *euler = 0;
    while (( i < nsources ) && (middle != tail)) {
       std::partial_sort(head, ++middle, tail, CompareAbs() );
       tmp.SetPhiTheta(head->GetPhiIndex(),head->GetThetaIndex());
