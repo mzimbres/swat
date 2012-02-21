@@ -64,23 +64,23 @@ Bool_t TCorrSelector::Process(Long64_t entry)
    // For Herald data in TTree generated with macros/convert_herald.C
    b_six->GetEntry(entry);
    b_seven->GetEntry(entry);
-   b_thirtyeight->GetEntry(entry);
+   b_thirtynine->GetEntry(entry);
    Double_t theta = Pi()*(seven + 90.)/180;
    Double_t phi = Pi()*(six + 180.)/180 + Pi();
 
    if (fAngle->IsInsideRec(theta,phi,fAngSep)) {
-       Double_t oneover = 1/thirtyeight;
+       Double_t oneover = 1/thirtynine;
        fEnergy.push_back(oneover); 
-       fEnergyError.push_back(thirtyeight*fError/Power(thirtyeight,2));
+       fEnergyError.push_back(thirtynine*fError/Power(thirtynine,2));
        Double_t ang = -fAngSep*180./Pi();
        fAngle2.push_back(ang); 
        fAngle2Error.push_back(1.); 
        ++fCount;
-       corr  << oneover  << " " << ang << " " << thirtyeight << "\n";
+       corr  << oneover  << " " << ang << " " << thirtynine << "\n";
 
        Double_t x, y;
        THistPainter::ProjectAitoff2xy(-six,seven,x,y);
-       out << x << " " << y << " " << thirtyeight << "\n";
+       out << x << " " << y << " " << thirtynine << "\n";
    }
 
    return kTRUE;
