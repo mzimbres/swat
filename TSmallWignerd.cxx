@@ -42,7 +42,7 @@ using namespace TMath;
 
 //_____________________________________________________________________
 TSmallWignerd::TSmallWignerd(Int_t L): 
-fSize(2*L), fEvenType(0), fOddType(5)
+fSize(2*L), fEvenType(1), fOddType(6)
 {
    // Constructor
    // Size of the transform will be 2*L. 
