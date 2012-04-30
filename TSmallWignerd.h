@@ -1,6 +1,6 @@
 // Author: Marcelo Zimbres Silva <mailto:mzimbres@gmail.com>
 
-/* Copyright (C) 2010, 2011 Marcelo Zimbres Silva
+/* Copyright (C) 2010, 2011, 2012 Marcelo Zimbres Silva
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,12 +35,15 @@ class TSmallWignerd {
    Int_t fSize;
    Int_t fEvenType;
    Int_t fOddType;
-   std::auto_ptr<TVirtualFFT> fEven;     //! No streamer available.
-   std::auto_ptr<TVirtualFFT> fOdd;     //! No streamer available.
+   std::auto_ptr<TVirtualFFT> fEven;
+   std::auto_ptr<TVirtualFFT> fOdd;
 
    public:
-   explicit  TSmallWignerd(Int_t L = 64);
-   Int_t     GetSize() const {return fSize;}
+   explicit TSmallWignerd(Int_t L)
+   : fSize(2*L), fEvenType(1), fOddType(5),
+     fEven(TVirtualFFT::SineCosine(1,&fSize,&fEvenType,"M K")),
+     fOdd(TVirtualFFT::SineCosine(1,&fSize,&fOddType,"M K")) { }
+   Int_t GetSize() const {return fSize;}
    Double_t* Get(const TWignerd& wig,Int_t m,Int_t n) const;
 };
 

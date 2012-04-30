@@ -1,6 +1,6 @@
 // Author: Marcelo Zimbres Silva <mailto:mzimbres@gmail.com>
 
-/* Copyright (C) 2010, 2011 Marcelo Zimbres Silva
+/* Copyright (C) 2010, 2011, 2012 Marcelo Zimbres Silva
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,40 +24,28 @@
 
 // SWAT
 
-#include "TWignerd.h"
 #include "TSmallWignerd.h"
+#include "TWignerd.h"
 
 using namespace TMath;
 
-  ///////////////////////////////////////////////////////////////////////
-  //                                                                   //
-  // Calculate small Wigner-d functions using sine and cosine 
-  // transforms(see TVirtualFFT::SineCosine() for details).
-  // Uses the transform type 0 and 5 for cosine and sine transforms
-  // respectively.
-  // See tutorials form details on how to use this class.
-  //                                                                   //
-  ///////////////////////////////////////////////////////////////////////
-
-
-//_____________________________________________________________________
-TSmallWignerd::TSmallWignerd(Int_t L): 
-fSize(2*L), fEvenType(1), fOddType(6)
-{
-   // Constructor
-   // Size of the transform will be 2*L. 
-
-   fEven.reset(TVirtualFFT::SineCosine(1,&fSize,&fEvenType,"M K"));
-   fOdd.reset(TVirtualFFT::SineCosine(1,&fSize,&fOddType,"M K"));
-}
+  //////////////////////////////////////////////////////////////////////////
+  //                                                                   
+  // Calculate small Wigner-d functions using sine and cosine transforms(see
+  // TVirtualFFT::SineCosine() for details).  The d`s are sample on the grid
+  // beta_k = pi(2k+1)/4B, where B is the band limit. It uses the transform
+  // type 1 and 5 for cosine and sine transforms respectively. See tutorials
+  // form details on how to use this class.
+  //                                                                   
+  //////////////////////////////////////////////////////////////////////////
 
 //_____________________________________________________________________
 Double_t* TSmallWignerd::Get(const TWignerd& wig,Int_t m,Int_t n) const
 {
-   // Will return array with Wigner-d functions. The value l will
-   // be taken from wig using TWignerd::GetL(). this value musst be 
-   // smaller than L, provided in the constructor.
-   
+   // Return array with Wigner-d functions. The value l will be taken from wig
+   // using TWignerd::GetL(). It must be smaller than L, provided in the
+   // constructor. Pointer to array returned is owned by the object and shall
+   // not be deleted.
 
    Int_t l = wig.GetL();
 
@@ -91,5 +79,4 @@ Double_t* TSmallWignerd::Get(const TWignerd& wig,Int_t m,Int_t n) const
       return fOdd->GetPointsReal();
    } 
 }
-
 

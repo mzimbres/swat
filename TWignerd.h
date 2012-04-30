@@ -27,16 +27,15 @@
 
 class TWignerd {
    private:
-   int fB;         // Band limit of the signal to be analised.
-   int fL;             // Value of l in each step of the recursion.
-   int fSize;                    // Size of container with deltas.
+   int fB;        // Band limit of the signal to be analised.
+   int fL;        // Value of l at each step of the recursion.
+   int fSize;     // Size of container with deltas.
    std::vector<double>   fMatrix;  // Delta coefficients. 		   
    int fIndex(int m,int n) const {return (((m*(m+1)) >> 1) + n);} // Global index
 
    public:
    explicit TWignerd(int B): fB(B+1), fL(0), 
-   fSize(((fB*(fB+1)) >> 1) + fB),fMatrix(fSize) { fMatrix[fIndex(0,0)] = 1; }
-
+      fSize(((fB*(fB+1)) >> 1) + fB),fMatrix(fSize) { fMatrix[fIndex(0,0)] = 1; }
    void     Recurse(); 
    std::complex<double> operator()(int m,int n,int u) const;
    double Delta(int m,int n) const;
@@ -45,12 +44,10 @@ class TWignerd {
 };
 
 //_____________________________________________________________________
-inline std::complex<double> TWignerd::operator()(int m,int n,int u) const
+inline 
+std::complex<double> TWignerd::operator()(int m,int n,int u) const
 {
    // Returns Fourier coefficients of the wigner d-function d^l_mn.
-   // If module of m or n or u greater than l returns zero instead of 
-   // reporting an error.
-   // u: frequency
 
    if ( (m - n) & 1) 
       return ((m - n + 1) & 3) ? -std::complex<double>(0,1)*Delta(u,m)*Delta(u,n): std::complex<double>(0,1)*Delta(u,m)*Delta(u,n);
@@ -58,7 +55,8 @@ inline std::complex<double> TWignerd::operator()(int m,int n,int u) const
 }
 
 //__________________________________________________________________________
-inline double TWignerd::Delta(int m,int n) const
+inline 
+double TWignerd::Delta(int m,int n) const
 {
    // Returns delta using symmetry relations.
 

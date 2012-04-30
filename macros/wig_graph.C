@@ -1,12 +1,11 @@
 
 void wig_graph(Int_t l,Int_t m,Int_t n)
 {
-   // This macro can be used to draw the graph of 
-   // a Wigner d function.
+   // Use this macr to draw a wigner-d function. For more information
+   // see the classes TWignerd and TSmallWignerd
 
-   Int_t L = 1024;
-   if (l > L)
-      L = l;
+   const Int_t L = 1024;
+   if (l > L) L = l;
 
    // The number of points on which the function will be sampled
    // is 2*L.
@@ -25,7 +24,7 @@ void wig_graph(Int_t l,Int_t m,Int_t n)
       vecx[j] = TMath::Pi()*(j + 1/2)/size;
 
    TGraph *gr = new TGraph(size,vecx,vecy);
-   gr->SetTitle("Wigner d function");
+   gr->SetTitle("Wigner-d function");
    gr->SetLineColor(kSpring+3);
    gr->SetFillColor(kSpring+3);
    gr->SetLineWidth(2);
