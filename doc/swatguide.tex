@@ -356,6 +356,64 @@ You can use the file pgfplots/wignerd.tar.gz to generate some nice graphs.
 
 \includegraphics[scale=1.0]{wignerpolar.pdf}
 \includegraphics[scale=1.0]{wigner.pdf} 
+\section{Transforms on the Sphere}
+Most SWAT functionality is based on Fourier and wavelet transforms on the sphere, therefore we give
+in this section a brief overview of analysis of functions on the sphere. Before
+that however, it is important to mention the problem of sampling functions on
+the sphere, which is refered to as its pixelization.  Due to the fact
+that most of the time we work with function defined on the line (temporal
+series, for example) or on the plane (images in general) we do not have to care
+much about how to sample. We simply divide it in squares of same area and everything works
+just fine. However, when we try the same thing on the sphere we imediately see
+that it is impossible to achieve same area pixelization on the sphere due its curvature.
+
+There are two main features we would like to have decide to divide a Sphere in
+bins. First we would like to have bins of same area, this is achieved by the
+Healpix pixelization \ref{healpix}. Second, we would like to to use FFT to calculate
+functions on the sphere instead of slow recursion and that is achieved by ECP
+Pixalization, which stands for "Equidistant cylindrical projection"\ref{healpix}.
+Unfortunately theses two features are mutualy excludente. In this software we
+decided to use ECP due to its simplicity. In ECP, the three Euler angles, which we 
+are using to parametrize SO(3), are sampled as follows
+$\alpha$, $\beta$ and $\gamma$
+\begin{equation}
+\alpha_{j_1} = \gamma_{j_1} = \frac{2\pi j}{2B}, \ \ \ \beta_{j_1} = \frac{\pi(2k + 1)}{4B}
+\nonumber
+\end{equation}
+\begin{figure}[ht]
+   \centering
+      \includegraphics[height=4cm,width=10.78cm,angle=0]{healpixGridRefinement.jpg} \\
+      \includegraphics[]{cylindrical-f1.pdf}
+      \includegraphics[]{cylindrical-f2.pdf}
+      \includegraphics[]{cylindrical-f3.pdf}
+   \caption{Above:Healpix pixelization of the sphere. Below: The ECP pixelization.}
+   \label{healpix}
+\end{figure}
+
+\subsection{Fourier Transform on SO(3)}
+A function $f \in L^2(SO(3))$ can be decomposed as follows
+\begin{eqnarray}
+f(\alpha,\beta,\gamma) = \sum_{l = 0}\sum_{m = -l}^l\sum_{n = -l}^l f^l_{mn}D^l_{mn}(\alpha,\beta,\gamma).
+\label{back}
+\end{eqnarray}
+where
+\begin{eqnarray}
+D^l_{mn}(\alpha,\beta,\gamma) = e^{-im\alpha}d^l_{mn}(\beta)e^{-in\gamma}.
+\end{eqnarray}
+is called "Wigner-D functions" and form an irreducible representation on SO(3). The
+functions $d^l_{mn}$ are called "small wigner-d functions".
+
+The inverse of \ref{back} on ECP pixelization is given by
+\begin{equation}
+f^l_{mn} = \frac{1}{(2B)^2}\sum_{j_1 = 0}^{2B - 1}\sum_{j_2 = 0}^{2B - 1}\sum_{k = 0}^{2B - 1}
+w_B(k)f(\alpha_{j_1},\beta_{k},\gamma_{j_1})D^{l*}_{mn}(\alpha_{j_1},\beta_{k},\gamma_{j_1})
+\end{equation}
+where $B$ is the band limit and the quadrature weights are given by
+\begin{equation}
+w_B(k) = \frac{2}{B}\sin\left(\frac{\pi(2k + 1)}{4B}\right)\sum_{j = 0}^{B - 1}
+\frac{1}{2k + 1}\sin\left((2j+1)(2k+1)\frac{\pi}{4B}\right)
+\end{equation}
+where $0\le k < 2B$. 
 
 \section{The three main programs}
 In the following sub-sections we will describe the three main programs which 
@@ -559,7 +617,6 @@ $ time swat -J 8 -N 3 # Will test wavelet transform.
     -N: Band limit of wavelet to be used.
    \end{lstlisting}
 }
-
 
 \begin{thebibliography}{99}
 \bibitem{frm} J Fourier Anal Appl (2008) 14: 145–179.
