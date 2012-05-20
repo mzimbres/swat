@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 // ROOT
 
 #include "TObject.h" 
@@ -26,13 +25,10 @@
 
 #include "TVMap.h" 
 
-
 ClassImp(TVMap);
 
  ///////////////////////////////////////////////////////////////////////
  //                                                    
- //                                                      
- //                                                       
  //  Stores coefficients of functions defined on SO(3) i.e. functions
  //  of the form f(a,b,c) where 0 <= a <= pi, 0 <= b,c <= 2*pi.
  //
@@ -49,5 +45,4 @@ void TVMap::Copy(TObject& rhs) const
 
    TNamed::Copy(rhs);
 }
-
 

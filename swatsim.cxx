@@ -28,7 +28,7 @@ void print_usage(const char* prog)
    position found (the euler angles). The correlation C is calculated including\n\
    all events that hit the tangent plane, whose size is specified with the\n\
    options -l and -w. The probablility will be the number of multiplets with\n\
-   correlation > C and number of events > m, diveded by the number of skies\n\
+   correlation > C and number of events > m, divided by the number of skies\n\
    simulated. Additionaly, two other quantities are calculated, the histogram\n\
    of the number of events that hit the tangent plane and the histogram of the\n\
    C's found for which the number of events is greater than m (passed in the\n\

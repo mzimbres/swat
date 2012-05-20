@@ -22,7 +22,11 @@
 #include <vector>
 #include <complex>
 
-class TAlm {
+// Root
+
+#include "TNamed.h"
+
+class TAlm: public TNamed {
    private:
    int     fJmax;      // Maximum number of Scales.
    size_t  fL;         // Band limit: l < fL
@@ -31,7 +35,9 @@ class TAlm {
    int    fIndex(size_t l,size_t m) const {return ((l*(l+1) >> 1) + m);} // Global index
 
    public:
-   explicit TAlm(int J): fJmax(J), fL(2 << (fJmax - 1)), fSize(((fL*(fL+1)) >> 1) + fL), fAlm(fSize) { };
+   explicit TAlm(int J = 2): TNamed("alm","alm"), fJmax(J), 
+      fL(2 << (fJmax - 1)), fSize(((fL*(fL+1)) >> 1) + fL), fAlm(fSize) { }
+   ~TAlm() {}
    std::complex<double>  operator()(int l,int m) const {return fAlm[fIndex(l,m)];}
    std::complex<double>& operator()(int l,int m) {return fAlm[fIndex(l,m)];}
    void   Add(const TAlm& alm);
@@ -40,7 +46,9 @@ class TAlm {
    void   Conjugate();
    void   ScaleL(const std::vector<double>& d);
    void   Scale(double factor);
+
+   ClassDef(TAlm,1); // Abstract class for all map types.
 };
 
-#endif
+#endif // SWAT_TAlm
 
