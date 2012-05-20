@@ -103,10 +103,10 @@ void TSourcesFinder::fSetCutCRPropa(std::string max,std::string min)
    fCut = min + " < Momentum_E_EeV && Momentum_E_EeV < " + max;
 }
 
-//______________________________________________
-void TSourcesFinder::FindSources()
+//__________________________________________________________________
+void TSourcesFinder::GenerateAlm()
 {
-   // Find sources algorithm. 
+   // Calculate alm and adds it to the current directory.
 
    std::auto_ptr<TSelector> fMapSelector;
 
@@ -128,9 +128,21 @@ void TSourcesFinder::FindSources()
    fEvents->Process(fMapSelector.get());
 
    THealpixMap* hmap = dynamic_cast<THealpixMap*>(gDirectory->Get("hmap"));
-   TAlm alm(hmap->GetJ());
-   hmap->CreateAlm(alm);
-   std::auto_ptr<TWavMap> wav(TAuxFunc::SWAT(alm,fScale,fN));
+   TAlm* alm = new TAlm(hmap->GetJ());
+   alm->SetName("alm");
+
+   hmap->CreateAlm(*alm);
+   gDirectory->Add(alm);
+}
+
+//______________________________________________
+void TSourcesFinder::FindSources()
+{
+   // Find sources algorithm. 
+
+   GenerateAlm(); // will add alm to the current directory.
+   TAlm* alm = dynamic_cast<TAlm*>(gDirectory->Get("alm"));
+   std::auto_ptr<TWavMap> wav(TAuxFunc::SWAT(*alm,fScale,fN));
 
    wav->FindSources(fNSources,fSep);
 }

@@ -31,7 +31,7 @@ class TAlm: public TNamed {
    int     fJmax;      // Maximum number of Scales.
    size_t  fL;         // Band limit: l < fL
    size_t  fSize;      // Size necessary to store data.
-   std::vector<std::complex<double> > fAlm;  // Stores real part
+   std::vector<std::complex<double> > fAlm;
    int    fIndex(size_t l,size_t m) const {return ((l*(l+1) >> 1) + m);} // Global index
 
    public:

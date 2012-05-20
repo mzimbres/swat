@@ -57,6 +57,7 @@ class TSourcesFinder {
    void         SetN(Int_t N) { fN = N; }
    void         SetScale(Int_t j) { fScale = j; }
    void         SetNSources(Int_t n) { fNSources = n; }
+   void         GenerateAlm();
    void         FindSources();
 };
 
