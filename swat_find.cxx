@@ -26,7 +26,7 @@ void print_usage(const char* prog)
    saved to sources.root file. To convert a Herald file to the format used by\n\
    this progra use the macro macros/convert_herald.C in swat source tree.\n\
    Usage: " << prog << " [ -j scale] [-N number] [-i emin] [-e emax] [-w width]\n\
-                         [-l length] [-f file.root]\n\n\
+                         [-l length] [-f file.root] [-n nsources]\n\n\
    Options:\n\n\
    -h:     This menu.\n\
    -j:     Wavelet scale a number in the range 0 <= j <= 8, defaults to 1.\n\
@@ -36,6 +36,7 @@ void print_usage(const char* prog)
    -w:     Width of tangent plane, defaults to 2 degrees.\n\
    -l:     Length of tangent plane, defaults to 10 degrees.\n\
    -f:     Root file containing Tree with data, defaults to chain.root.\n\
+   -n:     Number of sources to look for. Default to 15\n\
    " << endl;
 }
 
@@ -45,7 +46,7 @@ int main(int argc,char* argv[])
    // This is a ROOT bug.
    gROOT->ProcessLine("#include <complex>");
 
-   int N = 1, j = 1;
+   int N = 1, j = 1, n = 15;
    double w = 3., width = 2., length = 10., min = 20., max = 40.;
    string emin = "20", emax = "40", file = "chain.root", sources = "sources";
 
@@ -57,6 +58,9 @@ int main(int argc,char* argv[])
 	    j = atoi(optarg);
 	    sources += "j";
 	    sources += optarg;
+	    break;
+         case 'n': 
+	    n = atoi(optarg);
 	    break;
          case 'i':
 	    emin = optarg;
@@ -118,7 +122,7 @@ int main(int argc,char* argv[])
    finder.SetMaxEnergy(emax.c_str());
    finder.SetN(N);
    finder.SetScale(j);
-   finder.SetNSources(15);
+   finder.SetNSources(n);
    finder.SetSeparation(w);
    sourcesfile.cd();
    finder.FindSources();
