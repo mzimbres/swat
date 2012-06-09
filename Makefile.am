@@ -4,7 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 AM_COLOR_TESTS  = always
 
 AM_LDFLAGS  = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} \
-              -lHistPainter
+              -lHistPainter $(FFTW_LIBS)
 
 include_HEADERS =
 lib_LTLIBRARIES =
@@ -139,10 +139,10 @@ libswat_la_SOURCES        = $(SWATS)
 nodist_libswat_la_SOURCES = dictionary.cxx
 
 libswat_la_CPPFLAGS      = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} \
-                           -I$(SWATDIRI) -I$(HEALPIXDIRI)
+                           -I$(SWATDIRI) -I$(HEALPIXDIRI) $(FFTW_CFLAGS)
 
 libswat_la_LDFLAGS       = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} \
-                           -lhealpix -lfftpack
+                           -lhealpix -lfftpack $(FFTW_LIBS)
 
 CLEANFILES += dictionary.cxx dictionary.h
 
