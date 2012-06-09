@@ -3,7 +3,8 @@ ACLOCAL_AMFLAGS = -I m4
 
 AM_COLOR_TESTS  = always
 
-AM_LDFLAGS  = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} -lHistPainter
+AM_LDFLAGS  = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} \
+              -lHistPainter
 
 include_HEADERS =
 lib_LTLIBRARIES =
@@ -24,7 +25,6 @@ include_HEADERS +=  $(FFTPACKH)
 lib_LTLIBRARIES += libfftpack.la
 
 libfftpack_la_CPPFLAGS = -I$(top_srcdir)
-
 
 libfftpack_la_SOURCES = $(FFTPACKS)
 
@@ -60,6 +60,10 @@ libhealpix_la_CPPFLAGS = -I$(top_srcdir)
 libhealpix_la_SOURCES = $(HEALPIXS)
 
 #________________________________________________________________
+
+# headers for which no dictionaries are needed
+SWATH = $(top_srcdir)/TFFTWAlloc.h \
+        $(top_srcdir)/swat.h
 
 # headers for which dictionaries must be generated.
 SWATDH = $(top_srcdir)/TWignerd.h              \
@@ -126,7 +130,7 @@ dictionary.cxx: $(SWATDH)
 	@echo "Generating dictionary $@..."
 	$(ROOTCINT) -f $@ -c $^
 
-include_HEADERS += $(SWATDH) swat.h
+include_HEADERS += $(SWATDH) $(SWATH)
 
 lib_LTLIBRARIES += libswat.la
 
