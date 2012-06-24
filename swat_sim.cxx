@@ -1,18 +1,24 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <stdlib.h>
+
+// ROOT
+
 #include "TRandom3.h"
 #include "TF1.h"
-#include "TAuxFunc.h"
-#include "TSourcesFinder.h"
-#include "TAnalysis.h"
 #include "TGraph.h"
 #include "TTree.h"
 #include "TDirectory.h"
 #include "TTree.h"
 #include "TFile.h"
 #include "TH1D.h"
-#include <stdlib.h>
+
+// SWAT
+
+#include "TAuxFunc.h"
+#include "TSourcesFinder.h"
+#include "TAnalysis.h"
 
 using namespace std;
 using namespace TAuxFunc;
@@ -21,7 +27,7 @@ void print_usage(const char* prog)
 {
    cout << "\n\n\
    Calculates the probability of a multiplet with minimum correlation C (see -c\n\
-   option) and minimum number of events m (see -m option) happen by chance,\n\
+   option) and minimum number of events m (see -m option) happen by chance\n\
    using wavelet analysis. First an isotropic sky is simulated and the wavelet\n\
    representation of the sky is calculated, the euler angles of the largest\n\
    coefficient is used to calculate the equations of the tangent plane at the\n\
@@ -35,7 +41,16 @@ void print_usage(const char* prog)
    command line). If -f option is used, TTree in the file will be read and\n\
    events will be added to the analysis, this is useful to include a simulated\n\
    multiplet on the analysis, hiding it in the isotropic backgroung the test the\n\
-   algorithm.\n\n\
+   algorithm.\n\
+   \n\
+   It is also allowed to specify:\n\
+   \n\
+      - Energy distribution.\n\
+      - The theta distribution.\n\
+      - The phi distribution.\n\
+   \n\
+   These distributions are read from a root file. See swat_gen for an example.\n\
+   \n\n\
    Usage: " << prog << " [ -j scale] [-N number] [-n nevents] [-s skies]\n\
            [-i emin] [-e emax] [-c corr] [-m mevents] [-w width] [-l length]\n\
 	   [-f file.root]\n\n\
@@ -52,6 +67,7 @@ void print_usage(const char* prog)
    -w:     Width of tangent plane, defaults to 2 degrees.\n\
    -l:     Length of tangent plane, defaults to 10 degrees.\n\
    -f:     Add events in TTree stored in file to the simulated sky.\n\
+   -d:     Histogram with energy, theta and phi distributions.\n\
    " << endl;
 }
 
@@ -63,10 +79,12 @@ int main(int argc,char* argv[])
    double w = 3., width = 2., length = 10., min = 20., max = 40., C = 0.2;
    string emin = "20", emax = "40", file, outfilename;
    bool add = false;
+   TH1D *energy = 0, *theta = 0, *phi = 0;
+   TFile distributions;
 
    char opt;
 
-   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:f:")) != -1) {
+   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:f:d:")) != -1) {
       switch (opt) {
          case 'j': 
 	    j = atoi(optarg);
@@ -123,6 +141,28 @@ int main(int argc,char* argv[])
 	    n = atoi(optarg);
 	    outfilename += "n";
 	    outfilename += optarg;
+	    break;
+         case 'd':
+	    distributions.Open(optarg);
+            if (distributions.IsZombie()) {
+               cerr << "TFile: Invalid distribution file." << endl;
+               exit(EXIT_FAILURE);
+            }
+	    energy = (TH1D*)distributions.Get("energy");
+            if (!energy) {
+               cerr << "Unable to read energy histogram from file." << endl;
+               exit(EXIT_FAILURE);
+            }
+	    theta = (TH1D*)distributions.Get("theta");
+            if (!theta) {
+               cerr << "Unable to read theta histogram from file." << endl;
+               exit(EXIT_FAILURE);
+            }
+	    phi = (TH1D*)distributions.Get("phi");
+            if (!phi) {
+               cerr << "Unable to read phi histogram from file." << endl;
+               exit(EXIT_FAILURE);
+            }
 	    break;
          default:
 	    print_usage(argv[0]);

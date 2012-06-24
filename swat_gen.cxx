@@ -6,6 +6,7 @@
 
 #include "TTree.h"
 #include "TH1D.h"
+#include "TMath.h"
 
 // SWAT
 
@@ -80,14 +81,14 @@ int main(int argc, char* argv[])
    cout << nevents << " events have passed the cut." << endl;
 
    // Will create theta hist.
-   nevents = tree->Draw("seven>>theta",cut.c_str());
+   nevents = tree->Draw("(TMath::Pi()*(seven+90.)/180.)>>theta",cut.c_str());
    if (nevents == -1) {
       cerr << "Unable to scan the tree in: " << file << endl;
       exit(EXIT_FAILURE);
    }
 
    // Will create phi hist.
-   nevents = tree->Draw("six>>phi",cut.c_str());
+   nevents = tree->Draw("(TMath::Pi()*(six+180)/180+TMath::Pi())>>phi",cut.c_str());
    if (nevents == -1) {
       cerr << "Unable to scan the tree in: " << file << endl;
       exit(EXIT_FAILURE);
