@@ -58,7 +58,7 @@ class TSourcesFinder {
    void         SetScale(Int_t j) { fScale = j; }
    void         SetNSources(Int_t n) { fNSources = n; }
    void         GenerateAlm();
-   void         FindSources();
+   double       FindSources();
 };
 
 #endif // SWAT_TSourcesFinder

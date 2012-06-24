@@ -35,13 +35,13 @@ void print_usage(const char* prog)
    all events that hit the tangent plane, whose size is specified with the\n\
    options -l and -w. The probablility will be the number of multiplets with\n\
    correlation > C and number of events > m, divided by the number of skies\n\
-   simulated. Additionaly, two other quantities are calculated, the histogram\n\
-   of the number of events that hit the tangent plane and the histogram of the\n\
+   simulated. Additionaly, three other quantities are calculated, the histogram\n\
+   of the number of events that hit the tangent plane, the histogram of the\n\
    C's found for which the number of events is greater than m (passed in the\n\
-   command line). If -f option is used, TTree in the file will be read and\n\
-   events will be added to the analysis, this is useful to include a simulated\n\
-   multiplet on the analysis, hiding it in the isotropic backgroung the test the\n\
-   algorithm.\n\
+   command line) and the histogram of the magnitude of wavelet coefficients.\n\
+   If -f option is used, a TTree in the file will be read and events will be\n\
+   added to the analysis, this is useful to include a simulated multiplet on\n\
+   the analysis, hiding it in the isotropic backgroung the test the algorithm.\n\
    \n\
    It is also allowed to specify:\n\
    \n\
@@ -49,7 +49,8 @@ void print_usage(const char* prog)
       - The theta distribution.\n\
       - The phi distribution.\n\
    \n\
-   These distributions are read from a root file. See swat_gen for an example.\n\
+   This is the distribution the background events have to follow. These\n\
+   distributions are read from a root file. See swat_gen for an example.\n\
    \n\n\
    Usage: " << prog << " [ -j scale] [-N number] [-n nevents] [-s skies]\n\
            [-i emin] [-e emax] [-c corr] [-m mevents] [-w width] [-l length]\n\
@@ -77,7 +78,7 @@ int main(int argc,char* argv[])
 
    int N = 1, j = 1, n = 1000, m = 4, s = 100;
    double w = 3., width = 2., length = 10., min = 20., max = 40., C = 0.2;
-   string emin = "20", emax = "40", file, outfilename;
+   string emin = "20", emax = "40", file, outfilename = "hist_";
    bool add = false;
    TH1D *energy = 0, *theta = 0, *phi = 0;
    TFile distributions;
@@ -173,6 +174,7 @@ int main(int argc,char* argv[])
    TF1 f("f","pow(x,-3)",min,max);
    TH1D hist("corr","Correlation",50,0,1);
    TH1D hist2("n","Number of events hitting plane",35,0,35);
+   TH1D wav_mag("wav","Magnitude of wavelet coefficient",50,0.04,0.03);
 
    int tmp = 0;
    if (add) {
@@ -204,7 +206,7 @@ int main(int argc,char* argv[])
 	 finder.SetScale(j);
 	 finder.SetNSources(1);
 	 finder.SetSeparation(w);
-	 finder.FindSources();
+	 wav_mag.Fill(finder.FindSources());
 
 	 TAnalysis analysis(gDirectory,gDirectory);
 	 analysis.SetLength(length/2);
@@ -224,7 +226,6 @@ int main(int argc,char* argv[])
 	 if (npoints >= m) hist.Fill(corr);
 
 	 if (corr >= C && npoints >= m) ++tmp;
-
       }
    } else {
       for (int sky = 0; sky < s; ++sky) {
@@ -240,7 +241,7 @@ int main(int argc,char* argv[])
 	 finder.SetScale(j);
 	 finder.SetNSources(1);
 	 finder.SetSeparation(w);
-	 finder.FindSources();
+	 wav_mag.Fill(finder.FindSources());
 
 	 TAnalysis analysis(gDirectory,gDirectory);
 	 analysis.SetLength(length/2);
@@ -260,7 +261,6 @@ int main(int argc,char* argv[])
 	 if (npoints >= m) hist.Fill(corr);
 
 	 if (corr >= C && npoints >= m) ++tmp;
-
       }
    }
    if (outfilename.empty()) outfilename = "outfile";
@@ -268,6 +268,7 @@ int main(int argc,char* argv[])
    TFile fff(outfilename.c_str(),"recreate");
    hist.Write();
    hist2.Write();
+   wav_mag.Write();
    fff.Close();
 
    cout << "P = " << (tmp*100./s) << "%" << endl;

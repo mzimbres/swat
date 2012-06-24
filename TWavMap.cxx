@@ -107,11 +107,12 @@ void TWavMap::Filter(double factor)
 }
 
 //_____________________________________________________________________
-void TWavMap::FindSources(int nsources,double r) const
+double TWavMap::FindSources(int nsources,double r) const
 {
    // Adds TEulerAngles found to the current directory.
-   // All coefficients that are withing r(in degrees) 
+   // All coefficients that are within r(in degrees) 
    // will be considered to belong to the same source.
+   // Returns value of biggest wavelet coefficient.
 
    std::vector<coord> ind;
    ind.reserve(fSizeCoordinate/4);
@@ -145,6 +146,7 @@ void TWavMap::FindSources(int nsources,double r) const
       ++head;
       ++i;
    }
+   return ind.begin()->GetVal();
 }
 
 //_________________________________________________________

@@ -52,7 +52,7 @@ class TWavMap: public TCoeffInfo, public TDKernel {
    double  operator()(int i,int j,int k) const {return fArray[Coordinate(i,j,k)];}
    void      Filter(double factor);
    void      SetOrientation(int i) {fOrientation = i;}
-   void      FindSources(int nsources,double r) const;
+   double    FindSources(int nsources,double r) const;
    void      CreateAlm(TAlm& alm) const;
    TH2D*     CreateHist(int n) const;
    void      Fill(const TF1& f);
