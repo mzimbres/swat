@@ -50,21 +50,20 @@ struct THistsOwing {
    , phi("phi","Phi distribution",50,3,2) {}
 };
 
-THists hists_from_data(const string& file,const std::string& cut)
+THists* hists_from_data(TFile& f,const std::string& cut)
 {
-   THists hists;
-   TFile f(file.c_str());
+   THists* hists = new THists;
 
    TTree* tree = (TTree*)f.Get("events");
    if (!tree) {
-      cerr << "No TTree \"events\" in file: " << file << endl;
+      cerr << "No TTree \"events\" in file: " << f.GetName() << endl;
       exit(EXIT_FAILURE);
    }
 
    // Creates energy hist.
    Long64_t nevents = tree->Draw("thirtynine>>hist",cut.c_str());
    if (nevents == -1) {
-      cerr << "Unable to scan the tree in: " << file << endl;
+      cerr << "Unable to scan the tree in: " << f.GetName() << endl;
       exit(EXIT_FAILURE);
    }
 
@@ -73,38 +72,37 @@ THists hists_from_data(const string& file,const std::string& cut)
    // Creates theta hist.
    nevents = tree->Draw("(TMath::Pi()*(seven+90.)/180.)>>theta",cut.c_str());
    if (nevents == -1) {
-      cerr << "Unable to scan the tree in: " << file << endl;
+      cerr << "Unable to scan the tree in: " << f.GetName() << endl;
       exit(EXIT_FAILURE);
    }
 
    // Creates phi hist.
    nevents = tree->Draw("(TMath::Pi()*(six+180)/180+TMath::Pi())>>phi",cut.c_str());
    if (nevents == -1) {
-      cerr << "Unable to scan the tree in: " << file << endl;
+      cerr << "Unable to scan the tree in: " << f.GetName() << endl;
       exit(EXIT_FAILURE);
    }
 
-   //gDirectory->ls();
-   hists.energy = (TH1D*)gDirectory->Get("hist");
-   if (!hists.energy) {
+   hists->energy = (TH1D*)gDirectory->Get("hist");
+   if (!hists->energy) {
       cerr << "Unable to retrieve hist from root directory" << endl;
       exit(EXIT_FAILURE);
    }
-   hists.energy->SetNameTitle("energy","Energy distribution");
+   hists->energy->SetNameTitle("energy","Energy distribution");
 
-   hists.theta = (TH1D*)gDirectory->Get("theta");
-   if (!hists.theta) {
+   hists->theta = (TH1D*)gDirectory->Get("theta");
+   if (!hists->theta) {
       cerr << "Unable to retrieve hist from root directory" << endl;
       exit(EXIT_FAILURE);
    }
-   hists.theta->SetNameTitle("theta","Theta distribution");
+   hists->theta->SetNameTitle("theta","Theta distribution");
 
-   hists.phi = (TH1D*)gDirectory->Get("phi");
-   if (!hists.phi){
+   hists->phi = (TH1D*)gDirectory->Get("phi");
+   if (!hists->phi){
       cerr << "Unable to retrieve hist from root directory" << endl;
       exit(EXIT_FAILURE);
    }
-   hists.phi->SetNameTitle("phi","Phi distribution");
+   hists->phi->SetNameTitle("phi","Phi distribution");
 
    return hists;
 }
@@ -184,11 +182,13 @@ int main(int argc, char* argv[])
       cut.append(" && ");
       cut.append(TSourcesFinder::fHeraldCut);
       cut.append(")");
-      THists hists = hists_from_data(file,cut);
+      TFile f(file.c_str());
+      THists* hists = hists_from_data(f,cut);
       TFile save_file(sources.c_str(),"recreate");
-      hists.energy->Write();
-      hists.theta->Write();
-      hists.phi->Write();
+      hists->energy->Write();
+      hists->theta->Write();
+      hists->phi->Write();
+      delete hists;
    }
 
 }

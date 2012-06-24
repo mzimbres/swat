@@ -43,14 +43,14 @@ void print_usage(const char* prog)
    added to the analysis, this is useful to include a simulated multiplet on\n\
    the analysis, hiding it in the isotropic backgroung the test the algorithm.\n\
    \n\
-   It is also allowed to specify:\n\
+   It is also mandatory to specify:\n\
    \n\
       - Energy distribution.\n\
       - The theta distribution.\n\
       - The phi distribution.\n\
    \n\
    This is the distribution the background events have to follow. These\n\
-   distributions are read from a root file. See swat_gen for an example.\n\
+   distributions are read from a root file. Use swat_gen to generate them.\n\
    \n\n\
    Usage: " << prog << " [ -j scale] [-N number] [-n nevents] [-s skies]\n\
            [-i emin] [-e emax] [-c corr] [-m mevents] [-w width] [-l length]\n\
@@ -78,10 +78,9 @@ int main(int argc,char* argv[])
 
    int N = 1, j = 1, n = 1000, m = 4, s = 100;
    double w = 3., width = 2., length = 10., min = 20., max = 40., C = 0.2;
-   string emin = "20", emax = "40", file, outfilename = "hist_";
+   string emin = "20", emax = "40", file, outfilename = "hist_", dist_file;
    bool add = false;
-   TH1D *energy = 0, *theta = 0, *phi = 0;
-   TFile distributions;
+   TH1D* hists[3] = {0,0,0};
 
    char opt;
 
@@ -144,31 +143,44 @@ int main(int argc,char* argv[])
 	    outfilename += optarg;
 	    break;
          case 'd':
-	    distributions.Open(optarg);
-            if (distributions.IsZombie()) {
-               cerr << "TFile: Invalid distribution file." << endl;
-               exit(EXIT_FAILURE);
-            }
-	    energy = (TH1D*)distributions.Get("energy");
-            if (!energy) {
-               cerr << "Unable to read energy histogram from file." << endl;
-               exit(EXIT_FAILURE);
-            }
-	    theta = (TH1D*)distributions.Get("theta");
-            if (!theta) {
-               cerr << "Unable to read theta histogram from file." << endl;
-               exit(EXIT_FAILURE);
-            }
-	    phi = (TH1D*)distributions.Get("phi");
-            if (!phi) {
-               cerr << "Unable to read phi histogram from file." << endl;
-               exit(EXIT_FAILURE);
-            }
+	    dist_file = optarg;
 	    break;
          default:
 	    print_usage(argv[0]);
 	    exit(EXIT_SUCCESS);
       }
+   }
+
+   if (dist_file.empty()) {
+      cerr << "\n\
+You have to specify a file with distributions of\n\
+energy, theta and phi that will be used to generate the \n\
+background. See option -d\n" << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   TFile distributions(dist_file.c_str());
+   if (distributions.IsZombie()) {
+      cerr << "TFile: Invalid distribution file." << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   hists[0] = (TH1D*)distributions.Get("energy");
+   if (!hists[0]) {
+      cerr << "Unable to read energy histogram from file." << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   hists[1] = (TH1D*)distributions.Get("theta");
+   if (!hists[1]) {
+      cerr << "Unable to read theta histogram from file." << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   hists[2] = (TH1D*)distributions.Get("phi");
+   if (!hists[2]) {
+      cerr << "Unable to read phi histogram from file." << endl;
+      exit(EXIT_FAILURE);
    }
 
    TF1 f("f","pow(x,-3)",min,max);
@@ -197,7 +209,7 @@ int main(int argc,char* argv[])
 	 TTree* t = addtree->CloneTree();
 	 TRandom a(sky);
 	 gDirectory->Add(t);
-	 gensky_from(n,a,&f);
+	 gensky_from(n,hists);
 	 
 	 TSourcesFinder finder;
 	 finder.SetMinEnergy(emin.c_str());
@@ -231,7 +243,7 @@ int main(int argc,char* argv[])
       for (int sky = 0; sky < s; ++sky) {
 	 TFile ff("temp.root","recreate");
 	 TRandom a(sky);
-	 TTree* t = gensky(n,a,&f);
+	 TTree* t = gensky(n,hists);
 	 gDirectory->Add(t);
 
 	 TSourcesFinder finder;

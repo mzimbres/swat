@@ -26,6 +26,7 @@
 // ROOT
 
 #include "TObject.h"
+#include "TH1D.h"
 #include "TMath.h"
 #include "TFile.h"
 #include "TList.h"
@@ -332,7 +333,7 @@ TVMap* TAuxFunc::SHT(const TAlm& alm,bool healpixmap)
 
 }
 
-TTree* TAuxFunc::gensky(int n,TRandom& a,TF1* e)
+TTree* TAuxFunc::gensky(int n,TH1D* hists[3])
 {
    // Generate a TTree with name events and adds it to the current directory.
    // The tree contains a CRPropa-like tree, that can be used in other
@@ -358,8 +359,7 @@ TTree* TAuxFunc::gensky(int n,TRandom& a,TF1* e)
    newt->Branch("Momentum_theta"        ,&y14,"Momentum_theta/F"        );
    newt->Branch("Momentum_phi"          ,&y15,"Momentum_phi/F"          );
 
-   double x,y,z;
-   for (int i = 0; i < n/2; ++i) {
+   for (int i = 0; i < n; ++i) {
       y1  = 1;   
       y2  = 1; 
       y3  = 1; 
@@ -372,36 +372,16 @@ TTree* TAuxFunc::gensky(int n,TRandom& a,TF1* e)
       y10 = 10; 
       y11 = 11; 
       y12 = 12; 
-      y13 = e->GetRandom(); 
-      a.Sphere(x,y,z,1);
-      y14 = TMath::ACos(z);
-      y15 = TMath::ATan(y/x) + TMath::Pi()/2;
+      y13 = hists[0]->GetRandom(); 
+      y14 = hists[1]->GetRandom(); 
+      y15 = hists[2]->GetRandom(); 
       newt->Fill();
    }
 
-   for (int i = 0; i < n/2; ++i) {
-      y1  = 1;   
-      y2  = 1; 
-      y3  = 1; 
-      y4  = 1; 
-      y5  = 1; 
-      y6  = 1; 
-      y7  = 1; 
-      y8  = 1; 
-      y9  = 1; 
-      y10 = 10; 
-      y11 = 11; 
-      y12 = 12; 
-      y13 = e->GetRandom(); 
-      a.Sphere(x,y,z,1);
-      y14 = TMath::ACos(z);
-      y15 = TMath::ATan(y/x) - TMath::Pi()/2;
-      newt->Fill();
-   }
    return newt;
 }
 
-void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)
+void TAuxFunc::gensky_from(int n,TH1D* hists[3])
 {
    // Adds events from TTree called events in file.
    // The tree contains a CRPropa-like tree, that can be used in other
@@ -410,7 +390,7 @@ void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)
 
    TTree* newt = (TTree*) gDirectory->Get("events");
 
-   if (newt == 0) {
+   if (!newt) {
       cerr << "Not TTree events in directory." << endl;
       return;
    }
@@ -448,9 +428,7 @@ void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)
    newt->SetBranchAddress("Momentum_theta"        ,&y14,&b_y14);
    newt->SetBranchAddress("Momentum_phi"          ,&y15,&b_y15);
 
-   double x,y,z;
-
-   for (int i = 0; i < n/2; ++i) {
+   for (int i = 0; i < n; ++i) {
       y1  = 1;   
       y2  = 1; 
       y3  = 1; 
@@ -463,30 +441,9 @@ void TAuxFunc::gensky_from(int n,TRandom& a,TF1* e)
       y10 = 10; 
       y11 = 11; 
       y12 = 12; 
-      y13 = e->GetRandom(); 
-      a.Sphere(x,y,z,1);
-      y14 = TMath::ACos(z);
-      y15 = TMath::ATan(y/x) + TMath::Pi()/2;
-      newt->Fill();
-   }
-
-   for (int i = 0; i < n/2; ++i) {
-      y1  = 1;   
-      y2  = 1; 
-      y3  = 1; 
-      y4  = 1; 
-      y5  = 1; 
-      y6  = 1; 
-      y7  = 1; 
-      y8  = 1; 
-      y9  = 1; 
-      y10 = 10; 
-      y11 = 11; 
-      y12 = 12; 
-      y13 = e->GetRandom(); 
-      a.Sphere(x,y,z,1);
-      y14 = TMath::ACos(z);
-      y15 = TMath::ATan(y/x) - TMath::Pi()/2;
+      y13 = hists[0]->GetRandom(); 
+      y14 = hists[1]->GetRandom(); 
+      y15 = hists[2]->GetRandom(); 
       newt->Fill();
    }
 }
