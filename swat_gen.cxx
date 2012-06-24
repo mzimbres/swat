@@ -28,7 +28,7 @@ void print_usage(const char* prog)
 
 int main(int argc, char* argv[])
 {
-   string emin = "20", emax = "40", file = "chain.root", sources = "e_hist";
+   string emin = "20", emax = "40", file = "chain.root", sources = "energy_hist_";
 
    char opt;
    while ((opt = getopt(argc,argv,"+hi:e:f:")) != -1) {
@@ -70,6 +70,7 @@ int main(int argc, char* argv[])
    cut.append(TSourcesFinder::fHeraldCut);
    cut.append(")");
 
+   // Will create energy hist.
    Long64_t nevents = tree->Draw("thirtynine>>hist",cut.c_str());
    if (nevents == -1) {
       cerr << "Unable to scan the tree in: " << file << endl;
@@ -78,15 +79,45 @@ int main(int argc, char* argv[])
 
    cout << nevents << " events have passed the cut." << endl;
 
+   // Will create theta hist.
+   nevents = tree->Draw("seven>>theta",cut.c_str());
+   if (nevents == -1) {
+      cerr << "Unable to scan the tree in: " << file << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   // Will create phi hist.
+   nevents = tree->Draw("six>>phi",cut.c_str());
+   if (nevents == -1) {
+      cerr << "Unable to scan the tree in: " << file << endl;
+      exit(EXIT_FAILURE);
+   }
+
    //gDirectory->ls();
-   TH1D *hist = (TH1D*)gDirectory->Get("hist");
+   TH1D* hist = (TH1D*)gDirectory->Get("hist");
    if (!hist) {
       cerr << "Unable to retrieve hist from root directory" << endl;
       exit(EXIT_FAILURE);
    }
-
    hist->SetNameTitle("energy","Energy distribution");
+
+   TH1D* theta = (TH1D*)gDirectory->Get("theta");
+   if (!theta) {
+      cerr << "Unable to retrieve hist from root directory" << endl;
+      exit(EXIT_FAILURE);
+   }
+   theta->SetNameTitle("theta","Theta distribution");
+
+   TH1D* phi = (TH1D*)gDirectory->Get("phi");
+   if (!phi) {
+      cerr << "Unable to retrieve hist from root directory" << endl;
+      exit(EXIT_FAILURE);
+   }
+   phi->SetNameTitle("phi","Phi distribution");
+
    TFile save_file(sources.c_str(),"recreate");
    hist->Write();
+   theta->Write();
+   phi->Write();
 }
 
