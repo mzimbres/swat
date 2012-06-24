@@ -47,7 +47,7 @@
 
 //const char* TSourcesFinder::fHeraldCut = "(three < 60.) && (twentythree > 1.) && (twentytwo > 0.5)";
 const char* TSourcesFinder::fHeraldCut = "(two > 0) && (three < 60) && (twentytwo > 0.5) && \
-                                          (((twentysix > 0.5) && (thirtysix > 0.5)) || (twentythree > 1.1))";
+(((twentysix > 0.5) && (thirtysix > 0.5)) || (twentythree > 1.1))";
 
 //_________________________________________________________________
 TSourcesFinder::TSourcesFinder(): fNSources(15), fN(1), fScale(1), 
