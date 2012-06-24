@@ -77,7 +77,7 @@ THists* hists_from_data(TFile& f,const std::string& cut)
    }
 
    // Creates phi hist.
-   nevents = tree->Draw("(TMath::Pi()*(six+180)/180+TMath::Pi())>>phi",cut.c_str());
+   nevents = tree->Draw("(TMath::Pi()*(six+180.)/180)>>phi",cut.c_str());
    if (nevents == -1) {
       cerr << "Unable to scan the tree in: " << f.GetName() << endl;
       exit(EXIT_FAILURE);

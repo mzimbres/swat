@@ -46,8 +46,8 @@ Bool_t TMapSelector::Process(Long64_t entry)
    b_six->GetEntry(entry);
    b_thirtynine->GetEntry(entry);
 
-   Double_t theta = Pi()*(seven+90)/180;
-   Double_t phi = Pi()*(six+180)/180+Pi();
+   Double_t theta = Pi()*(seven+90.)/180;
+   Double_t phi = Pi()*(six+180.)/180;
 
    Double_t x, y;
    THistPainter::ProjectAitoff2xy(-six,seven,x,y);
