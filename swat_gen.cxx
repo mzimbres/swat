@@ -6,13 +6,17 @@
 
 #include "TTree.h"
 #include "TH1D.h"
+#include "TH2D.h"
 #include "TMath.h"
 #include "TRandom3.h"
 #include "TF1.h"
+#include "TEntryList.h"
 
 // SWAT
 
 #include "TSourcesFinder.h"
+
+static int B = 256;
 
 using namespace std;
 
@@ -35,22 +39,11 @@ void print_usage(const char* prog)
 
 struct THists {
    TH1D* energy;
-   TH1D* theta;
-   TH1D* phi;
-   THists(): energy(0), theta(0), phi(0) {}
+   TH2D* theta_phi;
+   THists(): energy(0), theta_phi(0) {}
 };
 
-struct THistsOwing {
-   TH1D energy;
-   TH1D theta;
-   TH1D phi;
-   THistsOwing()
-   : energy("energy","Energy distribution",50,3,2)
-   , theta("theta","Theta distribution",50,3,2)
-   , phi("phi","Phi distribution",50,3,2) {}
-};
-
-THists* hists_from_data(TFile& f,const std::string& cut)
+THists* hists_from_data(TFile& f,const std::string& cut, int ntimes)
 {
    THists* hists = new THists;
 
@@ -60,93 +53,111 @@ THists* hists_from_data(TFile& f,const std::string& cut)
       exit(EXIT_FAILURE);
    }
 
-   // Creates energy hist.
-   Long64_t nevents = tree->Draw("thirtynine>>hist",cut.c_str());
-   if (nevents == -1) {
-      cerr << "Unable to scan the tree in: " << f.GetName() << endl;
+   // Lets generate a list with of desired events.
+   tree->Draw(">>list",cut.c_str(),"entrylist");
+
+   TEntryList* list = dynamic_cast<TEntryList*>(gDirectory->Get("list"));
+   if (!list) {
+      cerr << "Unable to retrieve list of events from root current directoy" << endl;
       exit(EXIT_FAILURE);
    }
 
-   cout << nevents << " events have passed the cut." << endl;
+   cout << "N = " << list->GetN() << " events passed selection." << endl;
 
-   // Creates theta hist.
-   nevents = tree->Draw("(TMath::Pi()*(seven+90.)/180.)>>theta",cut.c_str());
-   if (nevents == -1) {
-      cerr << "Unable to scan the tree in: " << f.GetName() << endl;
-      exit(EXIT_FAILURE);
-   }
+   Double_t energy, theta, phi;
+   tree->SetBranchAddress("thirtynine",&energy);
+   tree->SetBranchAddress("seven",&theta);
+   tree->SetBranchAddress("six",&phi);
+   
+   //create two histograms
+   hists->energy   = new TH1D("hpx","Energy distribution",100,4,3);
+   hists->theta_phi = new TH2D("theta","Theta and Phi distribution"
+      ,2*B
+      ,TMath::Pi()/(4*B)
+      ,TMath::Pi() + 1./(4*B)
+      ,2*B
+      ,0
+      ,2*TMath::Pi());
+   
+   // Read selected entries and fill the histograms.
+   Long64_t nentries = 0;
+   while (nentries < list->GetN()) {
+     tree->GetEntry(list->Next());
+     hists->energy->Fill(energy);
+     hists->theta_phi->Fill(TMath::Pi()*(theta+90.)/180,TMath::Pi()*(phi+180.)/180);
+     ++nentries;
+  }
 
-   // Creates phi hist.
-   nevents = tree->Draw("(TMath::Pi()*(six+180.)/180)>>phi",cut.c_str());
-   if (nevents == -1) {
-      cerr << "Unable to scan the tree in: " << f.GetName() << endl;
-      exit(EXIT_FAILURE);
-   }
-
-   hists->energy = (TH1D*)gDirectory->Get("hist");
-   if (!hists->energy) {
-      cerr << "Unable to retrieve hist from root directory" << endl;
-      exit(EXIT_FAILURE);
-   }
-   hists->energy->SetNameTitle("energy","Energy distribution");
-
-   hists->theta = (TH1D*)gDirectory->Get("theta");
-   if (!hists->theta) {
-      cerr << "Unable to retrieve hist from root directory" << endl;
-      exit(EXIT_FAILURE);
-   }
-   hists->theta->SetNameTitle("theta","Theta distribution");
-
-   hists->phi = (TH1D*)gDirectory->Get("phi");
-   if (!hists->phi){
-      cerr << "Unable to retrieve hist from root directory" << endl;
-      exit(EXIT_FAILURE);
-   }
-   hists->phi->SetNameTitle("phi","Phi distribution");
-
+   int i = 0;
+   while (++i < ntimes) 
+      hists->theta_phi->Smooth(1);
+  
    return hists;
 }
 
-THistsOwing* isotropic_hists(const string& file,TF1& energy)
+struct THistsOwing {
+   TH1D energy;
+   TH2D theta_phi;
+   THistsOwing()
+   : energy("energy","Energy distribution",50,3,2)
+   , theta_phi("theta","Theta and Phi distribution"
+      ,2*B
+      ,TMath::Pi()/(4*B)
+      ,TMath::Pi() + 1./(4*B)
+      ,2*B
+      ,0
+      ,2*TMath::Pi()) { }
+};
+
+
+THistsOwing* isotropic_hists(const string& file,TF1& energy,int ntimes)
 {
    THistsOwing* hists = new THistsOwing;
    TRandom3 r;  
    
-   int i = 1001;
+   int i = 2001;
    double x,y,z;
 
    while (--i) {
       hists->energy.Fill(energy.GetRandom());
       r.Sphere(x,y,z,1);
-      hists->theta.Fill(TMath::ACos(z));
-      hists->phi.Fill(TMath::ATan(y/x) + TMath::Pi()/2);
+      hists->theta_phi.Fill(TMath::ACos(z),TMath::ATan(y/x) + TMath::Pi()/2);
    }
 
-   i = 1001;
+   i = 2001;
    while (--i) {
       hists->energy.Fill(energy.GetRandom());
       r.Sphere(x,y,z,1);
-      hists->theta.Fill(TMath::ACos(z));
-      hists->phi.Fill(TMath::ATan(y/x) + 3*TMath::Pi()/2);
+      hists->theta_phi.Fill(TMath::ACos(z),TMath::ATan(y/x) + 3*TMath::Pi()/2);
    }
+
+   i = 0;
+   while (++i < ntimes) 
+      hists->theta_phi.Smooth(1);
 
    return hists;
 }
 
 int main(int argc, char* argv[])
 {
-   string emin = "20", emax = "40", file = "chain.root", sources = "energy_hist_";
+   string emin = "20", emax = "40", file = "chain.root", sources = "dist_hist_";
    bool isotropic = true;
    double min = 20, max = 40;
+   int ntimes = 0; // How many times theta-phi histogram will be smoothed.
 
    char opt;
-   while ((opt = getopt(argc,argv,"+hi:e:f:")) != -1) {
+   while ((opt = getopt(argc,argv,"+hi:e:f:n:")) != -1) {
       switch (opt) {
          case 'i':
 	    emin = optarg;
 	    sources += "i";
 	    sources += optarg;
 	    min = atof(optarg);
+	    break;
+         case 'n':
+	    sources += "n";
+	    sources += optarg;
+	    ntimes = atoi(optarg);
 	    break;
          case 'e':
 	    emax = optarg;
@@ -168,11 +179,10 @@ int main(int argc, char* argv[])
 
    if (isotropic) {
       TF1 energy("f","pow(x,-3)",min,max);
-      THistsOwing* hists = isotropic_hists(file,energy);
+      THistsOwing* hists = isotropic_hists(file,energy,ntimes);
       TFile save_file(sources.c_str(),"recreate");
       hists->energy.Write();
-      hists->theta.Write();
-      hists->phi.Write();
+      hists->theta_phi.Write();
       delete hists;
    } else {
       string cut = "(";
@@ -183,13 +193,11 @@ int main(int argc, char* argv[])
       cut.append(TSourcesFinder::fHeraldCut);
       cut.append(")");
       TFile f(file.c_str());
-      THists* hists = hists_from_data(f,cut);
+      THists* hists = hists_from_data(f,cut,ntimes);
       TFile save_file(sources.c_str(),"recreate");
       hists->energy->Write();
-      hists->theta->Write();
-      hists->phi->Write();
+      hists->theta_phi->Write();
       delete hists;
    }
-
 }
 
