@@ -24,7 +24,8 @@
 
 class TFile;
 class TRandom;
-class TF1;
+class TH2D;
+class TH1D;
 class TDirectory;
 class TTree;
 
@@ -34,7 +35,6 @@ class TTree;
 
 class TWavMap;
 class TVMap;
-class TH1D;
 
 namespace TAuxFunc {
    TAlm*    alm2wav2alm(const TAlm& alm,int N,
@@ -60,8 +60,8 @@ namespace TAuxFunc {
    TAlm*    rand_gaus_alm(int J,double mean,double sigma);
    TWavMap* SWAT(const TAlm& alm,int j,int N);
    TVMap*   SHT(const TAlm& alm,bool healpixmap = false);
-   TTree*   gensky(int n,TH1D* hists[3]);
-   void     gensky_from(int n,TH1D* hists[3]);
+   TTree*   gensky(int n,TH1D* energy,TH2D* phi_theta);
+   void     gensky_from(int n,TH1D* energy,TH2D* phi_theta);
 }
 
 #endif

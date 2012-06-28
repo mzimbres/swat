@@ -39,8 +39,8 @@ void print_usage(const char* prog)
 
 struct THists {
    TH1D* energy;
-   TH2D* theta_phi;
-   THists(): energy(0), theta_phi(0) {}
+   TH2D* phi_theta;
+   THists(): energy(0), phi_theta(0) {}
 };
 
 THists* hists_from_data(TFile& f,const std::string& cut, int ntimes)
@@ -71,42 +71,42 @@ THists* hists_from_data(TFile& f,const std::string& cut, int ntimes)
    
    //create two histograms
    hists->energy   = new TH1D("hpx","Energy distribution",100,4,3);
-   hists->theta_phi = new TH2D("theta","Theta and Phi distribution"
-      ,2*B
-      ,TMath::Pi()/(4*B)
-      ,TMath::Pi() + 1./(4*B)
+   hists->phi_theta = new TH2D("phi_theta","Phi and Theta distribution"
       ,2*B
       ,0
-      ,2*TMath::Pi());
+      ,2*TMath::Pi()
+      ,2*B
+      ,TMath::Pi()/(4*B)
+      ,TMath::Pi() + 1./(4*B));
    
    // Read selected entries and fill the histograms.
    Long64_t nentries = 0;
    while (nentries < list->GetN()) {
      tree->GetEntry(list->Next());
      hists->energy->Fill(energy);
-     hists->theta_phi->Fill(TMath::Pi()*(theta+90.)/180,TMath::Pi()*(phi+180.)/180);
+     hists->phi_theta->Fill(TMath::Pi()*(phi+180.)/180,TMath::Pi()*(theta+90.)/180);
      ++nentries;
   }
 
    int i = 0;
    while (++i < ntimes) 
-      hists->theta_phi->Smooth(1);
+      hists->phi_theta->Smooth(1);
   
    return hists;
 }
 
 struct THistsOwing {
    TH1D energy;
-   TH2D theta_phi;
+   TH2D phi_theta;
    THistsOwing()
    : energy("energy","Energy distribution",50,3,2)
-   , theta_phi("theta","Theta and Phi distribution"
-      ,2*B
-      ,TMath::Pi()/(4*B)
-      ,TMath::Pi() + 1./(4*B)
+   , phi_theta("phi_theta","Phi and Theta distribution."
       ,2*B
       ,0
-      ,2*TMath::Pi()) { }
+      ,2*TMath::Pi()
+      ,2*B
+      ,TMath::Pi()/(4*B)
+      ,TMath::Pi() + 1./(4*B)) { }
 };
 
 
@@ -121,19 +121,19 @@ THistsOwing* isotropic_hists(const string& file,TF1& energy,int ntimes)
    while (--i) {
       hists->energy.Fill(energy.GetRandom());
       r.Sphere(x,y,z,1);
-      hists->theta_phi.Fill(TMath::ACos(z),TMath::ATan(y/x) + TMath::Pi()/2);
+      hists->phi_theta.Fill(TMath::ATan(y/x) + TMath::Pi()/2,TMath::ACos(z));
    }
 
    i = 2001;
    while (--i) {
       hists->energy.Fill(energy.GetRandom());
       r.Sphere(x,y,z,1);
-      hists->theta_phi.Fill(TMath::ACos(z),TMath::ATan(y/x) + 3*TMath::Pi()/2);
+      hists->phi_theta.Fill(TMath::ATan(y/x) + 3*TMath::Pi()/2,TMath::ACos(z));
    }
 
    i = 0;
    while (++i < ntimes) 
-      hists->theta_phi.Smooth(1);
+      hists->phi_theta.Smooth(1);
 
    return hists;
 }
@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
       THistsOwing* hists = isotropic_hists(file,energy,ntimes);
       TFile save_file(sources.c_str(),"recreate");
       hists->energy.Write();
-      hists->theta_phi.Write();
+      hists->phi_theta.Write();
       delete hists;
    } else {
       string cut = "(";
@@ -196,7 +196,7 @@ int main(int argc, char* argv[])
       THists* hists = hists_from_data(f,cut,ntimes);
       TFile save_file(sources.c_str(),"recreate");
       hists->energy->Write();
-      hists->theta_phi->Write();
+      hists->phi_theta->Write();
       delete hists;
    }
 }

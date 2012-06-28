@@ -13,6 +13,7 @@
 #include "TTree.h"
 #include "TFile.h"
 #include "TH1D.h"
+#include "TH2D.h"
 
 // SWAT
 
@@ -80,7 +81,8 @@ int main(int argc,char* argv[])
    double w = 3., width = 2., length = 10., min = 20., max = 40., C = 0.2;
    string emin = "20", emax = "40", file, outfilename = "hist_", dist_file;
    bool add = false;
-   TH1D* hists[3] = {0,0,0};
+   TH1D* energy = 0;
+   TH2D* phi_theta = 0;
 
    char opt;
 
@@ -165,25 +167,18 @@ background. See option -d\n" << endl;
       exit(EXIT_FAILURE);
    }
 
-   hists[0] = (TH1D*)distributions.Get("energy");
-   if (!hists[0]) {
+   energy = (TH1D*)distributions.Get("energy");
+   if (!energy) {
       cerr << "Unable to read energy histogram from file." << endl;
       exit(EXIT_FAILURE);
    }
 
-   hists[1] = (TH1D*)distributions.Get("theta");
-   if (!hists[1]) {
+   phi_theta = (TH2D*)distributions.Get("theta");
+   if (!phi_theta) {
       cerr << "Unable to read theta histogram from file." << endl;
       exit(EXIT_FAILURE);
    }
 
-   hists[2] = (TH1D*)distributions.Get("phi");
-   if (!hists[2]) {
-      cerr << "Unable to read phi histogram from file." << endl;
-      exit(EXIT_FAILURE);
-   }
-
-   TF1 f("f","pow(x,-3)",min,max);
    TH1D hist("corr","Correlation",50,0,1);
    TH1D hist2("n","Number of events hitting plane",35,0,35);
    TH1D wav_mag("wav","Magnitude of wavelet coefficient",50,0.04,0.03);
@@ -209,7 +204,7 @@ background. See option -d\n" << endl;
 	 TTree* t = addtree->CloneTree();
 	 TRandom a(sky);
 	 gDirectory->Add(t);
-	 gensky_from(n,hists);
+	 gensky_from(n,energy,phi_theta);
 	 
 	 TSourcesFinder finder;
 	 finder.SetMinEnergy(emin.c_str());
@@ -243,7 +238,7 @@ background. See option -d\n" << endl;
       for (int sky = 0; sky < s; ++sky) {
 	 TFile ff("temp.root","recreate");
 	 TRandom a(sky);
-	 TTree* t = gensky(n,hists);
+	 TTree* t = gensky(n,energy,phi_theta);
 	 gDirectory->Add(t);
 
 	 TSourcesFinder finder;
