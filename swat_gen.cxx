@@ -70,14 +70,14 @@ THists* hists_from_data(TFile& f,const std::string& cut, int ntimes)
    tree->SetBranchAddress("six",&phi);
    
    //create two histograms
-   hists->energy   = new TH1D("hpx","Energy distribution",100,4,3);
+   hists->energy   = new TH1D("energy","Energy distribution",100,4,3);
    hists->phi_theta = new TH2D("phi_theta","Phi and Theta distribution"
-      ,2*B
-      ,0
-      ,2*TMath::Pi()
-      ,2*B
-      ,TMath::Pi()/(4*B)
-      ,TMath::Pi() + 1./(4*B));
+      , 2*B
+      , 0
+      , 2*TMath::Pi()
+      , 2*B
+      , TMath::Pi()/(4*B)
+      , TMath::Pi() + 1./(4*B));
    
    // Read selected entries and fill the histograms.
    Long64_t nentries = 0;

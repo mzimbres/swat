@@ -173,7 +173,7 @@ background. See option -d\n" << endl;
       exit(EXIT_FAILURE);
    }
 
-   phi_theta = (TH2D*)distributions.Get("theta");
+   phi_theta = (TH2D*)distributions.Get("phi_theta");
    if (!phi_theta) {
       cerr << "Unable to read theta histogram from file." << endl;
       exit(EXIT_FAILURE);
@@ -181,7 +181,7 @@ background. See option -d\n" << endl;
 
    TH1D hist("corr","Correlation",50,0,1);
    TH1D hist2("n","Number of events hitting plane",35,0,35);
-   TH1D wav_mag("wav","Magnitude of wavelet coefficient",50,0.04,0.03);
+   TH1D wav_mag("wav","Magnitude of wavelet coefficient",50,4,3);
 
    int tmp = 0;
    if (add) {
