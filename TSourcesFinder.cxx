@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <memory>
+#include <cstdlib>
 
 // ROOT
 
@@ -141,8 +142,12 @@ double TSourcesFinder::FindSources()
    // Find sources algorithm. 
    // Returns magnitute of biggest wavelet coefficient found.
 
-   GenerateAlm(); // will add alm to the current directory.
+   GenerateAlm(); // Add alm to the current directory.
    TAlm* alm = dynamic_cast<TAlm*>(gDirectory->Get("alm"));
+   if (!alm) {
+      std::cerr << "TSourcesFinder::FindSources: Unalbe to retrieve alm." << std::endl;
+      std::exit(EXIT_FAILURE);
+   }
    std::auto_ptr<TWavMap> wav(TAuxFunc::SWAT(*alm,fScale,fN));
 
    return wav->FindSources(fNSources,fSep);
