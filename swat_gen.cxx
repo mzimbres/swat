@@ -34,6 +34,7 @@ void print_usage(const char* prog)
    -i:     Minimum energy of events, defaults to 20 EeV.\n\
    -e:     Maximum energy of events, defaults to 40 EeV.\n\
    -f:     Root file containing Tree with data, defaults to chain.root.\n\
+   -n:     How many times histogram should be smoothed.\n\
    " << endl;
 }
 

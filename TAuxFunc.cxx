@@ -333,7 +333,7 @@ TVMap* TAuxFunc::SHT(const TAlm& alm,bool healpixmap)
    }
 
 }
-static int counta = 0;
+
 TTree* TAuxFunc::gensky(int n,TH1D* energy,TH2D* phi_theta)
 {
    // Generate a TTree with name events and adds it to the current directory.
@@ -359,10 +359,6 @@ TTree* TAuxFunc::gensky(int n,TH1D* energy,TH2D* phi_theta)
    newt->Branch("Momentum_E_EeV"        ,&y13,"Momentum_E_EeV/F"        );
    newt->Branch("Momentum_theta"        ,&y14,"Momentum_theta/F"        );
    newt->Branch("Momentum_phi"          ,&y15,"Momentum_phi/F"          );
-
-   // FIXME: Why on hell would my program crash without the line below.
-   // It is somehow related to endl.
-   cout << ++counta << " " << endl;
 
    double theta,phi;
    for (int i = 0; i < n; ++i) {
@@ -433,10 +429,6 @@ void TAuxFunc::gensky_from(int n,TH1D* energy,TH2D* phi_theta)
    newt->SetBranchAddress("Momentum_E_EeV"        ,&y13,&b_y13);
    newt->SetBranchAddress("Momentum_theta"        ,&y14,&b_y14);
    newt->SetBranchAddress("Momentum_phi"          ,&y15,&b_y15);
-
-   // FIXME: Why on hell would my program crash without the line below.
-   // It is somehow related to endl.
-   cout << ++counta << " " << endl;
 
    double theta,phi;
    for (int i = 0; i < n; ++i) {
