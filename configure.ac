@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to create configure.  Use autoreconf.
 AC_PREREQ(2.67)
-AC_INIT([Swat], [1.47], [mzimbres@gmail.com],[],[http://www.ifi.unicamp.br/~mzimbres])
+AC_INIT([Swat], [1.48], [mzimbres@gmail.com],[],[http://www.ifi.unicamp.br/~mzimbres])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 AC_CONFIG_SRCDIR([config.h.in])
