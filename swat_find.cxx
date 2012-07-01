@@ -21,15 +21,17 @@ using namespace TAuxFunc;
 void print_usage(const char* prog)
 {
    cout << "\n\n\
-   Calculates sources from herald data, additionaly calculates correlation of\n\
-   events hitting tangent plane and dispalys on the screen. The results are\n\
-   saved to sources.root file. To convert a Herald file to the format used by\n\
-   this progra use the macro macros/convert_herald.C in swat source tree.\n\
+   Searches for multiplets in herald data or CRPropa simulations. Calculates\n\
+   correlation of events hitting stripe on the tangent plane and dispalys on\n\
+   the screen. The results are saved to sources.root file. Two input file formats\n\
+   are supported, both are TTrees saved in a .root file. The TTrees can be either\n\
+   the output of CRPropa or a Herald file converted to TTree (see macro\n\
+   macros/convert_herald.C in swat source tree).\n\n\
    Usage: " << prog << " [ -j scale] [-N number] [-i emin] [-e emax] [-w width]\n\
                          [-l length] [-f file.root] [-n nsources]\n\n\
    Options:\n\n\
    -h:     This menu.\n\
-   -j:     Wavelet scale a number in the range 0 <= j <= 8, defaults to 1.\n\
+   -j:     Wavelet scale. It is a number in the range 0 <= j <= 8, defaults to 1.\n\
    -N:     Band limit of wavelet, in the range 0 < N <= 128, defaults to 1.\n\
    -i:     Minimum energy of events, defaults to 20 EeV.\n\
    -e:     Maximum energy of events, defaults to 40 EeV.\n\
@@ -42,8 +44,7 @@ void print_usage(const char* prog)
 
 int main(int argc,char* argv[])
 {
-   // We need this to inform root we need dictionaries for std::complex.
-   // This is a ROOT bug.
+   // Needed this to inform root we need dictionaries for std::complex.
    gROOT->ProcessLine("#include <complex>");
 
    int N = 1, j = 1, n = 15;

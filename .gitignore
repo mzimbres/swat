@@ -1,4 +1,5 @@
 build/*
+release/*
 Makefile.in
 configure
 myconfigure.sh

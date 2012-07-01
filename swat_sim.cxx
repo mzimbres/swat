@@ -58,7 +58,7 @@ void print_usage(const char* prog)
 	   [-f file.root]\n\n\
    Options:\n\n\
    -h:     This menu.\n\
-   -j:     Wavelet scale a number in the range 0 <= j <= 8, defaults to 1.\n\
+   -j:     Wavelet scale, a number in the range 0 <= j <= 8, defaults to 1.\n\
    -N:     Band limit of wavelet, in the range 0 < N <= 128, defaults to 1.\n\
    -n:     Number of events in the simulated sky, defaults to n = 1000\n\
    -s:     Number of skies to simulate, defaults to 100.\n\
@@ -155,9 +155,10 @@ int main(int argc,char* argv[])
 
    if (dist_file.empty()) {
       cerr << "\n\
-You have to specify a file with distributions of\n\
-energy, theta and phi that will be used to generate the \n\
-background. See option -d\n" << endl;
+You have to specify a file with distributions of energy, theta and\n\
+phi that will be used to generate the  background(See option -d in the\n\
+help menu). You can use the program swat_gen to generate it.\n" 
+      << endl;
       exit(EXIT_FAILURE);
    }
 

@@ -26,15 +26,14 @@ void print_usage(const char* prog)
    Calculates the histogram of energy(field thirty nine), theta(field\n\
    seven) and phi (field six) in Herald data and save to file. The angular\n\
    variables are converted to radians before filling the histograms.\n\
-   If no file is specified, an isotropic sky is generated.\n\
-   If no herald file is specified, \n\
+   If no file is specified, an isotropic sky is generated.\n\n\
    Usage: " << prog << " [-i emin] [-e emax] [-f file.root]\n\n\
    Options:\n\n\
    -h:     This menu.\n\
    -i:     Minimum energy of events, defaults to 20 EeV.\n\
    -e:     Maximum energy of events, defaults to 40 EeV.\n\
    -f:     Root file containing Tree with data, defaults to chain.root.\n\
-   -n:     How many times histogram should be smoothed.\n\
+   -n:     How many times histogram should be smoothed (TH1::Smooth operatin).\n\
    " << endl;
 }
 

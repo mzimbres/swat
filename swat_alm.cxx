@@ -77,6 +77,10 @@ int main(int argc,char* argv[])
    finder.GenerateAlm();
 
    TObject* alm = gDirectory->Get("alm");
+   if (!alm) {
+      cerr << "Unable to retrieve alm from file." << endl;
+      exit(EXIT_FAILURE);
+   }
 
    TFile sourcesfile(sources.c_str(),"recreate");
 
@@ -85,11 +89,9 @@ int main(int argc,char* argv[])
       exit(EXIT_FAILURE);
    }
 
-
    gDirectory->ls();
 
-   // We need this to inform root we need dictionaries for std::complex.
-   // This is a ROOT bug.
+   // Needed to inform root we need dictionaries for std::complex.
    gROOT->ProcessLine("#include <complex>");
    alm->Write();
 
