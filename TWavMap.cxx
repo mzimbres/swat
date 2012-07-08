@@ -20,6 +20,8 @@
 #include <algorithm>
 #include <sstream>
 #include <vector>
+#include <numeric>
+#include <cmath>
 
 // ROOT
 
@@ -112,10 +114,27 @@ WavStat TWavMap::FindSources(int nsources,double r) const
    // Adds TEulerAngles found to the current directory.
    // All coefficients that are within r(in degrees) 
    // will be considered to belong to the same source.
-   // Returns value of biggest wavelet coefficient.
+   // Struct WavStat returned has statistical information 
+   // about the wavelet coefficients.
+
+   double mean = std::accumulate(fArray.begin(), fArray.end(), 0)/fArray.size();
+
+   // Lets get the variance skewness and kurtosis.
+   double variance = 0, skewness = 0, kurtosis = 0;
+   for (size_t i = 0; i < fArray.size(); ++i) {
+      double tmp = (fArray[i] - mean) * (fArray[i] - mean);
+      variance += tmp;
+      double tmp2 = tmp * (fArray[i] - mean); 
+      skewness += tmp2;
+      kurtosis += tmp2 * (fArray[i] - mean);
+   }
+
+   variance = std::sqrt(variance/fArray.size());
+   skewness = skewness / (fArray.size() * std::pow(variance, 3. / 2));
+   kurtosis = kurtosis / (fArray.size() * variance * variance) - 3;
 
    std::vector<coord> ind;
-   ind.reserve(fSizeCoordinate/4);
+   ind.reserve(fSizeCoordinate / 4);
 
    for (int n = 0; n < TCoeffInfo::fN; ++n)
       for (int u = 0;u < fNTheta/2; ++u)
@@ -146,7 +165,7 @@ WavStat TWavMap::FindSources(int nsources,double r) const
       ++head;
       ++i;
    }
-   return WavStat(ind.begin()->GetVal(),0,0,0,0);
+   return WavStat(ind.begin()->GetVal(),mean,variance,skewness,kurtosis);
 }
 
 //_________________________________________________________

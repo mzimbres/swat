@@ -180,9 +180,13 @@ help menu). You can use the program swat_gen to generate it.\n"
       exit(EXIT_FAILURE);
    }
 
-   TH1D hist("corr","Correlation",50,0,1);
-   TH1D hist2("n","Number of events hitting plane",35,0,35);
+   TH1D hist("corr","Correlation",50,2,1);
+   TH1D hist2("n","Number of events hitting plane",50,2,1);
    TH1D wav_mag("wav","Magnitude of wavelet coefficient",50,4,3);
+   TH1D mean("mean","Mean of wavelet coefficients",50,4,3);
+   TH1D variance("variance","Variance of wavelet coefficients",50,4,3);
+   TH1D skewness("skewness","Skewness of wavelet coefficients",50,4,3);
+   TH1D kurtosis("kurtosis","Kurtosis of wavelet coefficients",50,4,3);
 
    int tmp = 0;
    if (add) {
@@ -216,6 +220,10 @@ help menu). You can use the program swat_gen to generate it.\n"
 	 finder.SetSeparation(w);
 	 WavStat stat = finder.FindSources(); 
 	 wav_mag.Fill(stat.biggest);
+	 mean.Fill(stat.mean);
+	 variance.Fill(stat.variance);
+	 skewness.Fill(stat.skewness);
+	 kurtosis.Fill(stat.kurtosis);
 
 	 TAnalysis analysis(gDirectory,gDirectory);
 	 analysis.SetLength(length/2);
@@ -252,6 +260,10 @@ help menu). You can use the program swat_gen to generate it.\n"
 	 finder.SetSeparation(w);
 	 WavStat stat = finder.FindSources(); 
 	 wav_mag.Fill(stat.biggest);
+	 mean.Fill(stat.mean);
+	 variance.Fill(stat.variance);
+	 skewness.Fill(stat.skewness);
+	 kurtosis.Fill(stat.kurtosis);
 
 	 TAnalysis analysis(gDirectory,gDirectory);
 	 analysis.SetLength(length/2);
@@ -279,6 +291,10 @@ help menu). You can use the program swat_gen to generate it.\n"
    hist.Write();
    hist2.Write();
    wav_mag.Write();
+   mean.Write();
+   variance.Write();
+   skewness.Write();
+   kurtosis.Write();
    fff.Close();
 
    cout << "P = " << (tmp*100./s) << "%" << endl;
