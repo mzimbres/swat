@@ -195,6 +195,7 @@ help menu). You can use the program swat_gen to generate it.\n"
    TH1D skewness("skewness","Skewness of wavelet coefficients",50,4,3);
    TH1D kurtosis("kurtosis","Kurtosis of wavelet coefficients",50,4,3);
 
+   cout << "Sky = ";
    int tmp = 0;
    if (add) {
       TFile addfile(file.c_str());
@@ -250,6 +251,7 @@ help menu). You can use the program swat_gen to generate it.\n"
 	 if (npoints >= m) hist.Fill(corr);
 
 	 if (corr >= C && npoints >= m) ++tmp;
+	 cout << sky << ", " << flush;
       }
    } else {
       for (int sky = 0; sky < s; ++sky) {
@@ -290,8 +292,10 @@ help menu). You can use the program swat_gen to generate it.\n"
 	 if (npoints >= m) hist.Fill(corr);
 
 	 if (corr >= C && npoints >= m) ++tmp;
+	 cout << sky << ", " << flush;
       }
    }
+   cout << endl;
    if (outfilename.empty()) outfilename = "outfile";
    outfilename += ".root";
    TFile fff(outfilename.c_str(),"recreate");

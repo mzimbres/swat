@@ -42,11 +42,11 @@ struct WavStat {
    double kurtosis;
 
    WavStat(double b, double m, double v, double s, double k)
-   : biggest()
-   , mean()
-   , variance()
-   , skewness()
-   , kurtosis()
+   : biggest(b)
+   , mean(m)
+   , variance(v)
+   , skewness(s)
+   , kurtosis(k)
    {}
 };
 
