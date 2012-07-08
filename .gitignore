@@ -3,4 +3,12 @@ release/*
 Makefile.in
 configure
 myconfigure.sh
-
+aclocal.m4
+autom4te.cache/*
+config.guess
+config.h.in
+config.sub
+depcomp
+install-sh
+ltmain.sh
+missing
