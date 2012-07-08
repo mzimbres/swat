@@ -36,10 +36,17 @@ void print_usage(const char* prog)
    all events that hit the tangent plane, whose size is specified with the\n\
    options -l and -w. The probablility will be the number of multiplets with\n\
    correlation > C and number of events > m, divided by the number of skies\n\
-   simulated. Additionaly, three other quantities are calculated, the histogram\n\
-   of the number of events that hit the tangent plane, the histogram of the\n\
-   C's found for which the number of events is greater than m (passed in the\n\
-   command line) and the histogram of the magnitude of wavelet coefficients.\n\
+   simulated. Additionaly, seven other quantities are additionally calculated:\n\
+      \n\
+      1 - The histogram of the number of events that hit the tangent plane.\n\
+      2 - The histogram of the C's found for which the number of events is\n\
+          greater than m (passed in the command line).\n\
+      3 - The histogram of the magnitude of wavelet coefficients.\n\
+      4 - The histogram of the mean of wavelet coefficients.\n\
+      5 - The histogram of the variance of wavelet coefficients.\n\
+      6 - The histogram of the skewness of wavelet coefficients.\n\
+      7 - The histogram of the kurtosis of wavelet coefficients.\n\
+      \n\
    If -f option is used, a TTree in the file will be read and events will be\n\
    added to the analysis, this is useful to include a simulated multiplet on\n\
    the analysis, hiding it in the isotropic backgroung the test the algorithm.\n\
