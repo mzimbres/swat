@@ -1,4 +1,4 @@
-To install SWAT you just need ROOT and fftw installed on your machine.
+To install SWAT you need ROOT, fftw and BOOST installed on your machine.
 
 ./configure
 make 
