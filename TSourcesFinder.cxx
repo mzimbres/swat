@@ -137,7 +137,7 @@ void TSourcesFinder::GenerateAlm()
 }
 
 //______________________________________________
-double TSourcesFinder::FindSources()
+WavStat TSourcesFinder::FindSources()
 {
    // Find sources algorithm. 
    // Returns magnitute of biggest wavelet coefficient found.

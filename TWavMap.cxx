@@ -107,7 +107,7 @@ void TWavMap::Filter(double factor)
 }
 
 //_____________________________________________________________________
-double TWavMap::FindSources(int nsources,double r) const
+WavStat TWavMap::FindSources(int nsources,double r) const
 {
    // Adds TEulerAngles found to the current directory.
    // All coefficients that are within r(in degrees) 
@@ -146,7 +146,7 @@ double TWavMap::FindSources(int nsources,double r) const
       ++head;
       ++i;
    }
-   return ind.begin()->GetVal();
+   return WavStat(ind.begin()->GetVal(),0,0,0,0);
 }
 
 //_________________________________________________________

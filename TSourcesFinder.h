@@ -30,6 +30,8 @@
 
 // SWAT
 
+#include "TWavMap.h"
+
 enum FileType {Herald,CRPropa};
 
 class TSourcesFinder {
@@ -58,7 +60,7 @@ class TSourcesFinder {
    void         SetScale(Int_t j) { fScale = j; }
    void         SetNSources(Int_t n) { fNSources = n; }
    void         GenerateAlm();
-   double       FindSources();
+   WavStat      FindSources();
 };
 
 #endif // SWAT_TSourcesFinder

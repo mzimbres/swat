@@ -214,7 +214,8 @@ help menu). You can use the program swat_gen to generate it.\n"
 	 finder.SetScale(j);
 	 finder.SetNSources(1);
 	 finder.SetSeparation(w);
-	 wav_mag.Fill(finder.FindSources());
+	 WavStat stat = finder.FindSources(); 
+	 wav_mag.Fill(stat.biggest);
 
 	 TAnalysis analysis(gDirectory,gDirectory);
 	 analysis.SetLength(length/2);
@@ -249,7 +250,8 @@ help menu). You can use the program swat_gen to generate it.\n"
 	 finder.SetScale(j);
 	 finder.SetNSources(1);
 	 finder.SetSeparation(w);
-	 wav_mag.Fill(finder.FindSources());
+	 WavStat stat = finder.FindSources(); 
+	 wav_mag.Fill(stat.biggest);
 
 	 TAnalysis analysis(gDirectory,gDirectory);
 	 analysis.SetLength(length/2);

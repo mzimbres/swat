@@ -34,6 +34,22 @@ class TH2D;
 #include "TCoeffInfo.h"
 #include "TDKernel.h"
 
+struct WavStat {
+   double biggest;
+   double mean;
+   double variance;
+   double skewness;
+   double kurtosis;
+
+   WavStat(double b, double m, double v, double s, double k)
+   : biggest()
+   , mean()
+   , variance()
+   , skewness()
+   , kurtosis()
+   {}
+};
+
 class TAlm;
 
 class TWavMap: public TCoeffInfo, public TDKernel {
@@ -52,7 +68,7 @@ class TWavMap: public TCoeffInfo, public TDKernel {
    double  operator()(int i,int j,int k) const {return fArray[Coordinate(i,j,k)];}
    void      Filter(double factor);
    void      SetOrientation(int i) {fOrientation = i;}
-   double    FindSources(int nsources,double r) const;
+   WavStat   FindSources(int nsources,double r) const;
    void      CreateAlm(TAlm& alm) const;
    TH2D*     CreateHist(int n) const;
    void      Fill(const TF1& f);
