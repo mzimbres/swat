@@ -50,7 +50,7 @@ void print_usage(const char* progname)
    $\n\
    \n\
    Usage: " << progname << " [-J j] [-N n]\n\n\
-   Options:\n\ \n\
+   Options:\n\n\
    -h:     This menu.\n\
    -J:     Sets band limit of the signal to 2^J, defaults to J = 7.\n\
    -N:     Band limit of wavelet to be used.\n" 
