@@ -4,8 +4,10 @@ ACLOCAL_AMFLAGS = -I m4
 AM_COLOR_TESTS  = always
 
 AM_LDFLAGS  = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} \
-              -lHistPainter $(FFTW_LIBS) $(BOOST_LDFLAGS) \
-	      $(BOOST_PROGRAM_OPTIONS_LIB)
+              -lHistPainter $(FFTW_LIBS)
+
+# Add the line below to AM_LDFLAGS for Boost programm options.
+# $(BOOST_LDFLAGS) $(BOOST_PROGRAM_OPTIONS_LIB)
 
 include_HEADERS =
 lib_LTLIBRARIES =
@@ -151,8 +153,10 @@ CLEANFILES += dictionary.cxx dictionary.h
 
 LDADD  = libswat.la libhealpix.la libfftpack.la
 
-AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} \
-              -I$(SWATDIRI) $(BOOST_CPPFLAGS)
+AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(SWATDIRI)
+
+# Add the line below to AM_CPPFLAGS for boost programm options
+# $(BOOST_CPPFLAGS)
 
 #________________________________________________________________
 

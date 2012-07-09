@@ -126,7 +126,15 @@ int main(int argc,char* argv[])
    finder.SetNSources(n);
    finder.SetSeparation(w);
    sourcesfile.cd();
-   finder.FindSources();
+   WavStat stat = finder.FindSources();
+
+   cout << "\nWavelet statistics:\n\n"
+        << "   - Greatest: " << stat.biggest << "\n"
+        << "   - Mean: "     << stat.mean << "\n"
+        << "   - Variance: " << stat.variance << "\n"
+        << "   - Skewness: " << stat.skewness << "\n"
+        << "   - Kurtosis: " << stat.kurtosis << "\n"
+	<< endl;
 
    TAnalysis analysis(&sourcesfile,&addfile);
    analysis.SetLength(length/2);
