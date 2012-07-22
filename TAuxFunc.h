@@ -61,6 +61,7 @@ namespace TAuxFunc {
    TWavMap* SWAT(const TAlm& alm,int j,int N);
    TVMap*   SHT(const TAlm& alm,bool healpixmap = false);
    TTree*   gensky(int n,TH1D* energy,TH2D* phi_theta);
+   TAlm*    wav2alm(const TWavMap& wav);
    void     gensky_from(int n,TH1D* energy,TH2D* phi_theta);
 }
 

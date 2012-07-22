@@ -51,6 +51,7 @@
 #include "TSwatF.h"
 #include "THealpixMap.h" 
 #include "TSphHarmF.h" 
+#include "TSwatB.h" 
 
 // Healpix
 
@@ -450,5 +451,18 @@ void TAuxFunc::gensky_from(int n,TH1D* energy,TH2D* phi_theta)
       y15 = phi;
       newt->Fill();
    }
+}
+
+TAlm* TAuxFunc::wav2alm(const TWavMap& wav)
+{
+   // Uses Spherical WAvelet Transform to do a backward transformation
+   // to harmonic space(TAlm).
+
+   TAlm* alm = new TAlm(wav.GetJ());
+   TSwatB backward(wav.GetJ(),wav.GetN(),"M");
+   backward.SetPoints(wav);
+   backward.Transform();
+   backward.GetAlm(*alm,wav.GetScale());
+   return alm;
 }
 

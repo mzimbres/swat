@@ -46,6 +46,7 @@ class TDKernel {
    int   GetLmax() const {return fBandLim;}
    int   Begin() const {return fBegin;}
    int   End() const {return fEnd;}
+   int   GetScale() const {return fScale;}
    std::vector<double> GetKernel() const;
 };
 
