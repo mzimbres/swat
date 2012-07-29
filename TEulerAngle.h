@@ -59,7 +59,7 @@ class TEulerAngle: public TNamed {
    }
    void SetAnglesValue(Int_t alpha,Int_t beta,Int_t gamma,Double_t value);
    void Show(Int_t t = 0) const;
-   friend ostream& operator<<(ostream& out, const TEulerAngle& ang);
+   friend std::ostream& operator<<(std::ostream& out, const TEulerAngle& ang);
 
    ClassDef(TEulerAngle,2); // Stores Euler angles.
 };
