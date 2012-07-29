@@ -3,8 +3,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 AM_COLOR_TESTS  = always
 
-AM_LDFLAGS  = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} \
-              -lHistPainter $(FFTW_LIBS)
+AM_LDFLAGS  = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} -lHistPainter $(FFTW_LIBS)
 
 # Add the line below to AM_LDFLAGS for Boost programm options.
 # $(BOOST_LDFLAGS) $(BOOST_PROGRAM_OPTIONS_LIB)
@@ -145,7 +144,7 @@ libswat_la_CPPFLAGS      = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} \
                            -I$(SWATDIRI) -I$(HEALPIXDIRI) $(FFTW_CFLAGS)
 
 libswat_la_LDFLAGS       = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} \
-                           -lhealpix -lfftpack $(FFTW_LIBS)
+                           -lHistPainter -lhealpix -lfftpack $(FFTW_LIBS)
 
 CLEANFILES += dictionary.cxx dictionary.h
 
