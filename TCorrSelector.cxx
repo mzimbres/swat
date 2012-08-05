@@ -65,11 +65,11 @@ Bool_t TCorrSelector::Process(Long64_t entry)
    b_six->GetEntry(entry);
    b_seven->GetEntry(entry);
    b_thirtynine->GetEntry(entry);
-   Double_t theta = Pi()*(seven + 90.)/180;
-   Double_t phi = Pi()*(six + 180.)/180 + Pi();
+   Double_t theta = Pi() * (seven + 90.) / 180;
+   Double_t phi = Pi() * (six + 180.) / 180;
 
    if (fAngle->IsInsideRec(theta,phi,fAngSep)) {
-       Double_t oneover = 1/thirtynine;
+       Double_t oneover = 1./thirtynine;
        fEnergy.push_back(oneover); 
        fEnergyError.push_back(thirtynine*fError/Power(thirtynine,2));
        Double_t ang = -fAngSep*180./Pi();

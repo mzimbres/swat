@@ -69,7 +69,7 @@ Bool_t TCorrSelectorCRPropa::Process(Long64_t entry)
    Double_t seven = theta*180./Pi() - 90.;
 
    if (fAngle->IsInsideRec(theta,phi,fAngSep)) {
-       Double_t oneover = 1/Momentum_E_EeV;
+       Double_t oneover = 1./Momentum_E_EeV;
        fEnergy.push_back(oneover); 
        Double_t ang = -fAngSep*180./Pi();
        fAngle2.push_back(ang); 
