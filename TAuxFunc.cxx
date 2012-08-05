@@ -290,7 +290,7 @@ TWavMap* TAuxFunc::SWAT(const TAlm& alm,int j,int N)
    // band limit N > 0 at scale j.
    // Only cylindrical pixelization is provided.
 
-   TSwatF forward(alm.GetJmax(),N,"M");
+   TSwatF forward(alm.GetJmax(),N,"ES");
    forward.SetPoints(alm,j);
    forward.Transform();
 
