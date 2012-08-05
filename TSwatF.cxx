@@ -102,36 +102,45 @@ void TSwatF::SetPoints(const TAlm& alm,Int_t j)
       TWignerd Wig(fInfo.GetL());
       Wig.Advance(ker.Begin());
 
-      for (Int_t l = ker.Begin(); l < ker.End(); ++l, Wig.Recurse()){
+      for (Int_t l = ker.Begin(); l < ker.End(); ++l, Wig.Recurse()) {
          Int_t lim = Min(fInfo.GetN()-1,l);
-
          for (Int_t n = -lim; n <= 0; ++n){
             if (Odd(fInfo.GetN() + n)) {
                complex<Double_t> c = Wav(l,-n);
 	       c = fGetNegativen(c,n);
                for(Int_t u = -l; u<= l; ++u){ 
-                  for(Int_t m = 0; m <= l; ++m){
-                     complex<Double_t> f = c*alm(l,m)*Wig(m,n,u)*fShift(u);
-                     re[fInfo.Fourier(m,u,n)] += real(f);
-                     im[fInfo.Fourier(m,u,n)] += imag(f);
-                  }
+		  // Changing to pointer arithmetics to improve 
+		  // performance.
+		  double* pre = &re[fInfo.Fourier(0,u,n)];
+		  double* pim = &im[fInfo.Fourier(0,u,n)];
+		  complex<double> shift = fShift(u);
+		  int m = 0;
+		  while (m <= l) {
+                     complex<Double_t> f = c * alm(l,m) * Wig(m,n,u) * shift;
+                      *pre++ += real(f);
+                      *pim++ += imag(f);
+		      ++m;
+		  }
                }
             }
          }
-
          for (Int_t n = 1; n <= lim; ++n){
             if (Odd(fInfo.GetN() + n)) {
                complex<Double_t> c = Wav(l,n);
                for(Int_t u = -l; u<= l; ++u){ 
-                  for(Int_t m = 0; m <= l; ++m){
-                     complex<Double_t> f = c*alm(l,m)*Wig(m,n,u)*fShift(u);
-                     re[fInfo.Fourier(m,u,n)] += real(f);
-                     im[fInfo.Fourier(m,u,n)] += imag(f);
-                  }
+		  double* pre = &re[fInfo.Fourier(0,u,n)];
+		  double* pim = &im[fInfo.Fourier(0,u,n)];
+		  complex<double> shift = fShift(u);
+		  int m = 0;
+		  while (m <= l) {
+                     complex<Double_t> f = c * alm(l,m) * Wig(m,n,u) * shift;
+                      *pre++ += real(f);
+                      *pim++ += imag(f);
+		      ++m;
+		  }
                }
             }
          }
-
       }
       B->SetPointsComplex(&re[0],&im[0]);
 
