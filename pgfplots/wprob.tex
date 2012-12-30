@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage{graphics}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\pgfrealjobname{wprob}
+
+\begin{document}
+\beginpgfgraphicnamed{wprob-f0}
+   \begin{tikzpicture}[scale=1.0]
+      \begin{axis}[xlabel= $w_0$, ylabel=Probability \%, 
+      %title={Number of events = 1000}, 
+      legend columns=3,
+	legend style={ cells={anchor=east}, anchor=south east}
+      ]
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn1000.dat};
+      \addlegendentry{n = 1000}
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn900.dat};
+      \addlegendentry{n = 900}
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn800.dat};
+      \addlegendentry{n = 800}
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn700.dat};
+      \addlegendentry{n = 700}
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn600.dat};
+      \addlegendentry{n = 600}
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn500.dat};
+      \addlegendentry{n = 500}
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn400.dat};
+      \addlegendentry{n = 400}
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn300.dat};
+      \addlegendentry{n = 300}
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn200.dat};
+      \addlegendentry{n = 200}
+      \addplot+[mark size=2.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {wn100.dat};
+      \addlegendentry{n = 100}
+      \end{axis}
+   \end{tikzpicture}
+\endpgfgraphicnamed
+\end{document}
+
