@@ -25,6 +25,8 @@ void print_usage(const char* prog)
 {
    cout << "\n\n\
    Reads a file output by swat_sim and calculates probabilities.\n\
+   Use the macros cprob.tex and wprob.tex in pgfplots directory to produce\n\
+   probability graphs.\n\n\
    Usage: " << prog << " [-n n_steps] [-o outpu-file] [-t] [-k kind]\n\n\
    Options:\n\n\
    -h:     This menu.\n\
