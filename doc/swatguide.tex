@@ -649,6 +649,34 @@ $ time swat -J 8 -N 3 # Will test wavelet transform.
    \end{lstlisting}
 }
 
+\section{swat\_prob}
+{\bf \color{brown}
+   \begin{lstlisting}
+   Reads a file output by swat_sim and calculates
+   probabilities.  Use the macros cprob.tex and
+   wprob.tex in pgfplots directory to produce
+   probability graphs.
+
+   Usage: swat_prob [-n n_steps] [-o outpu-file] [-t] 
+                    [-k kind]
+
+   Options:
+
+      -h:     This menu.
+      -o:     Output file, where probabilities
+              will be recorded.
+      -t:     Calculates P(q >= q_0) if provided,
+              P(q < q_0) otherwise.  q will be the
+              correlation or wavelet coefficient,
+              depending on the value passed in option -k
+      -k:     Either 1 for correlation or two for
+              wavelet coefficient.
+      -n:     Total number of steps (points on
+              probability graph). Defaults to 10.
+
+   \end{lstlisting}
+}
+
 \section{swat}
 {\bf \color{brown}
    \begin{lstlisting}
