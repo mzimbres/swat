@@ -227,7 +227,7 @@ help menu). You can use the program swat_gen to generate it.\n"
 	 finder.SetNSources(1);
 	 finder.SetSeparation(w);
 	 WavStat stat = finder.FindSources(); 
-	 wav_mag.Fill(stat.biggest);
+	 wav_mag.Fill(std::abs(stat.biggest));
 	 mean.Fill(stat.mean);
 	 variance.Fill(stat.variance);
 	 skewness.Fill(stat.skewness);
