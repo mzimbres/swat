@@ -27,21 +27,22 @@
 #include "swat.h"
 
 class TDKernel {
-   private:
+private:
    int fJmax;  // Number of scales that will be used
-   protected:
+protected:
    int fScale; // The scale to construct the kernel. Range [0,fJmax]
-   private:
+private:
    int fBandLim;     // This is the band limit. Is determined by fJmax
    int fBegin; // Support begin
    int fEnd;   // Support end
    
-   public:
-           TDKernel(int j,int J):fJmax(J), 
-	      fScale((j <= fJmax) ? j : throw "TDKernel: j > J."),
-	      fBandLim((kAlpha << (fJmax - 1))),
-              fBegin(((J - fScale < 2)) ? 0 : kAlpha << (J-fScale-2)),
-	      fEnd((j == 0) ? fBandLim : (kAlpha << (J - fScale))) { }
+public:
+   TDKernel(int j,int J):fJmax(J)
+   , fScale((j <= fJmax) ? j : throw "TDKernel: j > J.")
+   , fBandLim((kAlpha << (fJmax - 1)))
+   , fBegin(((J - fScale < 2)) ? 0 : kAlpha << (J-fScale-2))
+   , fEnd((j == 0) ? fBandLim : (kAlpha << (J - fScale))) 
+   {}
    void  Copy(TDKernel& kernel) const;
    int   GetLmax() const {return fBandLim;}
    int   Begin() const {return fBegin;}

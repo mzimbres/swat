@@ -1,0 +1,27 @@
+\documentclass{article}
+\usepackage{graphics}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\pgfrealjobname{kernel}
+
+\begin{document}
+\beginpgfgraphicnamed{kernel-f0}
+   \begin{tikzpicture}[scale=1.0]
+      \begin{axis}[xlabel= $l$, ylabel= Kernel value., title={Wavelet kernel}, 
+      %legend columns=3,
+      %legend style={ cells={anchor=east}, anchor=south east}
+      ]
+      \addplot+[mark size=1.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {kernel_J8j1.dat};
+      \addlegendentry{j = 1}
+      \addplot+[mark size=1.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {kernel_J8j2.dat};
+      \addlegendentry{j = 2}
+      \addplot+[mark size=1.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {kernel_J8j3.dat};
+      \addlegendentry{j = 3}
+      \addplot+[mark size=1.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {kernel_J8j4.dat};
+      \addlegendentry{j = 4}
+      \end{axis}
+   \end{tikzpicture}
+\endpgfgraphicnamed
+\end{document}
+

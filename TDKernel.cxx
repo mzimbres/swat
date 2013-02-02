@@ -60,8 +60,7 @@ std::vector<double> TDKernel::GetKernel() const
          vec[i] = abs(a[i]-b[i]); 
       }
    }
-   std::transform(vec.begin(),vec.end(),vec.begin(),
-                  std::ptr_fun<double, double>(sqrt));
+   std::transform(vec.begin(),vec.end(),vec.begin(), std::ptr_fun<double, double>(sqrt));
    return vec;
 }
 
