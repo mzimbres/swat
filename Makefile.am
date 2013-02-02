@@ -203,7 +203,6 @@ dist_pkgdata_DATA = $(MACRODIR)/DrawLatitudesLongitudes.C \
                     $(MACRODIR)/benchmark_fft_gsl.C       \
 		    $(MACRODIR)/convert_auger.C           \
 	            $(MACRODIR)/convert_herald.C          \
-	            $(MACRODIR)/kernel.C                  \
                     $(MACRODIR)/makehtml.C                \
                     $(MACRODIR)/mystyle.C                 \
 	            $(MACRODIR)/scale_func.C              \
@@ -220,6 +219,9 @@ EXTRA_DIST = $(CONFIGDIR)/load.C.in                       \
              $(top_srcdir)/pgfplots/skymap.tar.gz         \
              $(top_srcdir)/pgfplots/wignerd.tar.gz        \
              $(top_srcdir)/pgfplots/corr_graph.tex        \
+             $(top_srcdir)/pgfplots/cprob.tex             \
+             $(top_srcdir)/pgfplots/wprob.tex             \
+             $(top_srcdir)/pgfplots/kernel.tex            \
              $(top_srcdir)/pgfplots/multiplicity.tex      \
              $(top_srcdir)/doc/skymap.pdf                 \
              $(top_srcdir)/doc/skymap-sim.pdf             \
