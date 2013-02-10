@@ -8,7 +8,6 @@ AM_LDFLAGS  = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} -lHistPainter $(FFTW_LI
 # Add the line below to AM_LDFLAGS for Boost programm options.
 # $(BOOST_LDFLAGS) $(BOOST_PROGRAM_OPTIONS_LIB)
 
-include_HEADERS =
 lib_LTLIBRARIES =
 CLEANFILES      =
 
@@ -21,8 +20,6 @@ FFTPACKH =  $(top_srcdir)/bluestein.h   \
 FFTPACKS =  $(top_srcdir)/bluestein.c   \
             $(top_srcdir)/ls_fft.c      \
 	    $(top_srcdir)/fftpack.c
-
-include_HEADERS +=  $(FFTPACKH)
 
 lib_LTLIBRARIES += libfftpack.la
 
@@ -52,8 +49,6 @@ HEALPIXH = $(top_srcdir)/alm_healpix_tools.h  \
 HEALPIXS = $(top_srcdir)/alm_healpix_tools.cc \
            $(top_srcdir)/alm_map_tools.cc     \
            $(top_srcdir)/healpix_base.cc
-
-include_HEADERS += $(HEALPIXH)
 
 lib_LTLIBRARIES += libhealpix.la
 
@@ -131,8 +126,6 @@ SWATS = $(top_srcdir)/TWignerd.cxx               \
 dictionary.cxx: $(SWATDH)
 	@echo "Generating dictionary $@..."
 	$(ROOTCINT) -f $@ -c $^
-
-include_HEADERS += $(SWATDH) $(SWATH)
 
 lib_LTLIBRARIES += libswat.la
 
