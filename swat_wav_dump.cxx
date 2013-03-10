@@ -89,6 +89,7 @@ int main(int argc, char* argv[])
 
    const double rad_to_deg = static_cast<double>(180) / TMath::Pi();
 
+   int count = 0;
    for (int i = 0; i < n_phi; ++i) {
      for (int j = 0; j < n_theta / 2; ++j) {
        double phi = 2 * TMath::Pi() * i / n_phi;
@@ -100,9 +101,11 @@ int main(int argc, char* argv[])
 	 double x, y;
 	 THistPainter::ProjectAitoff2xy(phi_g , theta_g, x, y);
 	 of << x << " " << y << " " << val << "\n";
+	 ++count;
        }
      }
    }
+   std::cout << "Number of events in file: " << count << std::endl;
 
    return 0;
 }
