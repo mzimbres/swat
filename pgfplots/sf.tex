@@ -1,0 +1,34 @@
+\documentclass{article}
+\usepackage{graphics}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[utf8]{inputenc}
+
+\pgfrealjobname{sf}
+
+\begin{document}
+\beginpgfgraphicnamed{sf-f0}
+   \begin{tikzpicture}[scale=1.0]
+      \begin{axis}[ xlabel= Frequência ($l$), ylabel= $\Phi(l)$
+                  , title={Função de escala}
+		  ,  width=12cm, height=5cm ]
+      \addplot+[mark size=0.8] table[x index=0,y index=1]  {scale_func_J8.dat};
+      \addlegendentry{j = 0}
+      \addplot+[mark size=0.8] table[x index=0,y index=2]  {scale_func_J8.dat};
+      \addlegendentry{j = 2}
+      \addplot+[mark size=0.8] table[x index=0,y index=3]  {scale_func_J8.dat};
+      \addlegendentry{j = 3}
+      \addplot+[mark size=0.8] table[x index=0,y index=4]  {scale_func_J8.dat};
+      \addlegendentry{j = 4}
+      %\addplot+[mark size=0.8] table[x index=0,y index=5]  {scale_func_J8.dat};
+      %\addlegendentry{j = 5}
+      %\addplot+[mark size=0.8] table[x index=0,y index=6]  {scale_func_J8.dat};
+      %\addplot+[mark size=0.8] table[x index=0,y index=7]  {scale_func_J8.dat};
+      %\addplot+[mark size=0.8] table[x index=0,y index=8]  {scale_func_J8.dat};
+      %\addplot+[mark size=0.8] table[x index=0,y index=9]  {scale_func_J8.dat};
+      \end{axis}
+   \end{tikzpicture}
+\endpgfgraphicnamed
+
+\end{document}
+

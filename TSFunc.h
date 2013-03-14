@@ -28,14 +28,14 @@
 
 class TSFunc {
    private:
-   Int_t fJmax; // Number of scales 
-   Int_t fL;  // This is the band limit 
+   int fJmax; // Number of scales 
+   int fL;  // This is the band limit 
    TF1 fIntegr;  
 
    public:
    explicit TSFunc(Int_t J);
-   std::vector<Double_t> GetSquaredAtScale(Int_t s);
-   std::vector<Double_t> GetAtScale(Int_t s);
+   std::vector<double> GetSquaredAtScale(int s);
+   std::vector<double> GetAtScale(int s);
 };
 
 #endif // SWAT_TSFunc

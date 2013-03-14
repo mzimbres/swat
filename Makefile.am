@@ -10,6 +10,7 @@ AM_LDFLAGS  = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} -lHistPainter $(FFTW_LI
 
 lib_LTLIBRARIES =
 CLEANFILES      =
+EXTRA_DIST      =
 
 #________________________________________________________________
 
@@ -26,6 +27,8 @@ lib_LTLIBRARIES += libfftpack.la
 libfftpack_la_CPPFLAGS = -I$(top_srcdir)
 
 libfftpack_la_SOURCES = $(FFTPACKS)
+
+EXTRA_DIST += $(FFTPACKH)
 
 #______________________________________________________
 
@@ -45,6 +48,7 @@ HEALPIXH = $(top_srcdir)/alm_healpix_tools.h  \
            $(top_srcdir)/Healpix_Base.h       \
            $(top_srcdir)/Healpix_Map.h
 
+EXTRA_DIST += $(HEALPIXH)
 
 HEALPIXS = $(top_srcdir)/alm_healpix_tools.cc \
            $(top_srcdir)/alm_map_tools.cc     \
@@ -60,7 +64,8 @@ libhealpix_la_SOURCES = $(HEALPIXS)
 
 # headers for which no dictionaries are needed
 SWATH = $(top_srcdir)/TFFTWAlloc.h \
-        $(top_srcdir)/swat.h
+        $(top_srcdir)/swat.h \
+        $(top_srcdir)/to_number.h
 
 # headers for which dictionaries must be generated.
 SWATDH = $(top_srcdir)/TWignerd.h              \
@@ -92,6 +97,8 @@ SWATDH = $(top_srcdir)/TWignerd.h              \
 	 $(top_srcdir)/TSourcesFinder.h        \
 	 $(top_srcdir)/TAnalysis.h             \
 	 $(top_srcdir)/TAuxFunc.h
+
+EXTRA_DIST += $(SWATH) $(SWATDH)
 
 SWATS = $(top_srcdir)/TWignerd.cxx               \
         $(top_srcdir)/TSmallWignerd.cxx          \
@@ -152,7 +159,12 @@ AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(SWATDIRI)
 
 #________________________________________________________________
 
-bin_PROGRAMS      = swat swat_sim swat_find swat_alm swat_gen swat_prob swat_kernel swat_wav_dump
+bin_PROGRAMS      = swat swat_sim \
+                    swat_find swat_alm \
+		    swat_gen swat_prob \
+		    swat_kernel \
+		    swat_wav_dump \
+		    swat_sf_dump
 
 swat_SOURCES          = $(top_srcdir)/swat.cxx
 swat_sim_SOURCES      = $(top_srcdir)/swat_sim.cxx
@@ -162,6 +174,7 @@ swat_gen_SOURCES      = $(top_srcdir)/swat_gen.cxx
 swat_prob_SOURCES     = $(top_srcdir)/swat_prob.cxx
 swat_kernel_SOURCES   = $(top_srcdir)/swat_kernel.cxx
 swat_wav_dump_SOURCES = $(top_srcdir)/swat_wav_dump.cxx
+swat_sf_dump_SOURCES  = $(top_srcdir)/swat_sf_dump.cxx
 
 #________________________________________________________________
 
@@ -208,26 +221,27 @@ dist_pkgdata_DATA = $(MACRODIR)/DrawLatitudesLongitudes.C \
 	            $(MACRODIR)/wig_graph.C
 #________________________________________________________________
 
-EXTRA_DIST = $(CONFIGDIR)/load.C.in                       \
-             $(top_srcdir)/tests/map2alm.C                \
-             $(top_srcdir)/pgfplots/skymap.tar.gz         \
-             $(top_srcdir)/pgfplots/wignerd.tar.gz        \
-             $(top_srcdir)/pgfplots/corr_graph.tex        \
-             $(top_srcdir)/pgfplots/cprob.tex             \
-             $(top_srcdir)/pgfplots/wprob.tex             \
-             $(top_srcdir)/pgfplots/kernel.tex            \
-             $(top_srcdir)/pgfplots/multiplicity.tex      \
-             $(top_srcdir)/doc/skymap.pdf                 \
-             $(top_srcdir)/doc/skymap-sim.pdf             \
-             $(top_srcdir)/doc/mult-cand.pdf              \
-             $(top_srcdir)/doc/crpropa.pdf                \
-             $(top_srcdir)/doc/wignerpolar.pdf            \
-             $(top_srcdir)/doc/wigner.pdf                 \
-             $(top_srcdir)/doc/corr_graph-sim.pdf         \
-             $(top_srcdir)/doc/multiplicity-sim.pdf       \
-             $(top_srcdir)/doc/swatguide.tex              \
-             $(top_srcdir)/doc/healpixGridRefinement.jpg  \
-             $(top_srcdir)/doc/cylindrical-f1.pdf         \
-             $(top_srcdir)/doc/cylindrical-f2.pdf         \
-             $(top_srcdir)/doc/cylindrical-f3.pdf
+EXTRA_DIST += $(CONFIGDIR)/load.C.in                       \
+              $(top_srcdir)/tests/map2alm.C                \
+              $(top_srcdir)/pgfplots/skymap.tar.gz         \
+              $(top_srcdir)/pgfplots/wignerd.tar.gz        \
+              $(top_srcdir)/pgfplots/corr_graph.tex        \
+              $(top_srcdir)/pgfplots/cprob.tex             \
+              $(top_srcdir)/pgfplots/wprob.tex             \
+              $(top_srcdir)/pgfplots/kernel.tex            \
+              $(top_srcdir)/pgfplots/multiplicity.tex      \
+              $(top_srcdir)/doc/skymap.pdf                 \
+              $(top_srcdir)/doc/skymap-sim.pdf             \
+              $(top_srcdir)/doc/mult-cand.pdf              \
+              $(top_srcdir)/doc/crpropa.pdf                \
+              $(top_srcdir)/doc/wignerpolar.pdf            \
+              $(top_srcdir)/doc/wigner.pdf                 \
+              $(top_srcdir)/doc/corr_graph-sim.pdf         \
+              $(top_srcdir)/doc/multiplicity-sim.pdf       \
+              $(top_srcdir)/doc/swatguide.tex              \
+              $(top_srcdir)/doc/healpixGridRefinement.jpg  \
+              $(top_srcdir)/doc/cylindrical-f1.pdf         \
+              $(top_srcdir)/doc/cylindrical-f2.pdf         \
+              $(top_srcdir)/doc/cylindrical-f3.pdf         \
+              $(top_srcdir)/fig/sf-f0.pdf
 
