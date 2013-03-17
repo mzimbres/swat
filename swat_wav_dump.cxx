@@ -24,6 +24,9 @@ void print_usage(const char* prog)
    -j:     Scale used.\n\
    -N:     Wavelet azimuth band limit.\n\
    -t:     Tolerance to print.\n\
+   -a:     Index of alpha coordinate. In the range [0, 2^J)\n\
+   -b:     Index of beta coordinate. In the range [0, 2^J)\n\
+   -g:     Index of gamma coordinate. In the range [0,N)\n\
    " << std::endl;
 }
 
@@ -41,12 +44,15 @@ int main(int argc, char* argv[])
    int J = 8;
    int j = 2;
    int N = 3;
-   double tol = 0.001;
+   int alpha = 2 << (J - 2);
+   int beta  = 2 << (J - 2);
+   int gamma = 0;
+   double tol = 0;
 
 
    char opt;
 
-   while ((opt = getopt(argc,argv,"+h:J:j:N:t:")) != -1) {
+   while ((opt = getopt(argc,argv,"+h:J:j:N:t:a:b:g:")) != -1) {
       switch (opt) {
          case 'J':
 	    J = to_number<int>(optarg);
@@ -56,6 +62,15 @@ int main(int argc, char* argv[])
 	    break;
          case 'N':
 	    N = to_number<int>(optarg);
+	    break;
+         case 'a':
+	    alpha = to_number<int>(optarg);
+	    break;
+         case 'b':
+	    beta = to_number<int>(optarg);
+	    break;
+         case 'g':
+	    gamma = to_number<int>(optarg);
 	    break;
          case 't':
 	    tol = to_number<double>(optarg);
@@ -72,7 +87,7 @@ int main(int argc, char* argv[])
    int n_gamma = info.GetNQui();
 
    TWavMap wav(j, J, N);
-   wav(n_phi / 3, (n_theta / 4) - (n_theta / 8), n_gamma / 2) = 1;
+   wav(alpha, beta, gamma) = 1;
    TSwatB  swat(J, N, "M");
    swat.SetPoints(wav);
    swat.Transform();
@@ -92,8 +107,8 @@ int main(int argc, char* argv[])
    int count = 0;
    for (int i = 0; i < n_phi; ++i) {
      for (int j = 0; j < n_theta / 2; ++j) {
-       double phi = 2 * TMath::Pi() * i / n_phi;
-       double theta = 2 * TMath::Pi() * (2 * j + 1) / n_theta;
+       double phi = 2 * i * TMath::Pi() / n_phi;
+       double theta = (2 * j + 1) * TMath::Pi() / n_theta;
        double val = (*sky)(i, j);
        if (std::abs(val) > tol) {
 	 double phi_g = rad_to_deg * (phi - TMath::Pi());
