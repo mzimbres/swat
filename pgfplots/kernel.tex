@@ -2,26 +2,35 @@
 \usepackage{graphics}
 \usepackage{tikz}
 \usepackage{pgfplots}
+\usepackage[utf8]{inputenc}
 
 \pgfrealjobname{kernel}
 
 \begin{document}
 \beginpgfgraphicnamed{kernel-f0}
    \begin{tikzpicture}[scale=1.0]
-      \begin{axis}[xlabel= $l$, ylabel= Kernel value., title={Wavelet kernel},  width=16cm, height=8cm
-      %legend columns=3,
-      %legend style={ cells={anchor=east}, anchor=south east}
-      ]
-      \addplot+[mark size=1.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {kernel_J8j1.dat};
-      \addlegendentry{j = 1}
-      \addplot+[mark size=1.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {kernel_J8j2.dat};
+      \begin{axis}[ xlabel= Frequência ($l$), ylabel= $k(l)$
+                  , title={Suporte do kernel}
+		  %,  width=12cm, height=5cm 
+		  ]
+      \addplot+[mark size=0.8] table[x index=0,y index=1]   {kernel_J8.dat};
+      \addlegendentry{j = 0}
+      \addplot+[mark size=0.8] table[x index=0,y index=2]   {kernel_J8.dat};
       \addlegendentry{j = 2}
-      \addplot+[mark size=1.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {kernel_J8j3.dat};
+      \addplot+[mark size=0.8] table[x index=0,y index=3]   {kernel_J8.dat};
       \addlegendentry{j = 3}
-      \addplot+[mark size=1.0,error bars/.cd,y dir=both,y explicit,error mark=triangle* ] table[x=xcol,y=ycol] {kernel_J8j4.dat};
+      \addplot+[mark size=0.8] table[x index=0,y index=4]   {kernel_J8.dat};
       \addlegendentry{j = 4}
+      %\addplot+[mark size=0.8] table[x index=0,y index=5]  {kernel_J8.dat};
+      %\addlegendentry{j = 5}
+      %\addplot+[mark size=0.8] table[x index=0,y index=6]  {kernel_J8.dat};
+      %\addplot+[mark size=0.8] table[x index=0,y index=7]  {kernel_J8.dat};
+      %\addplot+[mark size=0.8] table[x index=0,y index=8]  {kernel_J8.dat};
+      %\addplot+[mark size=0.8] table[x index=0,y index=9]  {kernel_J8.dat};
       \end{axis}
    \end{tikzpicture}
 \endpgfgraphicnamed
+
 \end{document}
+
 

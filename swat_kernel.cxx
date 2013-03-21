@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "TDKernel.h"
+#include "to_number.h"
 
 void print_usage(const char* prog)
 {
@@ -19,15 +20,6 @@ void print_usage(const char* prog)
 }
 
 template <typename T>
-T to_number(const char* str)
-{
-  T tmp;
-  std::istringstream ss(str);
-  ss >> tmp;
-  return tmp;
-}
-
-template <typename T>
 std::string to_string(T number)
 {
   std::ostringstream ss;
@@ -39,6 +31,7 @@ int main(int argc,char* argv[])
 {
    if (argc != 2) {
      std::cerr << "Please, provida a maximum scale. 0 < J < 10 (hint)." << std::endl;
+     print_usage(argv[0]);
      return 1;
    }
 
@@ -46,19 +39,22 @@ int main(int argc,char* argv[])
 
    std::string prefix = "kernel_J";
    prefix += argv[1];
+   prefix += ".dat";
+   std::ofstream fs(prefix.c_str());
+
+   std::vector<std::vector<double> > vecs;
 
    for (int j = 0; j <= J; ++j) {
-      std::string file_name = prefix;
-      file_name += "j";
-      file_name += to_string(j);
-      file_name += ".dat";
       TDKernel k(j, J);
-      std::vector<double> vec = k.GetKernel();
-      std::ofstream fs(file_name.c_str());
-      fs << "xcol ycol\n";
-      for (int i = 0; i < vec.size(); ++i) {
-         fs << i << " " << vec[i] << "\n";
+      vecs.push_back(k.GetKernel());
+   }
+
+   for (int i = 0; i < vecs[0].size(); ++i) {
+      fs << i << " ";
+      for (int j = 0; j <= J; ++j) {
+         fs << vecs[j][i] << "  ";
       }
+      fs << "\n";
    }
 
    return 0;

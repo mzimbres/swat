@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <sstream>
 #include <vector>
 #include <fstream>
 
@@ -17,14 +16,6 @@ void print_usage(const char* prog)
    Options:\n\n\
    -h:     This menu.\n\
    " << std::endl;
-}
-
-template <typename T>
-std::string to_string(T number)
-{
-  std::ostringstream ss;
-  ss << number;
-  return ss.str();
 }
 
 int main(int argc,char* argv[])
