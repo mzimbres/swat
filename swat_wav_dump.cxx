@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
    int alpha = 2 << (J - 2);
    int beta  = 2 << (J - 2);
    int gamma = 0;
-   double tol = 0;
+   int tol = 0;
 
 
    char opt;
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 	    gamma = to_number<int>(optarg);
 	    break;
          case 't':
-	    tol = to_number<double>(optarg);
+	    tol = to_number<int>(optarg);
 	    break;
          default:
 	    print_usage(argv[0]);
@@ -105,19 +105,18 @@ int main(int argc, char* argv[])
    const double rad_to_deg = static_cast<double>(180) / TMath::Pi();
 
    int count = 0;
-   for (int i = 0; i < n_phi; ++i) {
-     for (int j = 0; j < n_theta / 2; ++j) {
+   int half = n_theta / 2;
+   for (int i = (alpha - tol); i < (alpha + tol); ++i) {
+     for (int j = (beta - tol); j < (beta + tol); ++j) {
        double phi = 2 * i * TMath::Pi() / n_phi;
        double theta = (2 * j + 1) * TMath::Pi() / n_theta;
        double val = (*sky)(i, j);
-       if (std::abs(val) > tol) {
-	 double phi_g = rad_to_deg * (phi - TMath::Pi());
-	 double theta_g = rad_to_deg * (theta - TMath::Pi() / 2);
-	 double x, y;
-	 THistPainter::ProjectAitoff2xy(phi_g , theta_g, x, y);
-	 of << x << " " << y << " " << val << "\n";
-	 ++count;
-       }
+       double phi_g = rad_to_deg * (phi - TMath::Pi());
+       double theta_g = rad_to_deg * (theta - TMath::Pi() / 2);
+       double x, y;
+       THistPainter::ProjectAitoff2xy(phi_g , theta_g, x, y);
+       of << x << " " << y << " " << val << "\n";
+       ++count;
      }
    }
    std::cout << "Number of events in file: " << count << std::endl;
