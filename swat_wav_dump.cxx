@@ -23,7 +23,10 @@ void print_usage(const char* prog)
    -J:     Maximum scale to perform the analysis.\n\
    -j:     Scale used.\n\
    -N:     Wavelet azimuth band limit.\n\
-   -t:     Tolerance to print.\n\
+   -p:     Negative delta of phi coordinate to print.\n\
+   -i:     Positive delta of phi coordinate to print.\n\
+   -t:     Negative delta of theta coordinate to print.\n\
+   -e:     Positive delta of theta coordinate to print.\n\
    -a:     Index of alpha coordinate. In the range [0, 2^J)\n\
    -b:     Index of beta coordinate. In the range [0, 2^J)\n\
    -g:     Index of gamma coordinate. In the range [0,N)\n\
@@ -47,12 +50,14 @@ int main(int argc, char* argv[])
    int alpha = 2 << (J - 2);
    int beta  = 2 << (J - 2);
    int gamma = 0;
-   int tol = 0;
-
+   int p = 0;
+   int ii = 0;
+   int t = 0;
+   int e = 0;
 
    char opt;
 
-   while ((opt = getopt(argc,argv,"+h:J:j:N:t:a:b:g:")) != -1) {
+   while ((opt = getopt(argc,argv,"+h:J:j:N:p:i:t:e:a:b:g:")) != -1) {
       switch (opt) {
          case 'J':
 	    J = to_number<int>(optarg);
@@ -72,8 +77,17 @@ int main(int argc, char* argv[])
          case 'g':
 	    gamma = to_number<int>(optarg);
 	    break;
+         case 'p':
+	    p = to_number<int>(optarg);
+	    break;
+         case 'i':
+	    ii = to_number<int>(optarg);
+	    break;
          case 't':
-	    tol = to_number<int>(optarg);
+	    t = to_number<int>(optarg);
+	    break;
+         case 'e':
+	    e = to_number<int>(optarg);
 	    break;
          default:
 	    print_usage(argv[0]);
@@ -106,8 +120,8 @@ int main(int argc, char* argv[])
 
    int count = 0;
    int half = n_theta / 2;
-   for (int i = (alpha - tol); i < (alpha + tol); ++i) {
-     for (int j = (beta - tol); j < (beta + tol); ++j) {
+   for (int i = (alpha - p); i < (alpha + ii); ++i) {
+     for (int j = (beta - t); j < (beta + e); ++j) {
        double phi = 2 * i * TMath::Pi() / n_phi;
        double theta = (2 * j + 1) * TMath::Pi() / n_theta;
        double val = (*sky)(i, j);
