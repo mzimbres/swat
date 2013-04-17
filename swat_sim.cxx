@@ -96,7 +96,7 @@ int main(int argc,char* argv[])
 
    char opt;
 
-   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:f:d:")) != -1) {
+   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:C:s:f:d:")) != -1) {
       switch (opt) {
          case 'j': 
 	    j = atoi(optarg);
