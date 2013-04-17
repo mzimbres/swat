@@ -40,6 +40,7 @@ struct WavStat {
    double variance;
    double skewness;
    double kurtosis;
+   std::vector<double> mags;
 
    WavStat(double b, double m, double v, double s, double k)
    : biggest(b)

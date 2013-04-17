@@ -27,21 +27,23 @@ using namespace TAuxFunc;
 void print_usage(const char* prog)
 {
    cout << "\n\n\
-   Calculates the probability of a multiplet with minimum correlation C (see -c\n\
-   option) and minimum number of events m (see -m option) happen by chance\n\
-   using wavelet analysis. First an isotropic sky is simulated and the wavelet\n\
-   representation of the sky is calculated, the euler angles of the largest\n\
-   coefficient is used to calculate the equations of the tangent plane at the\n\
-   position found (the euler angles). The correlation C is calculated including\n\
-   all events that hit the tangent plane, whose size is specified with the\n\
-   options -l and -w. The probablility will be the number of multiplets with\n\
-   correlation > C and number of events > m, divided by the number of skies\n\
-   simulated. Additionaly, seven other quantities are additionally calculated:\n\
+   Calculates the probability of a multiplet with minimum correlation c > c_0\n\
+   (see -c option), minimum number of events m > m_0 (see -m option) and where\n\
+   the magnitude of the wavelet coefficint e C > C_0 (see -C option), happen by\n\
+   chance using wavelet analysis.  First an isotropic sky is simulated and the\n\
+   wavelet representation of the sky is calculated, the euler angles of the\n\
+   largest coefficient is used to calculate the equations of the tangent plane\n\
+   at the position found (the euler angles). The correlation c is calculated\n\
+   including all events that hit the tangent plane, whose size is specified\n\
+   with the options -l and -w. The probablility will be the number of\n\
+   multiplets with c c _0, C > C_0 and number of events m > m_0, divided by the\n\
+   number of skies simulated. Additionaly, seven other quantities are\n\
+   additionally calculated:\n\
       \n\
       1 - The histogram of the number of events that hit the tangent plane.\n\
-      2 - The histogram of the C's found for which the number of events is\n\
-          greater than m (passed in the command line).\n\
-      3 - The histogram of the magnitude of wavelet coefficients.\n\
+      2 - The histogram of the c's found for which the number of events is\n\
+          greater than m_0 and C > C_0 (passed in the command line).\n\
+      3 - The histogram of the magnitude of wavelet coefficients C_0.\n\
       4 - The histogram of the mean of wavelet coefficients.\n\
       5 - The histogram of the variance of wavelet coefficients.\n\
       6 - The histogram of the skewness of wavelet coefficients.\n\
@@ -62,7 +64,7 @@ void print_usage(const char* prog)
    \n\n\
    Usage: " << prog << " [ -j scale] [-N number] [-n nevents] [-s skies]\n\
            [-i emin] [-e emax] [-c corr] [-m mevents] [-w width] [-l length]\n\
-	   [-f file.root]\n\n\
+	   [-f file.root] [-C min_wav]\n\n\
    Options:\n\n\
    -h:     This menu.\n\
    -j:     Wavelet scale, a number in the range 0 <= j <= 8, defaults to 1.\n\
@@ -72,6 +74,7 @@ void print_usage(const char* prog)
    -i:     Minimum energy of events, defaults to 20 EeV.\n\
    -e:     Maximum energy of events, defaults to 40 EeV.\n\
    -c:     Minimum correlation, defaults to 0.2.\n\
+   -C:     Minimum Magniftude of wavelet coefficient, defaults to 0.0.\n\
    -m:     Minimum number of events hitting tangent plane.\n\
    -w:     Width of tangent plane, defaults to 2 degrees.\n\
    -l:     Length of tangent plane, defaults to 10 degrees.\n\
@@ -85,7 +88,7 @@ int main(int argc,char* argv[])
    // Automates simulation for swat.
 
    int N = 1, j = 1, n = 1000, m = 4, s = 100;
-   double w = 3., width = 2., length = 10., min = 20., max = 40., C = 0.2;
+   double w = 3., width = 2., length = 10., min = 20., max = 40., c = 0.2, C = 0;
    string emin = "20", emax = "40", file, outfilename = "hist_", dist_file;
    bool add = false;
    TH1D* energy = 0;
@@ -136,6 +139,9 @@ int main(int argc,char* argv[])
 	    outfilename += optarg;
 	    break;
          case 'c':
+	    c = atof(optarg);
+	    break;
+         case 'C':
 	    C = atof(optarg);
 	    break;
          case 'N':
@@ -162,9 +168,9 @@ int main(int argc,char* argv[])
 
    if (dist_file.empty()) {
       cerr << "\n\
-You have to specify a file with distributions of energy, theta and\n\
-phi that will be used to generate the  background(See option -d in the\n\
-help menu). You can use the program swat_gen to generate it.\n" 
+  You have to specify a file with distributions of energy, theta and\n\
+  phi that will be used to generate the  background(See option -d in the\n\
+  help menu). You can use the program swat_gen to generate it.\n" 
       << endl;
       exit(EXIT_FAILURE);
    }
@@ -250,7 +256,7 @@ help menu). You can use the program swat_gen to generate it.\n"
 	 gDirectory->DeleteAll();
 	 if (npoints >= m) hist.Fill(corr);
 
-	 if (corr >= C && npoints >= m) ++tmp;
+	 if ((corr >= c) && (npoints >= m) && (stat.biggest > C)) ++tmp;
 	 cout << sky << ", " << flush;
       }
    } else {
@@ -291,7 +297,7 @@ help menu). You can use the program swat_gen to generate it.\n"
 	 gDirectory->DeleteAll();
 	 if (npoints >= m) hist.Fill(corr);
 
-	 if (corr >= C && npoints >= m) ++tmp;
+	 if (corr >= c && npoints >= m && (stat.biggest > C)) ++tmp;
 	 cout << sky << ", " << flush;
       }
    }
@@ -308,7 +314,7 @@ help menu). You can use the program swat_gen to generate it.\n"
    kurtosis.Write();
    fff.Close();
 
-   cout << "P = " << (tmp*100./s) << "%" << endl;
+   cout << "P = " << (tmp * 100. / s) << "%" << endl;
    return 0;
 }
 

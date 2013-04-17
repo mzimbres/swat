@@ -136,6 +136,13 @@ int main(int argc,char* argv[])
         << "   - Kurtosis: " << stat.kurtosis << "\n"
 	<< endl;
 
+   cout << "\nMagnitude for the first sources:\n\n";
+   cout << "C = ";
+   for (int i = 0; i < stat.mags.size() - 1; ++i)
+     std::cout << stat.mags[i] << ", ";
+
+   std::cout << stat.mags[stat.mags.size() - 1] << endl;
+
    TAnalysis analysis(&sourcesfile,&addfile);
    analysis.SetLength(length/2);
    analysis.SetWidth(width/2);

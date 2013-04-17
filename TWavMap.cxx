@@ -165,7 +165,10 @@ WavStat TWavMap::FindSources(int nsources,double r) const
       ++head;
       ++i;
    }
-   return WavStat(ind.begin()->GetVal(),mean,variance,skewness,kurtosis);
+   WavStat stat(ind.begin()->GetVal(),mean,variance,skewness,kurtosis);
+   for (int i = 0; (i < nsources) && (i < ind.size()); ++i)
+     stat.mags.push_back(std::abs(ind[i].GetVal()));
+   return stat;
 }
 
 //_________________________________________________________
