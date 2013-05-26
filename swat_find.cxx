@@ -137,7 +137,7 @@ int main(int argc,char* argv[])
 	<< endl;
 
    cout << "\nMagnitude for the first sources:\n\n";
-   cout << "C = ";
+   cout << "W = ";
    for (int i = 0; i < stat.mags.size() - 1; ++i)
      std::cout << stat.mags[i] << ", ";
 
