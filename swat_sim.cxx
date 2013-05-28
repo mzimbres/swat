@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <cmath>
 #include <stdlib.h>
@@ -254,10 +255,15 @@ int main(int argc,char* argv[])
 	 double npoints = g->GetN();
 	 hist2.Fill(npoints);
 	 gDirectory->DeleteAll();
-	 if (npoints >= m) hist.Fill(corr);
+	 if (npoints >= m) 
+	   hist.Fill(corr);
 
-	 if ((corr >= c) && (npoints >= m) && (stat.biggest > C)) ++tmp;
-	 cout << sky << ", " << flush;
+	 if ((corr >= c) && (npoints >= m) && (stat.biggest > C)) 
+	   ++tmp;
+
+         std::cout << "\r" << std::setw(8) << sky << " / ";
+         std::cout << std::setw(8) << tmp;
+         std::cout << " " << std::setfill('-') << std::setw(8);
       }
    } else {
       for (int sky = 0; sky < s; ++sky) {
@@ -295,10 +301,14 @@ int main(int argc,char* argv[])
 	 double npoints = g->GetN();
 	 hist2.Fill(npoints);
 	 gDirectory->DeleteAll();
-	 if (npoints >= m) hist.Fill(corr);
+	 if (npoints >= m) 
+	   hist.Fill(corr);
 
-	 if (corr >= c && npoints >= m && (stat.biggest > C)) ++tmp;
-	 cout << sky << ", " << flush;
+	 if (corr >= c && npoints >= m && (stat.biggest > C)) 
+	   ++tmp;
+         std::cout << "\r" << std::setw(8) << sky << " / ";
+         std::cout << std::setw(8) << tmp;
+         std::cout << " " << std::setfill('-') << std::setw(8);
       }
    }
    cout << endl;
