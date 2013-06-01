@@ -122,7 +122,7 @@ int main(int argc,char* argv[])
       throw 1;
    }
 
-   const TAlm* alm2 = TAuxFunc::alm2wav2alm(*alm, N, 0, j);
+   const TAlm* alm2 = TAuxFunc::alm2wav2alm(*alm, N, j, 8);
    const TVMap* sky = TAuxFunc::SHT(*alm2, false);
    delete alm2;
 
