@@ -202,7 +202,7 @@ TH2D* TSkyMap::CreateHist(Int_t) const
 {
    // Creates Histogram
 
-   TH2D* h = new TH2D("","histogram",fL,0,2*Pi(),fL,0,Pi());
+   TH2D* h = new TH2D("Coverage","histogram",fL,0,2*Pi(),fL,TMath::Pi()/(4*fL),TMath::Pi() + 1./(4*fL));
 
    Double_t xcon = 2*Pi()/fNPhi;
    Double_t ycon = 2*Pi()/fNTheta;
@@ -210,8 +210,7 @@ TH2D* TSkyMap::CreateHist(Int_t) const
    for (Int_t u = 0; u < fNPhi; ++u)
       for (Int_t m = 0; m < fNPhi; ++m){
 	 Int_t bin = h->FindBin(xcon*m,ycon*u);
-	 if (h->At(bin) == 0.)
-	    h->SetBinContent(bin,fArray[Coordinate(m,u,0)]);
+	 h->SetBinContent(bin,fArray[Coordinate(m,u,0)]);
       }
 
    h->GetXaxis()->SetLimits(-180,180);

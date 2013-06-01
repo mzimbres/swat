@@ -165,18 +165,20 @@ bin_PROGRAMS      = swat swat_sim \
 		    swat_kernel \
 		    swat_wav_dump \
 		    swat_sph_dump \
+		    swat_coverage \
 		    swat_sf_dump
 
-swat_SOURCES          = $(top_srcdir)/swat.cxx
-swat_sim_SOURCES      = $(top_srcdir)/swat_sim.cxx
-swat_find_SOURCES     = $(top_srcdir)/swat_find.cxx
-swat_alm_SOURCES      = $(top_srcdir)/swat_alm.cxx
-swat_gen_SOURCES      = $(top_srcdir)/swat_gen.cxx
-swat_prob_SOURCES     = $(top_srcdir)/swat_prob.cxx
-swat_kernel_SOURCES   = $(top_srcdir)/swat_kernel.cxx
-swat_wav_dump_SOURCES = $(top_srcdir)/swat_wav_dump.cxx
-swat_sph_dump_SOURCES = $(top_srcdir)/swat_sph_dump.cxx
-swat_sf_dump_SOURCES  = $(top_srcdir)/swat_sf_dump.cxx
+swat_SOURCES           = $(top_srcdir)/swat.cxx
+swat_sim_SOURCES       = $(top_srcdir)/swat_sim.cxx
+swat_find_SOURCES      = $(top_srcdir)/swat_find.cxx
+swat_alm_SOURCES       = $(top_srcdir)/swat_alm.cxx
+swat_gen_SOURCES       = $(top_srcdir)/swat_gen.cxx
+swat_prob_SOURCES      = $(top_srcdir)/swat_prob.cxx
+swat_kernel_SOURCES    = $(top_srcdir)/swat_kernel.cxx
+swat_wav_dump_SOURCES  = $(top_srcdir)/swat_wav_dump.cxx
+swat_sph_dump_SOURCES  = $(top_srcdir)/swat_sph_dump.cxx
+swat_sf_dump_SOURCES   = $(top_srcdir)/swat_sf_dump.cxx
+swat_coverage_SOURCES  = $(top_srcdir)/swat_coverage.cxx
 
 #________________________________________________________________
 
