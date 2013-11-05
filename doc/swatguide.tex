@@ -62,7 +62,7 @@ urlcolor=cyan!50!black           % color of external links
 
 %\colorlet{swat}{yellow!50!black!50}
 \colorlet{swat}{brown!50!black!50} % box color
-\colorlet{textcolor}{brown!20!black} % text in box color
+\colorlet{textcolor}{brown!70!black} % text in box color
 \colorlet{swatred}{red!50!black}
 
 \tikzstyle{one}=[shade,top color=swat,fill=swat,rounded corners, textcolor,thick]
@@ -194,17 +194,19 @@ rounded corners,textcolor,thick]
 \section{Introduction} \label{ch::Introduction}
 
 \href{http://www.ifi.unicamp.br/~mzimbres}{SWAT} is a package for analysis of
-functions that live on the sphere, which I have mostly used to analyze data 
-collected by the Pierre Auger experiment and CRPropa simulations. I have written it from
-scratch as part of my my Ph.D. It evolved from a simple ROOT macro and
-got bigger and bigger, since the code may be useful to other people I decided
-to organize, document it and make it public. The code is an C++ implementation
-of the spherical wavelet transform as presented in \cite{wiaux}. Some
-attractive features of SWAT are:
+functions that are defined on the sphere. It has been used extensively to
+analyze data collected by the Pierre Auger experiment, CRPropa simulations and
+other simulation data. The program has been written from scratch as part of my
+my Ph.D, where it evolved from a simple ROOT macro and got bigger and bigger,
+since the code may be useful to other people I decided to organize, document it
+and make it public. The project main feature is its C++ implementation of the
+spherical wavelet transform as presented in \cite{wiaux}.  Some attractive
+features of SWAT are:
 
 \begin{list}{\labelitemi}{}
 \item Harmonic and Wavelet transform on the sphere.
-\item Interface to Healpix code, which is included in the build system.
+\item Interface to Healpix code, which is included in the build system (the user
+does not have to install it).
 \item Easy selection of events hitting sky window. 
 \item Calculation of deflection vs. $1/E$ graphs.
 \item ROOT and FFTW are the only prerequisites.
@@ -217,10 +219,11 @@ I decided to include it here, instead of just link against Healpix libraries.
 \item I usually need shared libraries to call Healpix code in a ROOT session,
 which are not built by Healpix build system since most of its code are C++
 templates.
+\item Healpix installation used to be messy.
 \end{enumerate}
 
-Most of the theoretical details of analysis of functions defined on $S^2$ and $S^3$ 
-were taken from \cite{wiaux} and references therein. 
+Most of the theoretical details of analysis of functions defined on $S^2$ and
+$S^3$ were taken from \cite{wiaux} and references therein. 
 
 The code has been tested in \textsc{Linux} and \textsc{MacBook}, but the code
 is portable enough to be built on other platforms.  In the following we
@@ -251,55 +254,59 @@ the libraries on {\color{brown}"/usr/local"}
    \begin{lstlisting}
    $ ./configure CXXFLAGS="-O3 -ffast-math"
    $ make
-   $ make install
+   $ sudo make install
    \end{lstlisting}
 }
-The flags passed to the configure script are optional, but greatly improve performance.
-To use some of the features of the package, I am assuming you are able to build
-shared libraries on your platform. To easy the task of loading swat libraries
-the macro load.C, will be installed on
-{\color{brown}"prefix/share/swat"}. To load the libraries in ROOT's C++
-interpreter you just have to execute it in your ROOT session, or just add it to
+The flags passed to the configure script are optional, but greatly improve
+performance.  To use some of the features of the package, I am assuming you are
+able to build shared libraries on your platform. To easy the task of loading
+swat libraries the macro load.C, will be installed on
+{\color{brown}"/usr/local/share/swat"}. To load the libraries in ROOT's C++
+interpreter you have to execute it in your ROOT session, or add it to
 your code {\color{brown}.rootlogon.C} macro.
 
 {\bf \color{brown}
 \begin{lstlisting}
-$ cp /usr/local/shar/swat/load.C ~/.rootlogon.C
+$ cp /usr/local/share/swat/load.C ~/.rootlogon.C
 $ root # The .so's are automatically loaded here.
 \end{lstlisting}
 }
 
-All SWAT classes are now available in the ROOT session with syntax
-highlighting. You should also be able to generate documentation in HTML format
+All SWAT classes are now available in the ROOT session with syntax highlighting
+(currently I do not use swat from inside a root session, but it may be usefull
+for others). You should also be able to generate documentation in HTML format
 with the macro {\color{brown}"prefix/share/swat/makehtml.C"}. You have to run
 this macro from the directory where you built SWAT. The documentation will be
-built in the directory {\color{brown}htmldoc}.
+built in the directory {\color{brown}htmldoc}, this is a nice way to get aquainted with 
+the code (this is meant for those wanting to develop).
 
 \subsection{Getting ready} \label{ch::ready}
-To use Herald data, you will have to convert the ascii file to a {TTree} and
+
+To use Herald file (a file distributed by the Pierre Auger collaboration containing collected data),
+you will have to convert the ascii file to a {\bf TTree} and
 save it in a .root file, for that you should use the macro
 {\color{brown}prefix/share/swat/convert\_herald.C} where prefix is usually
 {\color{brown}/usr/local}.  Copy this macro to the same directory where you have the
 herald data file. The macro will read a file with name
 {\color{brown}"herald.dat"}, so you may have to rename your file or edit the macro. 
-For CRPropa simulations you can just configure CRPropa to output a .root file
-instead of a text file.  The code uses the title of the TTree to differentiate
+For CRPropa simulations you can configure CRPropa to output a .root file
+instead of a text file.  The code uses the title of the {\bf TTree} to differentiate
 between a Herald and CRPropa file. The title of the TTree for CRPropa must be
-\textit{\color{brown}"CRPropa 3D events"}, as far as I know, this is the default.
+``{\color{textcolor}CRPropa 3D events}", as far as I know, this is the default.
 
 \subsection{High quality graphs with pgfplots} \label{ch::pgfplots}
 If you have pgfplots installed on your machine, you can use the \LaTeX\,\,
-files which are available in the directory pgfplots to generate high quality
-graphs using some output of swat analysis. You may have noted that after
-running {\color{brown}swatfind} you get many text files in your working
-directory. They are input files for the \LaTeX\,\, files. In the following
-subsections we show how to use the material.
+files which are available in the directory {\color{textcolor}pgfplots} in swat
+root dyrectory, to generate high quality graphs using some output of swat
+analysis.  You may have noted that after running {\color{textcolor}swatfind}
+you get many text files in your working directory. They are input files for the
+\LaTeX\,\, files. In the following subsections we show how to use the material.
 \subsubsection{Skymaps}
-When you run the program swatfind or swatsim, they produce a file named
-skymap.dat. This file contains the coordinates and energy of the events that
+When you run the program {\color{textcolor}swatfind} or {\color{textcolor}swatsim}, they produce a file named
+{\it skymap.dat}. This file contains the coordinates and energy of the events that
 passed the cut. To generate a graph for an isotropic sky for example, one can
 use:
-{\bf \color{brown}
+{\bf \color{textcolor}
 \begin{lstlisting}
 $ tar -xzf skymap.tar.gz
 $ cd skymap
@@ -334,20 +341,20 @@ originates from a CRPropa simulation. \\
 \includegraphics[scale=0.8]{corr_graph.pdf} 
 \includegraphics[scale=0.8]{corr_graph-sim.pdf} \hfill
 
-\subsubsection{Number of events versus orientation}
-
-The number of events hitting stripes centered at the same point and
-whose orientation varies from 0 - 180 degrees is also a useful observable
-when interpreting the results. Some of these graphs can be seem below:
-
-\includegraphics[scale=0.8]{multiplicity.pdf}  
-\includegraphics[scale=0.8]{multiplicity-sim.pdf} 
-
-To generate them, use the macro {\color{brown}multiplicity.tex} in the pgfplots directory
-and the file {\color{brown}multiplicity0.dat} generated by swatfind of swatsim.
-One such file will be generated for each source found.
-Similar to what we have done for the energy deflection graphs.
-
+%\subsubsection{Number of events versus orientation}
+%
+%The number of events hitting stripes centered at the same point and
+%whose orientation varies from 0 - 180 degrees is also a useful observable
+%when interpreting the results. Some of these graphs can be seem below:
+%
+%\includegraphics[scale=0.8]{multiplicity.pdf}  
+%\includegraphics[scale=0.8]{multiplicity-sim.pdf} 
+%
+%To generate them, use the macro {\color{brown}multiplicity.tex} in the pgfplots directory
+%and the file {\color{brown}multiplicity0.dat} generated by swatfind of swatsim.
+%One such file will be generated for each source found.
+%Similar to what we have done for the energy deflection graphs.
+%
 
 \subsubsection{Wigner-d functions}
 
@@ -415,10 +422,13 @@ w_B(k) = \frac{2}{B}\sin\left(\frac{\pi(2k + 1)}{4B}\right)\sum_{j = 0}^{B - 1}
 \end{equation}
 where $0\le k < 2B$. 
 
-\section{Swat command line programs}
-In the following sub-sections we will describe the three main programs which 
+\section{Installed programms}
+
+In the following sub-sections we will describe the main programs which 
 SWAT installs and which provide an easy interface to the wavelet analysis.
+
 \subsection{swat\_find}
+
 {\it swat\_find} is the main program. It can be used to find sources in Pierre
 Auger data and CRPropa simulations. Beyond that, it can be also used to test
 whether the events belong to a multiplet, calculating energy-deflections graphs
@@ -486,19 +496,42 @@ wav(137.812,-27.4219,159.638) = -0.035312
 root [3] 
 \end{lstlisting}
 }
-\subsection{swat\_gen}
-Generates distribution of $E$ $\theta$ and $\phi$ coordinates that
-will be used by swat\_sim program. Two kinds of distribution are
-supported, isotropic or Auger distribution if herald data is provided.
-\begin{figure}[ht]
-   \centering
-      \includegraphics[scale=0.25]{energy.jpg}
-      \includegraphics[scale=0.25]{phi_theta.jpg}
-   \caption{Energy distribution on the left. On the right
-   angular distribution. Both for Auger experiment.}
-   \label{healpix}
-\end{figure}
 
+Help description
+{\bf \color{textcolor}
+\begin{lstlisting}
+
+Searches for multiplets in herald data or CRPropa
+simulations. Calculates correlation of events hitting
+stripe on the tangent plane and dispalys on the screen.
+The results are saved to sources.root file. Two input
+file formats are supported, both are TTrees saved in a
+.root file. The TTrees can be either the output of
+CRPropa or a Herald file converted to TTree (see macro
+macros/convert_herald.C in swat source tree).
+
+Usage: swat_find [ -j scale] [-N number] [-i emin] 
+       [-e emax] [-w width] [-l length] [-f file.root] 
+       [-n nsources] [-t wav_threshold]
+
+Options:
+
+-h:     This menu.
+-j:     Wavelet scale. It is a number in the range 
+        0 <= j <= 8, defaults to 1.
+-N:     Band limit of wavelet, in the range 0 < N <= 128,
+        defaults to 1.
+-i:     Minimum energy of events, defaults to 20 EeV.
+-e:     Maximum energy of events, defaults to 40 EeV.
+-w:     Width of tangent plane, defaults to 2 degrees.
+-l:     Length of tangent plane, defaults to 10 degrees.
+-f:     Root file containing Tree with data, defaults to
+        chain.root.
+-n:     Number of sources to look for. Default to 15
+-t:     Wavelet threshold value.
+\end{lstlisting}
+}
+\newpage
 \subsection{swat\_sim}
 {\it swat\_sim} uses Monte Carlo simulations to calculate the probability of a
 multiplet happen by chance on a isotropic sky. The distribution of $E$, $\theta$
@@ -524,6 +557,103 @@ of events is larger than the value passed with -m.
 \item A histogram of the largest wavelet coefficients found.
 \end{enumerate}
 
+Help message
+
+{\bf \color{textcolor}
+\begin{lstlisting}
+
+Calculates the probability of a multiplet with minimum
+correlation c > c_0 (see -c option), minimum number of
+events m > m_0 (see -m option) and where the magnitude of
+the wavelet coefficint e C > C_0 (see -C option), happen
+by chance using wavelet analysis.  First an isotropic sky
+is simulated (the coverage and energy distribution must
+be provided) and the wavelet representation of the sky is
+calculated, the euler angles of the largest coefficient
+is used to calculate the equations of the tangent plane
+at the position found (the euler angles). The correlation
+c is calculated including all events that hit the tangent
+plane, whose size is specified with the options -l and
+-w. The probablility will be the number of multiplets
+with c > c _0, C > C_0 and m > m_0, divided by the number
+of skies simulated. Additionaly, seven other quantities
+are calculated:
+   
+   1 - The histogram of the number of events that hit the
+       tangent plane.
+   2 - The histogram of the c's found for which the
+       number of events is greater than m_0 and C > C_0
+       (passed in the command line).
+   3 - The histogram of the magnitude of wavelet
+       coefficients C_0.
+   4 - The histogram of the mean of wavelet coefficients.
+   5 - The histogram of the variance of wavelet
+       coefficients.
+   6 - The histogram of the skewness of wavelet
+       coefficients.
+   7 - The histogram of the kurtosis of wavelet
+       coefficients.
+   
+If -f option is used, a TTree in the file will be read
+and events will be added to the analysis, this is useful
+to include a simulated multiplet on the analysis, hiding
+it in the isotropic backgroung the test the algorithm.
+
+It is also mandatory to specify:
+
+   - Energy distribution.
+   - The theta distribution.
+   - The phi distribution.
+
+This is the distribution the background events have to
+follow. These distributions are read from a root file.
+Use swat_gen and swat_coverage to generate them.
+
+Usage: swat_sim [ -j scale] [-N number] [-n nevents] 
+       [-s skies] [-i emin] [-e emax] [-c corr] [-m mevents]
+       [-w width] [-l length] [-f file.root] [-C min_wav]
+       [-d energy] [-a coverage]
+
+Options:
+
+-h:     This menu.
+-j:     Wavelet scale, a number in the range 0 <= j <= 8,
+        defaults to 1.
+-N:     Band limit of wavelet, in the range 0 < N <= 128,
+        defaults to 1.
+-n:     Number of events in the simulated sky, defaults
+        to n = 1000
+-s:     Number of skies to simulate, defaults to 100.
+-i:     Minimum energy of events, defaults to 20 EeV.
+-e:     Maximum energy of events, defaults to 40 EeV.
+-c:     Minimum correlation, defaults to 0.2.
+-C:     Minimum Magniftude of wavelet coefficient,
+        defaults to 0.0.
+-m:     Minimum number of events hitting tangent plane.
+-w:     Width of tangent plane, defaults to 2 degrees.
+-l:     Length of tangent plane, defaults to 10 degrees.
+-f:     Add events in TTree stored in file to the
+        simulated sky.
+-d:     Histogram with energy distributions.
+-a:     Histogram with theta and phi distributions.
+
+\end{lstlisting}
+}
+
+\subsection{swat\_gen}
+Generates distribution of $E$ $\theta$ and $\phi$ coordinates that
+will be used by swat\_sim program. Two kinds of distribution are
+supported, isotropic or Auger distribution if herald data is provided.
+\begin{figure}[ht]
+   \centering
+      \includegraphics[scale=0.25]{energy.jpg}
+      \includegraphics[scale=0.25]{phi_theta.jpg}
+   \caption{Energy distribution on the left. On the right
+   angular distribution. Both for Auger experiment.}
+   \label{healpix}
+\end{figure}
+
+\subsection{swat\_sim}
 \subsection{swat}
 swat: This program is only used to benchmark and test the algorithm. It can test
 both the spherical harmonic transform and the spherical wavelet transform.
@@ -534,40 +664,8 @@ $ time swat -J 8 -N 3 # Will test wavelet transform.
 \end{lstlisting}
 }
 
-\appendix
-\section{swat\_find}
-{\bf \color{brown}
-   \begin{lstlisting}
-   Searches for multiplets in herald data or CRPropa
-   simulations. Calculates correlation of events hitting
-   stripe on the tangent plane and dispalys on the screen.
-   The results are saved to sources.root file. Two input
-   file formats are supported, both are TTrees saved in a
-   .root file. The TTrees can be either the output of
-   CRPropa or a Herald file converted to TTree (see macro
-   macros/convert_herald.C in swat source tree).
-   
-   Usage: swat_find [ -j scale] [-N number] [-i emin] [-e
-   emax] [-w width] [-l length] [-f file.root] [-n nsources]
-   
-   Options:
-   
-   -h:     This menu.
-   -j:     Wavelet scale. It is a number in the range 0 <= j
-           <= 8, defaults to 1.
-   -N:     Band limit of wavelet, in the range 0 < N <= 128,
-           defaults to 1.
-   -i:     Minimum energy of events, defaults to 20 EeV.
-   -e:     Maximum energy of events, defaults to 40 EeV.
-   -w:     Width of tangent plane, defaults to 2 degrees.
-   -l:     Length of tangent plane, defaults to 10 degrees.
-   -f:     Root file containing Tree with data, defaults to
-           chain.root.
-   -n:     Number of sources to look for. Default to 15
-   \end{lstlisting}
-}
-\section{swat\_gen}
-{\bf \color{brown}
+Help message
+{\bf \color{textcolor}
    \begin{lstlisting}
    Calculates the histogram of energy(field thirty nine),
    theta(field seven) and phi (field six) in Herald data and
@@ -586,71 +684,9 @@ $ time swat -J 8 -N 3 # Will test wavelet transform.
            (TH1::Smooth operation).
    \end{lstlisting}
 }
-\newpage
-\section{swat\_sim}
-{\bf \color{brown}
-   \begin{lstlisting}
-   Calculates the probability of a multiplet with minimum
-   correlation C (see -c option) and minimum number of
-   events m (see -m option) happen by chance using wavelet
-   analysis. First an isotropic sky is simulated and the
-   wavelet representation of the sky is calculated, the
-   euler angles of the largest coefficient is used to
-   calculate the equations of the tangent plane at the
-   position found (the euler angles). The correlation C is
-   calculated including all events that hit the tangent
-   plane, whose size is specified with the options -l and
-   -w. The probablility will be the number of multiplets
-   with correlation > C and number of events > m, divided by
-   the number of skies simulated. Additionaly, three other
-   quantities are calculated, the histogram of the number of
-   events that hit the tangent plane, the histogram of the
-   C's found for which the number of events is greater than
-   m (passed in the command line) and the histogram of the
-   magnitude of wavelet coefficients.  If -f option is used,
-   a TTree in the file will be read and events will be added
-   to the analysis, this is useful to include a simulated
-   multiplet on the analysis, hiding it in the isotropic
-   backgroung the test the algorithm.
-   
-   It is also mandatory to specify:
-   
-      - Energy distribution.
-      - The theta distribution.
-      - The phi distribution.
-   
-   This is the distribution the background events have to
-   follow. These distributions are read from a root file.
-   Use swat_gen to generate them.
 
-   Usage:  swat_sim [ -j scale] [-N number] [-n nevents] [-s
-           skies] [-i emin] [-e emax] [-c corr] [-m mevents] [-w
-           width] [-l length] [-f file.root]
-
-   Options:
-   -h:     This menu.
-   -j:     Wavelet scale, a number in the range 0 <= j <= 8,
-           defaults to 1.
-   -N:     Band limit of wavelet, in the range 0 < N <= 128,
-           defaults to 1.
-   -n:     Number of events in the simulated sky, defaults
-           to n = 1000
-   -s:     Number of skies to simulate, defaults to 100.
-   -i:     Minimum energy of events, defaults to 20 EeV.
-   -e:     Maximum energy of events, defaults to 40 EeV.
-   -c:     Minimum correlation, defaults to 0.2.
-   -m:     Minimum number of events hitting tangent plane.
-   -w:     Width of tangent plane, defaults to 2 degrees.
-   -l:     Length of tangent plane, defaults to 10 degrees.
-   -f:     Add events in TTree stored in file to the
-           simulated sky.
-   -d:     Histogram with energy, theta and phi
-           distributions.
-   \end{lstlisting}
-}
-
-\section{swat\_prob}
-{\bf \color{brown}
+\subsection{swat\_prob}
+{\bf \color{textcolor}
    \begin{lstlisting}
    Reads a file output by swat_sim and calculates
    probabilities.  Use the macros cprob.tex and
@@ -677,8 +713,8 @@ $ time swat -J 8 -N 3 # Will test wavelet transform.
    \end{lstlisting}
 }
 
-\section{swat}
-{\bf \color{brown}
+\subsection{swat}
+{\bf \color{textcolor}
    \begin{lstlisting}
    Tests the algorithm performing forward and backward
    transform.  Both spherical harmonic transform (if option
