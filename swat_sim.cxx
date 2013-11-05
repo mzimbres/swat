@@ -31,15 +31,16 @@ void print_usage(const char* prog)
    Calculates the probability of a multiplet with minimum correlation c > c_0\n\
    (see -c option), minimum number of events m > m_0 (see -m option) and where\n\
    the magnitude of the wavelet coefficint e C > C_0 (see -C option), happen by\n\
-   chance using wavelet analysis.  First an isotropic sky is simulated and the\n\
+   chance using wavelet analysis.  First an isotropic sky is simulated\n\
+   (the coverage and energy distribution must be provided) and the\n\
    wavelet representation of the sky is calculated, the euler angles of the\n\
    largest coefficient is used to calculate the equations of the tangent plane\n\
    at the position found (the euler angles). The correlation c is calculated\n\
    including all events that hit the tangent plane, whose size is specified\n\
    with the options -l and -w. The probablility will be the number of\n\
-   multiplets with c c _0, C > C_0 and number of events m > m_0, divided by the\n\
+   multiplets with c > c _0, C > C_0 and m > m_0, divided by the\n\
    number of skies simulated. Additionaly, seven other quantities are\n\
-   additionally calculated:\n\
+   calculated:\n\
       \n\
       1 - The histogram of the number of events that hit the tangent plane.\n\
       2 - The histogram of the c's found for which the number of events is\n\
@@ -61,11 +62,12 @@ void print_usage(const char* prog)
       - The phi distribution.\n\
    \n\
    This is the distribution the background events have to follow. These\n\
-   distributions are read from a root file. Use swat_gen to generate them.\n\
+   distributions are read from a root file. Use swat_gen and swat_coverage\n\
+   to generate them.\n\
    \n\n\
    Usage: " << prog << " [ -j scale] [-N number] [-n nevents] [-s skies]\n\
            [-i emin] [-e emax] [-c corr] [-m mevents] [-w width] [-l length]\n\
-	   [-f file.root] [-C min_wav]\n\n\
+	   [-f file.root] [-C min_wav] [-d energy] [-a coverage]\n\n\
    Options:\n\n\
    -h:     This menu.\n\
    -j:     Wavelet scale, a number in the range 0 <= j <= 8, defaults to 1.\n\
@@ -80,7 +82,8 @@ void print_usage(const char* prog)
    -w:     Width of tangent plane, defaults to 2 degrees.\n\
    -l:     Length of tangent plane, defaults to 10 degrees.\n\
    -f:     Add events in TTree stored in file to the simulated sky.\n\
-   -d:     Histogram with energy, theta and phi distributions.\n\
+   -d:     Histogram with energy distributions.\n\
+   -a:     Histogram with theta and phi distributions.\n\
    " << endl;
 }
 
@@ -90,14 +93,14 @@ int main(int argc,char* argv[])
 
    int N = 1, j = 1, n = 1000, m = 4, s = 100;
    double w = 3., width = 2., length = 10., min = 20., max = 40., c = 0.2, C = 0;
-   string emin = "20", emax = "40", file, outfilename = "hist_", dist_file;
+   string emin = "20", emax = "40", file, outfilename = "hist_", dist_file, angle_dist;
    bool add = false;
    TH1D* energy = 0;
    TH2D* phi_theta = 0;
 
    char opt;
 
-   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:C:s:f:d:")) != -1) {
+   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:C:s:f:d:a:")) != -1) {
       switch (opt) {
          case 'j': 
 	    j = atoi(optarg);
@@ -161,6 +164,9 @@ int main(int argc,char* argv[])
          case 'd':
 	    dist_file = optarg;
 	    break;
+         case 'a':
+	    angle_dist = optarg;
+	    break;
          default:
 	    print_usage(argv[0]);
 	    exit(EXIT_SUCCESS);
@@ -169,28 +175,44 @@ int main(int argc,char* argv[])
 
    if (dist_file.empty()) {
       cerr << "\n\
-  You have to specify a file with distributions of energy, theta and\n\
-  phi that will be used to generate the  background(See option -d in the\n\
+  You have to specify a file with the energy distribution\n\
+  that will be used to generate the  background (See option -d in the\n\
   help menu). You can use the program swat_gen to generate it.\n" 
       << endl;
       exit(EXIT_FAILURE);
    }
 
-   TFile distributions(dist_file.c_str());
-   if (distributions.IsZombie()) {
+   if (angle_dist.empty()) {
+      cerr << "\n\
+  You have to specify a file with distributions of theta and phi\n\
+  that will be used to generate the  background (See option -a in the\n\
+  help menu). You can use the program swat_coverage to generate it.\n" 
+      << endl;
+      exit(EXIT_FAILURE);
+   }
+
+
+   TFile energy_dist(dist_file.c_str());
+   if (energy_dist.IsZombie()) {
       cerr << "TFile: Invalid distribution file." << endl;
       exit(EXIT_FAILURE);
    }
 
-   energy = (TH1D*)distributions.Get("energy");
+   TFile coverage_dist(angle_dist.c_str());
+   if (coverage_dist.IsZombie()) {
+      cerr << "TFile: Invalid angle distribution file." << endl;
+      exit(EXIT_FAILURE);
+   }
+
+   energy = (TH1D*)energy_dist.Get("energy");
    if (!energy) {
       cerr << "Unable to read energy histogram from file." << endl;
       exit(EXIT_FAILURE);
    }
 
-   phi_theta = (TH2D*)distributions.Get("phi_theta");
+   phi_theta = (TH2D*)coverage_dist.Get("phi_theta");
    if (!phi_theta) {
-      cerr << "Unable to read theta histogram from file." << endl;
+      cerr << "Unable to read coverage histogram from file." << endl;
       exit(EXIT_FAILURE);
    }
 

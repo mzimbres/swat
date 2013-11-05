@@ -50,7 +50,7 @@ int main(int argc,char* argv[])
    // Needed this to inform root we need dictionaries for std::complex.
    gROOT->ProcessLine("#include <complex>");
 
-   int N = 1, j = 1;
+   int N = 1, j = 4;
    double w = 3., min = 20., max = 40.;
    string emin = "20", emax = "40", file = "chain.root", sources = "coverage";
 
