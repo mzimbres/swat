@@ -1,26 +1,26 @@
 
 ACLOCAL_AMFLAGS = -I m4
 
-AM_COLOR_TESTS  = always
+AM_COLOR_TESTS = always
 
-AM_LDFLAGS  = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} -lHistPainter $(FFTW_LIBS)
+AM_LDFLAGS = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} -lHistPainter $(FFTW_LIBS)
 
 # Add the line below to AM_LDFLAGS for Boost programm options.
 # $(BOOST_LDFLAGS) $(BOOST_PROGRAM_OPTIONS_LIB)
 
 lib_LTLIBRARIES =
-CLEANFILES      =
-EXTRA_DIST      =
+CLEANFILES =
+EXTRA_DIST =
 
 #________________________________________________________________
 
-FFTPACKH =  $(top_srcdir)/bluestein.h   \
-            $(top_srcdir)/ls_fft.h      \
-	    $(top_srcdir)/fftpack.h
+FFTPACKH = $(top_srcdir)/bluestein.h \
+           $(top_srcdir)/ls_fft.h \
+	   $(top_srcdir)/fftpack.h
 
-FFTPACKS =  $(top_srcdir)/bluestein.c   \
-            $(top_srcdir)/ls_fft.c      \
-	    $(top_srcdir)/fftpack.c
+FFTPACKS = $(top_srcdir)/bluestein.c \
+           $(top_srcdir)/ls_fft.c \
+	   $(top_srcdir)/fftpack.c
 
 lib_LTLIBRARIES += libfftpack.la
 
@@ -51,7 +51,7 @@ HEALPIXH = $(top_srcdir)/alm_healpix_tools.h  \
 EXTRA_DIST += $(HEALPIXH)
 
 HEALPIXS = $(top_srcdir)/alm_healpix_tools.cc \
-           $(top_srcdir)/alm_map_tools.cc     \
+           $(top_srcdir)/alm_map_tools.cc \
            $(top_srcdir)/healpix_base.cc
 
 lib_LTLIBRARIES += libhealpix.la
@@ -136,15 +136,15 @@ dictionary.cxx: $(SWATDH)
 
 lib_LTLIBRARIES += libswat.la
 
-libswat_la_SOURCES        = $(SWATS)
+libswat_la_SOURCES = $(SWATS)
 
 nodist_libswat_la_SOURCES = dictionary.cxx
 
-libswat_la_CPPFLAGS      = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} \
-                           -I$(SWATDIRI) -I$(HEALPIXDIRI) $(FFTW_CFLAGS)
+libswat_la_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} \
+                      -I$(SWATDIRI) -I$(HEALPIXDIRI) $(FFTW_CFLAGS)
 
-libswat_la_LDFLAGS       = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} \
-                           -lHistPainter -lhealpix -lfftpack $(FFTW_LIBS)
+libswat_la_LDFLAGS = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} \
+                     -lHistPainter -lhealpix -lfftpack $(FFTW_LIBS)
 
 CLEANFILES += dictionary.cxx dictionary.h
 
@@ -159,14 +159,14 @@ AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(SWATDIRI)
 
 #________________________________________________________________
 
-bin_PROGRAMS      = swat swat_sim \
-                    swat_find swat_alm \
-		    swat_gen swat_prob \
-		    swat_kernel \
-		    swat_wav_dump \
-		    swat_sph_dump \
-		    swat_coverage \
-		    swat_sf_dump
+bin_PROGRAMS = swat swat_sim \
+               swat_find swat_alm \
+	       swat_gen swat_prob \
+	       swat_kernel \
+	       swat_wav_dump \
+	       swat_sph_dump \
+	       swat_coverage \
+	       swat_sf_dump
 
 swat_SOURCES           = $(top_srcdir)/swat.cxx
 swat_sim_SOURCES       = $(top_srcdir)/swat_sim.cxx
@@ -182,11 +182,11 @@ swat_coverage_SOURCES  = $(top_srcdir)/swat_coverage.cxx
 
 #________________________________________________________________
 
-check_PROGRAMS    = alm2map2alm 
+check_PROGRAMS = alm2map2alm 
 
-alm2map2alm_SOURCES  = $(top_srcdir)/tests/alm2map2alm.cxx
+alm2map2alm_SOURCES = $(top_srcdir)/tests/alm2map2alm.cxx
 
-TESTS =  alm2map2alm swat 
+TESTS = alm2map2alm swat 
 
 #________________________________________________________________
 
@@ -204,7 +204,7 @@ load.C: $(CONFIGDIR)/load.C.in
 pkgdata_DATA = load.C
 
 
-CLEANFILES        += load.C
+CLEANFILES += load.C
 
 #________________________________________________________________
 
