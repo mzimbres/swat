@@ -255,7 +255,7 @@ int main(int argc,char* argv[])
 	 finder.SetScale(j);
 	 finder.SetNSources(1);
 	 finder.SetSeparation(w);
-	 WavStat stat = finder.FindSources(); 
+	 WavStat stat = finder.FindSources(0); 
 	 wav_mag.Fill(std::abs(stat.biggest));
 	 mean.Fill(stat.mean);
 	 variance.Fill(stat.variance);
@@ -301,7 +301,7 @@ int main(int argc,char* argv[])
 	 finder.SetScale(j);
 	 finder.SetNSources(1);
 	 finder.SetSeparation(w);
-	 WavStat stat = finder.FindSources(); 
+	 WavStat stat = finder.FindSources(0); 
 	 wav_mag.Fill(stat.biggest);
 	 mean.Fill(stat.mean);
 	 variance.Fill(stat.variance);

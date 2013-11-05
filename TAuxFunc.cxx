@@ -273,7 +273,7 @@ void TAuxFunc::find_sources(const char* emin,
       finder.SetSeparation(w);
       TFile f("sources.root","recreate");
       std::cout << "Finding sources ...\n";
-      finder.FindSources();
+      finder.FindSources(0);
       gDirectory->ls();
       gDirectory->Write(0,TObject::kOverwrite);
       f.Close();

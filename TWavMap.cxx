@@ -109,13 +109,15 @@ void TWavMap::Filter(double factor)
 }
 
 //_____________________________________________________________________
-WavStat TWavMap::FindSources(int nsources,double r) const
+WavStat TWavMap::FindSources(int nsources, double r, double wav_threshold) const
 {
    // Adds TEulerAngles found to the current directory.
    // All coefficients that are within r(in degrees) 
    // will be considered to belong to the same source.
    // Struct WavStat returned has statistical information 
    // about the wavelet coefficients.
+   // Only wavelet coefficients greater than wav_threshold in absolute
+   // value are taken into account.
 
    double mean = std::accumulate(fArray.begin(), fArray.end(), 0)/fArray.size();
 
@@ -136,12 +138,17 @@ WavStat TWavMap::FindSources(int nsources,double r) const
    std::vector<coord> ind;
    ind.reserve(fSizeCoordinate / 4);
 
-   for (int n = 0; n < TCoeffInfo::fN; ++n)
-      for (int u = 0;u < fNTheta/2; ++u)
-	 for (int m = 0; m < fNPhi; ++m){
-	    coord tmp(m,u,n,fArray[Coordinate(m,u,n)]);
-	    ind.push_back(tmp);
+   for (int n = 0; n < TCoeffInfo::fN; ++n) {
+      for (int u = 0;u < fNTheta/2; ++u) {
+	 for (int m = 0; m < fNPhi; ++m) {
+            const double wav = fArray[Coordinate(m, u, n)];
+            if (std::abs(wav) >= wav_threshold) {
+   	       coord tmp(m, u, n, wav);
+	       ind.push_back(tmp);
+            }
 	 }
+      }
+   }
    
    std::vector<coord>::iterator head    = ind.begin();
    std::vector<coord>::iterator middle  = ind.begin();

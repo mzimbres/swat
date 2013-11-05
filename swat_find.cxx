@@ -28,7 +28,7 @@ void print_usage(const char* prog)
    the output of CRPropa or a Herald file converted to TTree (see macro\n\
    macros/convert_herald.C in swat source tree).\n\n\
    Usage: " << prog << " [ -j scale] [-N number] [-i emin] [-e emax] [-w width]\n\
-                         [-l length] [-f file.root] [-n nsources]\n\n\
+                         [-l length] [-f file.root] [-n nsources] [-t wav_threshold]\n\n\
    Options:\n\n\
    -h:     This menu.\n\
    -j:     Wavelet scale. It is a number in the range 0 <= j <= 8, defaults to 1.\n\
@@ -39,6 +39,7 @@ void print_usage(const char* prog)
    -l:     Length of tangent plane, defaults to 10 degrees.\n\
    -f:     Root file containing Tree with data, defaults to chain.root.\n\
    -n:     Number of sources to look for. Default to 15\n\
+   -t:     Wavelet threshold value.\n\
    " << endl;
 }
 
@@ -48,12 +49,12 @@ int main(int argc,char* argv[])
    gROOT->ProcessLine("#include <complex>");
 
    int N = 1, j = 1, n = 15;
-   double w = 3., width = 2., length = 10., min = 20., max = 40.;
+   double w = 3., width = 2., length = 10., min = 20., max = 40., wavt = 0;
    string emin = "20", emax = "40", file = "chain.root", sources = "sources";
 
    char opt;
 
-   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:f:")) != -1) {
+   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:f:t:")) != -1) {
       switch (opt) {
          case 'j': 
 	    j = atoi(optarg);
@@ -87,6 +88,9 @@ int main(int argc,char* argv[])
 	    length = atof(optarg);
 	    sources += "l";
 	    sources += optarg;
+	    break;
+         case 't':
+	    wavt = atof(optarg);
 	    break;
          case 'N':
 	    if ((N = atoi(optarg)) < 1) {
@@ -126,7 +130,7 @@ int main(int argc,char* argv[])
    finder.SetNSources(n);
    finder.SetSeparation(w);
    sourcesfile.cd();
-   WavStat stat = finder.FindSources();
+   WavStat stat = finder.FindSources(wavt);
 
    cout << "\nWavelet statistics:\n\n"
         << "   - Greatest: " << stat.biggest << "\n"

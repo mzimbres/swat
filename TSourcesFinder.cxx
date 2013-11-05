@@ -137,7 +137,7 @@ void TSourcesFinder::GenerateAlm()
 }
 
 //______________________________________________
-WavStat TSourcesFinder::FindSources()
+WavStat TSourcesFinder::FindSources(double wav_threshold)
 {
    // Find sources algorithm. 
    // Returns magnitute of biggest wavelet coefficient found.
@@ -150,6 +150,6 @@ WavStat TSourcesFinder::FindSources()
    }
    std::auto_ptr<TWavMap> wav(TAuxFunc::SWAT(*alm,fScale,fN));
 
-   return wav->FindSources(fNSources,fSep);
+   return wav->FindSources(fNSources, fSep, wav_threshold);
 }
 

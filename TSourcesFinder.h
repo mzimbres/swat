@@ -60,7 +60,7 @@ class TSourcesFinder {
    void         SetScale(Int_t j) { fScale = j; }
    void         SetNSources(Int_t n) { fNSources = n; }
    void         GenerateAlm();
-   WavStat      FindSources();
+   WavStat      FindSources(double wav_threshold);
 };
 
 #endif // SWAT_TSourcesFinder
