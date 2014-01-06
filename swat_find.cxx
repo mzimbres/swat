@@ -35,6 +35,8 @@ void print_usage(const char* prog)
    -N:     Band limit of wavelet, in the range 0 < N <= 128, defaults to 1.\n\
    -i:     Minimum energy of events, defaults to 20 EeV.\n\
    -e:     Maximum energy of events, defaults to 40 EeV.\n\
+   -a:     Minimum time in unix timestamp.\n\
+   -b:     Maximum time in unix timestamp.\n\
    -w:     Width of tangent plane, defaults to 2 degrees.\n\
    -l:     Length of tangent plane, defaults to 10 degrees.\n\
    -f:     Root file containing Tree with data, defaults to chain.root.\n\
@@ -50,11 +52,11 @@ int main(int argc,char* argv[])
 
    int N = 1, j = 1, n = 15;
    double w = 3., width = 2., length = 10., min = 20., max = 40., wavt = 0;
-   string emin = "20", emax = "40", file = "chain.root", sources = "sources";
+   string emin = "20", emax = "40", file = "chain.root", sources = "sources", tmax = "1072959037", tmin = "1072959036";
 
    char opt;
 
-   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:f:t:")) != -1) {
+   while ((opt = getopt(argc,argv,"+hj:m:N:n:i:e:w:l:c:s:f:t:a:b:")) != -1) {
       switch (opt) {
          case 'j': 
 	    j = atoi(optarg);
@@ -69,6 +71,12 @@ int main(int argc,char* argv[])
 	    min = atof(optarg);
 	    sources += "i";
 	    sources += optarg;
+	    break;
+         case 'a':
+	    tmin = optarg;
+	    break;
+         case 'b':
+	    tmax = optarg;
 	    break;
          case 'e':
 	    emax = optarg;
@@ -125,6 +133,8 @@ int main(int argc,char* argv[])
    TSourcesFinder finder;
    finder.SetMinEnergy(emin.c_str());
    finder.SetMaxEnergy(emax.c_str());
+   finder.SetMinTime(tmin.c_str());
+   finder.SetMaxTime(tmax.c_str());
    finder.SetN(N);
    finder.SetScale(j);
    finder.SetNSources(n);

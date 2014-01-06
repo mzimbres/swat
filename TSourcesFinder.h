@@ -42,9 +42,11 @@ class TSourcesFinder {
    Int_t fSep;      // Sources separation
    std::string fMaxEnergy;  //!
    std::string fMinEnergy;  //!
+   std::string fMaxTime;  //!
+   std::string fMinTime;  //!
    std::string fCut; //! Cuts
    TTree* fEvents; //!
-   void fSetCutHerald(std::string max,std::string min);
+   void fSetCutHerald(std::string max,std::string min, std::string tmax,std::string tmin);
    void fSetCutCRPropa(std::string max,std::string min);
    FileType fTypeId; //!
    TSourcesFinder(const TSourcesFinder& obj);
@@ -55,6 +57,8 @@ class TSourcesFinder {
    static const char* fHeraldCut;  
    void         SetMaxEnergy(const char* emax) { fMaxEnergy = emax; }
    void         SetMinEnergy(const char* emin) { fMinEnergy = emin; }
+   void         SetMaxTime(const char* tmax) { fMaxTime = tmax; }
+   void         SetMinTime(const char* tmin) { fMinTime = tmin; }
    void         SetSeparation(Double_t sep) { fSep = sep; }
    void         SetN(Int_t N) { fN = N; }
    void         SetScale(Int_t j) { fScale = j; }

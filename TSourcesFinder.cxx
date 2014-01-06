@@ -51,8 +51,15 @@ const char* TSourcesFinder::fHeraldCut = "(two > 0) && (three < 60) && (twentytw
 (((twentysix > 0.5) && (thirtysix > 0.5)) || (twentythree > 1.1))";
 
 //_________________________________________________________________
-TSourcesFinder::TSourcesFinder(): fNSources(15), fN(1), fScale(1), 
-fSep(3.), fMaxEnergy("40."), fMinEnergy("15.")
+TSourcesFinder::TSourcesFinder()
+: fNSources(15)
+, fN(1)
+, fScale(1)
+, fSep(3.)
+, fMaxEnergy("40.")
+, fMinEnergy("15.")
+, fMaxTime("1072959036")
+, fMinTime("1072959036")
 {
    // Will open file and get a pointer to the TTree called events.
    // Very important: This function must be called after setting cuts.
@@ -88,12 +95,13 @@ fSep(3.), fMaxEnergy("40."), fMinEnergy("15.")
 }
 
 //__________________________________________________________
-void TSourcesFinder::fSetCutHerald(std::string max,std::string min)
+void TSourcesFinder::fSetCutHerald(std::string max,std::string min,std::string tmax, std::string tmin)
 {
    // Set the string fCuts to new values.
 
-   fCut = min + " < thirtynine && thirtynine < " + max 
-          + " && " + fHeraldCut;
+   std::string tcut = "(" + tmin + " < eight && eight < " + tmax + ")";
+
+   fCut = tcut + "&& (" + min + " < thirtynine && thirtynine < " + max + ") && " + fHeraldCut;
 }
 
 //__________________________________________________________
@@ -111,9 +119,9 @@ void TSourcesFinder::GenerateAlm()
 
    std::auto_ptr<TSelector> fMapSelector;
 
-   switch ( fTypeId ) {
+   switch (fTypeId) {
       case Herald: 
-	 fSetCutHerald(fMaxEnergy,fMinEnergy);
+	 fSetCutHerald(fMaxEnergy, fMinEnergy, fMaxTime, fMinTime);
 	 fMapSelector.reset(new TMapSelector);
 	 break;
       case CRPropa:
