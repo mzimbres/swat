@@ -51,10 +51,10 @@ pdfproducer={Marcelo Zimbres Silva}, % producer of the document
 pdfkeywords={Wavelets} {Cosmic Rays}, % list of keywords
 pdfnewwindow=true,      % links in new window
 colorlinks=true,        % false: boxed links; true: colored links
-linkcolor=red,          % color of internal links
-citecolor=green,        % color of links to bibliography
-filecolor=magenta,      % color of file links
-urlcolor=cyan!50!black           % color of external links
+linkcolor=black,          % color of internal links
+citecolor=black,        % color of links to bibliography
+filecolor=black,      % color of file links
+urlcolor=black           % color of external links
 }
 
 % My definitions
@@ -62,7 +62,7 @@ urlcolor=cyan!50!black           % color of external links
 
 %\colorlet{swat}{yellow!50!black!50}
 \colorlet{swat}{brown!50!black!50} % box color
-\colorlet{textcolor}{brown!70!black} % text in box color
+\colorlet{textcolor}{brown!40!black} % text in box color
 \colorlet{swatred}{red!50!black}
 
 \tikzstyle{one}=[shade,top color=swat,fill=swat,rounded corners, textcolor,thick]
@@ -180,7 +180,7 @@ rounded corners,textcolor,thick]
 
    \node[at={(0,-3.0)}] {\includegraphics[scale=2.0]{skymap.pdf}};
 
-   \node[at={(0,-10)}] {\Large\bf \color{gray!70!black}Manual for version 1.44 - Marcelo Zimbres};
+   \node[at={(0,-10)}] {\Large\bf \color{gray!70!black}Manual for version 1.53 - Marcelo Zimbres};
    %\draw[-,very thick,gray] (-9,-10.5) -- (9,-10.5);
 
   \end{tikzpicture}
@@ -190,7 +190,6 @@ rounded corners,textcolor,thick]
 \newpage
 \tableofcontents
 
-\newpage
 \section{Introduction} \label{ch::Introduction}
 
 \href{http://www.ifi.unicamp.br/~mzimbres}{SWAT} is a package for analysis of
@@ -223,11 +222,11 @@ templates.
 \end{enumerate}
 
 Most of the theoretical details of analysis of functions defined on $S^2$ and
-$S^3$ were taken from \cite{wiaux} and references therein. 
+$SO(3)$ were taken from \cite{wiaux} and references therein. 
 
 The code has been tested in \textsc{Linux} and \textsc{MacBook}, but the code
 is portable enough to be built on other platforms.  In the following we
-describe how to use SWAT. Questions concerning the software can sent to Marcelo
+describe how to use SWAT. Questions concerning the software can be sent to Marcelo
 Zimbres \href{mailto:mzimbres@gmail.com}{mzimbres@gmail.com}
 \vspace{0.7cm}
 \newline
@@ -249,9 +248,11 @@ As a prerequisite to install SWAT you need ROOT and FFTW installed, the
 configure script will fail if they are not installed. SWAT uses autotools to
 generate the configure script and the Makefile, so you can expect all the
 standard configure options and makefile targets. The lines bellow will install
-the libraries on {\color{brown}"/usr/local"}
-{\bf \color{brown}
+the libraries on {\color{textcolor}``/usr/local"}
+{\bf \color{textcolor}
    \begin{lstlisting}
+   $ tar -xvzf swat-1.53.tar.gz
+   $ cd swat-1.53
    $ ./configure CXXFLAGS="-O3 -ffast-math"
    $ make
    $ sudo make install
@@ -261,11 +262,11 @@ The flags passed to the configure script are optional, but greatly improve
 performance.  To use some of the features of the package, I am assuming you are
 able to build shared libraries on your platform. To easy the task of loading
 swat libraries the macro load.C, will be installed on
-{\color{brown}"/usr/local/share/swat"}. To load the libraries in ROOT's C++
+{\color{textcolor}"/usr/local/share/swat"}. To load the libraries in ROOT's C++
 interpreter you have to execute it in your ROOT session, or add it to
-your code {\color{brown}.rootlogon.C} macro.
+your code {\color{textcolor}.rootlogon.C} macro.
 
-{\bf \color{brown}
+{\bf \color{textcolor}
 \begin{lstlisting}
 $ cp /usr/local/share/swat/load.C ~/.rootlogon.C
 $ root # The .so's are automatically loaded here.
@@ -275,9 +276,9 @@ $ root # The .so's are automatically loaded here.
 All SWAT classes are now available in the ROOT session with syntax highlighting
 (currently I do not use swat from inside a root session, but it may be usefull
 for others). You should also be able to generate documentation in HTML format
-with the macro {\color{brown}"prefix/share/swat/makehtml.C"}. You have to run
+with the macro {\color{textcolor}"prefix/share/swat/makehtml.C"}. You have to run
 this macro from the directory where you built SWAT. The documentation will be
-built in the directory {\color{brown}htmldoc}, this is a nice way to get aquainted with 
+built in the directory {\color{textcolor}htmldoc}, this is a nice way to get aquainted with 
 the code (this is meant for those wanting to develop).
 
 \subsection{Getting ready} \label{ch::ready}
@@ -285,10 +286,10 @@ the code (this is meant for those wanting to develop).
 To use Herald file (a file distributed by the Pierre Auger collaboration containing collected data),
 you will have to convert the ascii file to a {\bf TTree} and
 save it in a .root file, for that you should use the macro
-{\color{brown}prefix/share/swat/convert\_herald.C} where prefix is usually
-{\color{brown}/usr/local}.  Copy this macro to the same directory where you have the
+{\color{textcolor}prefix/share/swat/convert\_herald.C} where prefix is usually
+{\color{textcolor}/usr/local}.  Copy this macro to the same directory where you have the
 herald data file. The macro will read a file with name
-{\color{brown}"herald.dat"}, so you may have to rename your file or edit the macro. 
+{\color{textcolor}"herald.dat"}, so you may have to rename your file or edit the macro. 
 For CRPropa simulations you can configure CRPropa to output a .root file
 instead of a text file.  The code uses the title of the {\bf TTree} to differentiate
 between a Herald and CRPropa file. The title of the TTree for CRPropa must be
@@ -298,11 +299,11 @@ between a Herald and CRPropa file. The title of the TTree for CRPropa must be
 If you have pgfplots installed on your machine, you can use the \LaTeX\,\,
 files which are available in the directory {\color{textcolor}pgfplots} in swat
 root dyrectory, to generate high quality graphs using some output of swat
-analysis.  You may have noted that after running {\color{textcolor}swatfind}
+analysis.  You may have noted that after running {\color{textcolor}swat\_find}
 you get many text files in your working directory. They are input files for the
 \LaTeX\,\, files. In the following subsections we show how to use the material.
 \subsubsection{Skymaps}
-When you run the program {\color{textcolor}swatfind} or {\color{textcolor}swatsim}, they produce a file named
+When you run the program {\color{textcolor}swat\_find} or {\color{textcolor}swat\_sim}, they produce a file named
 {\it skymap.dat}. This file contains the coordinates and energy of the events that
 passed the cut. To generate a graph for an isotropic sky for example, one can
 use:
@@ -333,13 +334,17 @@ are used to differentiate energies which in my opinion is a much clear way of
 representing the sky.
 
 \subsubsection{Energy deflection graphs}
-In addition to skymap.dat, the files {\color{brown}corr\_graphN.dat} will be also generated, 
-with N varying from 0 to 15. These files contains the energy-deflection graphs,
+In addition to skymap.dat, the files {\color{textcolor}corr\_graphN.dat} will be also generated, 
+with N varying from $0$ to $15$ (this number can be passed in the command line). These files contains the energy-deflection graphs,
 of the events the hit the tangent plane in the position found by the wavelet
-analysis. On the figure below, we see two examples. The graph on the left
+analysis. On figures \ref{deflections}, we see two examples. The graph on the left
 originates from a CRPropa simulation. \\
+\begin{figure}
+\centering
 \includegraphics[scale=0.8]{corr_graph.pdf} 
-\includegraphics[scale=0.8]{corr_graph-sim.pdf} \hfill
+\includegraphics[scale=0.8]{corr_graph-sim.pdf}
+\label{deflections}
+\end{figure}
 
 %\subsubsection{Number of events versus orientation}
 %
@@ -350,19 +355,22 @@ originates from a CRPropa simulation. \\
 %\includegraphics[scale=0.8]{multiplicity.pdf}  
 %\includegraphics[scale=0.8]{multiplicity-sim.pdf} 
 %
-%To generate them, use the macro {\color{brown}multiplicity.tex} in the pgfplots directory
-%and the file {\color{brown}multiplicity0.dat} generated by swatfind of swatsim.
+%To generate them, use the macro {\color{textcolor}multiplicity.tex} in the pgfplots directory
+%and the file {\color{textcolor}multiplicity0.dat} generated by swatfind of swatsim.
 %One such file will be generated for each source found.
 %Similar to what we have done for the energy deflection graphs.
 %
 
 \subsubsection{Wigner-d functions}
 
-Swat implements the calculation of the wigner-d functions via FFT.
+Swat implements the calculation of the wigner $d^l_{mn}$ functions via FFT.
 You can use the file pgfplots/wignerd.tar.gz to generate some nice graphs.
 
+\begin{figure}
+\centering
 \includegraphics[scale=1.0]{wignerpolar.pdf}
 \includegraphics[scale=1.0]{wigner.pdf} 
+\end{figure}
 \section{Transforms on the Sphere}
 Most SWAT functionality is based on Fourier and wavelet transforms on the sphere, therefore we give
 in this section a brief overview of analysis of functions on the sphere. Before
@@ -374,12 +382,12 @@ much about how to sample. We simply divide it in squares of same area and everyt
 just fine. However, when we try the same thing on the sphere we imediately see
 that it is impossible to achieve same area pixelization on the sphere due its curvature.
 
-There are two main features we would like to have decide to divide a Sphere in
-bins. First we would like to have bins of same area, this is achieved by the
+There are two main features we would like to have when dividing a sphere in
+pixels. First we would like to have pixels of same area, this is achieved by the
 Healpix pixelization \ref{healpix}. Second, we would like to to use FFT to calculate
 functions on the sphere instead of slow recursion and that is achieved by ECP
-Pixalization, which stands for "Equidistant cylindrical projection"\ref{healpix}.
-Unfortunately theses two features are mutualy excludente. In this software we
+Pixalization, which stands for ``Equidistant cylindrical projection"\ref{healpix}.
+Unfortunately theses two features can not be achieved at the same time. In this software we
 decided to use ECP due to its simplicity. In ECP, the three Euler angles, which we 
 are using to parametrize SO(3), are sampled as follows
 $\alpha$, $\beta$ and $\gamma$
@@ -458,9 +466,9 @@ plane. The energy cut is used again.
 \item The energy-deflection graphs are calculated and the correlations found
 are printed on the screen.
 \end{enumerate}
-All the information is saved in the file {\color{brown}"sources.root"}.  Lets see an example:
+All the information is saved in the file {\color{textcolor}"sources.root"}.  Lets see an example:
 
-{\bf \color{brown}
+{\bf \color{textcolor}
 \begin{lstlisting}
 $ swatfind -j 1 -N 127 -i 20 -e 40 -w 2 -l 10 -f chain.root
 TFile**		chain.root	CRPropa output data file
@@ -481,7 +489,7 @@ events which hit the tangent plane) and is not to be confused with the N passed 
 option -N. C is the correlation of the energy-deflection graphs.
 
 Now, if you want to see the exact location of the source:
-{\bf \color{brown}
+{\bf \color{textcolor}
 \begin{lstlisting}
 $ root sources.root
 root[1] .ls
@@ -531,7 +539,6 @@ Options:
 -t:     Wavelet threshold value.
 \end{lstlisting}
 }
-\newpage
 \subsection{swat\_sim}
 {\it swat\_sim} uses Monte Carlo simulations to calculate the probability of a
 multiplet happen by chance on a isotropic sky. The distribution of $E$, $\theta$
@@ -653,37 +660,6 @@ supported, isotropic or Auger distribution if herald data is provided.
    \label{healpix}
 \end{figure}
 
-\subsection{swat\_sim}
-\subsection{swat}
-swat: This program is only used to benchmark and test the algorithm. It can test
-both the spherical harmonic transform and the spherical wavelet transform.
-{\bf \color{brown}
-\begin{lstlisting}
-$ time swat -J 8 # Will test spherical harmonic transform.
-$ time swat -J 8 -N 3 # Will test wavelet transform.
-\end{lstlisting}
-}
-
-Help message
-{\bf \color{textcolor}
-   \begin{lstlisting}
-   Calculates the histogram of energy(field thirty nine),
-   theta(field seven) and phi (field six) in Herald data and
-   save to file. The angular variables are converted to
-   radians before filling the histograms.  If no file is
-   specified, an isotropic sky is generated.
-
-   Usage: swat_gen [-i emin] [-e emax] [-f file.root]
-   Options:
-   -h:     This menu.
-   -i:     Minimum energy of events, defaults to 20 EeV.
-   -e:     Maximum energy of events, defaults to 40 EeV.
-   -f:     Root file containing Tree with data, defaults to
-           chain.root.
-   -n:     How many times histogram should be smoothed
-           (TH1::Smooth operation).
-   \end{lstlisting}
-}
 
 \subsection{swat\_prob}
 {\bf \color{textcolor}
@@ -714,6 +690,16 @@ Help message
 }
 
 \subsection{swat}
+This program is only used to benchmark and test the algorithm. It can test
+both the spherical harmonic transform and the spherical wavelet transform.
+{\bf \color{textcolor}
+\begin{lstlisting}
+$ time swat -J 8 # Will test spherical harmonic transform.
+$ time swat -J 8 -N 3 # Will test wavelet transform.
+\end{lstlisting}
+}
+
+Help message
 {\bf \color{textcolor}
    \begin{lstlisting}
    Tests the algorithm performing forward and backward
