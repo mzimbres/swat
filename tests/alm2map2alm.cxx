@@ -9,11 +9,11 @@
 
 // SWAT
 
-#include "TAlm.h"
-#include "TSphHarmF.h"
-#include "TSphHarmB.h"
-#include "TVMap.h"
-#include "TAuxFunc.h"
+#include <swat/swat/TAlm.h>
+#include <swat/swat/TSphHarmF.h>
+#include <swat/swat/TSphHarmB.h>
+#include <swat/swat/TVMap.h>
+#include <swat/swat/TAuxFunc.h>
 
 using namespace std;
 using namespace TMath;

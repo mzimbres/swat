@@ -4,6 +4,8 @@ ACLOCAL_AMFLAGS = -I m4
 AM_COLOR_TESTS = always
 
 AM_LDFLAGS = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} -lHistPainter $(FFTW_LIBS)
+AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(top_srcdir)/swat
+
 
 # Add the line below to AM_LDFLAGS for Boost programm options.
 # $(BOOST_LDFLAGS) $(BOOST_PROGRAM_OPTIONS_LIB)
@@ -11,20 +13,22 @@ AM_LDFLAGS = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} -lHistPainter $(FFTW_LIB
 lib_LTLIBRARIES =
 CLEANFILES =
 EXTRA_DIST =
+swat_inc = $(top_srcdir)/swat/swat
+swat_src = $(top_srcdir)/swat/libs
+healpix_inc = $(top_srcdir)/swat/swat/healpix
+healpix_src = $(top_srcdir)/swat/libs/healpix
 
 #________________________________________________________________
 
-FFTPACKH = $(top_srcdir)/bluestein.h \
-           $(top_srcdir)/ls_fft.h \
-	   $(top_srcdir)/fftpack.h
+FFTPACKH = $(healpix_inc)/bluestein.h \
+           $(healpix_inc)/ls_fft.h \
+	   $(healpix_inc)/fftpack.h
 
-FFTPACKS = $(top_srcdir)/bluestein.c \
-           $(top_srcdir)/ls_fft.c \
-	   $(top_srcdir)/fftpack.c
+FFTPACKS = $(healpix_src)/bluestein.c \
+           $(healpix_src)/ls_fft.c \
+	   $(healpix_src)/fftpack.c
 
 lib_LTLIBRARIES += libfftpack.la
-
-libfftpack_la_CPPFLAGS = -I$(top_srcdir)
 
 libfftpack_la_SOURCES = $(FFTPACKS)
 
@@ -32,102 +36,100 @@ EXTRA_DIST += $(FFTPACKH)
 
 #______________________________________________________
 
-HEALPIXH = $(top_srcdir)/alm_healpix_tools.h  \
-           $(top_srcdir)/alm_map_tools.h      \
-           $(top_srcdir)/fftpack_support.h    \
-           $(top_srcdir)/lsconstants.h        \
-           $(top_srcdir)/message_error.h      \
-           $(top_srcdir)/cxxutils.h           \
-           $(top_srcdir)/vec3.h               \
-           $(top_srcdir)/ylmgen.h             \
-           $(top_srcdir)/geom_utils.h         \
-           $(top_srcdir)/pointing.h           \
-           $(top_srcdir)/Alm.h                \
-           $(top_srcdir)/xcomplex.h           \
-           $(top_srcdir)/arr.h                \
-           $(top_srcdir)/Healpix_Base.h       \
-           $(top_srcdir)/Healpix_Map.h
+HEALPIXH = $(healpix_inc)/alm_healpix_tools.h  \
+           $(healpix_inc)/alm_map_tools.h      \
+           $(healpix_inc)/fftpack_support.h    \
+           $(healpix_inc)/lsconstants.h        \
+           $(healpix_inc)/message_error.h      \
+           $(healpix_inc)/cxxutils.h           \
+           $(healpix_inc)/vec3.h               \
+           $(healpix_inc)/ylmgen.h             \
+           $(healpix_inc)/geom_utils.h         \
+           $(healpix_inc)/pointing.h           \
+           $(healpix_inc)/Alm.h                \
+           $(healpix_inc)/xcomplex.h           \
+           $(healpix_inc)/arr.h                \
+           $(healpix_inc)/Healpix_Base.h       \
+           $(healpix_inc)/Healpix_Map.h
 
 EXTRA_DIST += $(HEALPIXH)
 
-HEALPIXS = $(top_srcdir)/alm_healpix_tools.cc \
-           $(top_srcdir)/alm_map_tools.cc \
-           $(top_srcdir)/healpix_base.cc
+HEALPIXS = $(healpix_src)/alm_healpix_tools.cc \
+           $(healpix_src)/alm_map_tools.cc \
+           $(healpix_src)/healpix_base.cc
 
 lib_LTLIBRARIES += libhealpix.la
-
-libhealpix_la_CPPFLAGS = -I$(top_srcdir)
 
 libhealpix_la_SOURCES = $(HEALPIXS)
 
 #________________________________________________________________
 
 # headers for which no dictionaries are needed
-SWATH = $(top_srcdir)/TFFTWAlloc.h \
-        $(top_srcdir)/swat.h \
-        $(top_srcdir)/to_number.h
+SWATH = $(swat_inc)/TFFTWAlloc.h \
+        $(swat_inc)/swat.h \
+        $(swat_inc)/to_number.h
 
 # headers for which dictionaries must be generated.
-SWATDH = $(top_srcdir)/TWignerd.h              \
-         $(top_srcdir)/TSmallWignerd.h         \
-	 $(top_srcdir)/TSlm.h                  \
-	 $(top_srcdir)/TSFunc.h                \
-	 $(top_srcdir)/TDKernel.h              \
-	 $(top_srcdir)/TAlm.h                  \
-	 $(top_srcdir)/TCoeffInfo.h            \
-	 $(top_srcdir)/TSwatF.h                \
-	 $(top_srcdir)/TSwatB.h                \
-	 $(top_srcdir)/TVMap.h                 \
-	 $(top_srcdir)/TSkyMap.h               \
-	 $(top_srcdir)/THealpixMap.h           \
-	 $(top_srcdir)/TWavMap.h               \
-	 $(top_srcdir)/TSphHarmB.h             \
-	 $(top_srcdir)/TSphHarmF.h             \
-	 $(top_srcdir)/TWavelet.h              \
-	 $(top_srcdir)/TShift.h                \
-	 $(top_srcdir)/TEulerAngle.h           \
-	 $(top_srcdir)/TAngDistance.h          \
-	 $(top_srcdir)/TCorrSelector.h         \
-	 $(top_srcdir)/TCorrSelectorCRPropa.h  \
-	 $(top_srcdir)/TCounter.h              \
-	 $(top_srcdir)/TCounterCRPropa.h       \
-	 $(top_srcdir)/TMapSelector.h          \
-	 $(top_srcdir)/TMapSelectorCRPropa.h   \
-	 $(top_srcdir)/TStripeAnalysis.h       \
-	 $(top_srcdir)/TSourcesFinder.h        \
-	 $(top_srcdir)/TAnalysis.h             \
-	 $(top_srcdir)/TAuxFunc.h
+SWATDH = $(swat_inc)/TWignerd.h              \
+         $(swat_inc)/TSmallWignerd.h         \
+	 $(swat_inc)/TSlm.h                  \
+	 $(swat_inc)/TSFunc.h                \
+	 $(swat_inc)/TDKernel.h              \
+	 $(swat_inc)/TAlm.h                  \
+	 $(swat_inc)/TCoeffInfo.h            \
+	 $(swat_inc)/TSwatF.h                \
+	 $(swat_inc)/TSwatB.h                \
+	 $(swat_inc)/TVMap.h                 \
+	 $(swat_inc)/TSkyMap.h               \
+	 $(swat_inc)/THealpixMap.h           \
+	 $(swat_inc)/TWavMap.h               \
+	 $(swat_inc)/TSphHarmB.h             \
+	 $(swat_inc)/TSphHarmF.h             \
+	 $(swat_inc)/TWavelet.h              \
+	 $(swat_inc)/TShift.h                \
+	 $(swat_inc)/TEulerAngle.h           \
+	 $(swat_inc)/TAngDistance.h          \
+	 $(swat_inc)/TCorrSelector.h         \
+	 $(swat_inc)/TCorrSelectorCRPropa.h  \
+	 $(swat_inc)/TCounter.h              \
+	 $(swat_inc)/TCounterCRPropa.h       \
+	 $(swat_inc)/TMapSelector.h          \
+	 $(swat_inc)/TMapSelectorCRPropa.h   \
+	 $(swat_inc)/TStripeAnalysis.h       \
+	 $(swat_inc)/TSourcesFinder.h        \
+	 $(swat_inc)/TAnalysis.h             \
+	 $(swat_inc)/TAuxFunc.h
 
 EXTRA_DIST += $(SWATH) $(SWATDH)
 
-SWATS = $(top_srcdir)/TWignerd.cxx               \
-        $(top_srcdir)/TSmallWignerd.cxx          \
-	$(top_srcdir)/TSlm.cxx                   \
-	$(top_srcdir)/TSFunc.cxx                 \
-	$(top_srcdir)/TDKernel.cxx               \
-	$(top_srcdir)/TAlm.cxx                   \
-	$(top_srcdir)/TCoeffInfo.cxx             \
-	$(top_srcdir)/TSwatF.cxx                 \
-	$(top_srcdir)/TVMap.cxx                  \
-	$(top_srcdir)/TSkyMap.cxx                \
-	$(top_srcdir)/THealpixMap.cxx            \
-	$(top_srcdir)/TSwatB.cxx                 \
-	$(top_srcdir)/TWavMap.cxx                \
-	$(top_srcdir)/TEulerAngle.cxx            \
-	$(top_srcdir)/TSphHarmB.cxx              \
-	$(top_srcdir)/TSphHarmF.cxx              \
-	$(top_srcdir)/TWavelet.cxx               \
-	$(top_srcdir)/TShift.cxx                 \
-	$(top_srcdir)/TAngDistance.cxx           \
-	$(top_srcdir)/TCorrSelector.cxx          \
-	$(top_srcdir)/TCorrSelectorCRPropa.cxx   \
-	$(top_srcdir)/TCounter.cxx               \
-	$(top_srcdir)/TCounterCRPropa.cxx        \
-	$(top_srcdir)/TMapSelector.cxx           \
-	$(top_srcdir)/TMapSelectorCRPropa.cxx    \
-	$(top_srcdir)/TSourcesFinder.cxx         \
-	$(top_srcdir)/TAnalysis.cxx              \
-	$(top_srcdir)/TAuxFunc.cxx
+SWATS = $(swat_src)/TWignerd.cxx               \
+        $(swat_src)/TSmallWignerd.cxx          \
+	$(swat_src)/TSlm.cxx                   \
+	$(swat_src)/TSFunc.cxx                 \
+	$(swat_src)/TDKernel.cxx               \
+	$(swat_src)/TAlm.cxx                   \
+	$(swat_src)/TCoeffInfo.cxx             \
+	$(swat_src)/TSwatF.cxx                 \
+	$(swat_src)/TVMap.cxx                  \
+	$(swat_src)/TSkyMap.cxx                \
+	$(swat_src)/THealpixMap.cxx            \
+	$(swat_src)/TSwatB.cxx                 \
+	$(swat_src)/TWavMap.cxx                \
+	$(swat_src)/TEulerAngle.cxx            \
+	$(swat_src)/TSphHarmB.cxx              \
+	$(swat_src)/TSphHarmF.cxx              \
+	$(swat_src)/TWavelet.cxx               \
+	$(swat_src)/TShift.cxx                 \
+	$(swat_src)/TAngDistance.cxx           \
+	$(swat_src)/TCorrSelector.cxx          \
+	$(swat_src)/TCorrSelectorCRPropa.cxx   \
+	$(swat_src)/TCounter.cxx               \
+	$(swat_src)/TCounterCRPropa.cxx        \
+	$(swat_src)/TMapSelector.cxx           \
+	$(swat_src)/TMapSelectorCRPropa.cxx    \
+	$(swat_src)/TSourcesFinder.cxx         \
+	$(swat_src)/TAnalysis.cxx              \
+	$(swat_src)/TAuxFunc.cxx
 
 ## Generates dictionary
 dictionary.cxx: $(SWATDH)
@@ -140,9 +142,6 @@ libswat_la_SOURCES = $(SWATS)
 
 nodist_libswat_la_SOURCES = dictionary.cxx
 
-libswat_la_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} \
-                      -I$(SWATDIRI) -I$(HEALPIXDIRI) $(FFTW_CFLAGS)
-
 libswat_la_LDFLAGS = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} \
                      -lHistPainter -lhealpix -lfftpack $(FFTW_LIBS)
 
@@ -151,8 +150,6 @@ CLEANFILES += dictionary.cxx dictionary.h
 #________________________________________________________________
 
 LDADD  = libswat.la libhealpix.la libfftpack.la
-
-AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(SWATDIRI)
 
 # Add the line below to AM_CPPFLAGS for boost programm options
 # $(BOOST_CPPFLAGS)
@@ -168,17 +165,17 @@ bin_PROGRAMS = swat swat_sim \
 	       swat_coverage \
 	       swat_sf_dump
 
-swat_SOURCES           = $(top_srcdir)/swat.cxx
-swat_sim_SOURCES       = $(top_srcdir)/swat_sim.cxx
-swat_find_SOURCES      = $(top_srcdir)/swat_find.cxx
-swat_alm_SOURCES       = $(top_srcdir)/swat_alm.cxx
-swat_gen_SOURCES       = $(top_srcdir)/swat_gen.cxx
-swat_prob_SOURCES      = $(top_srcdir)/swat_prob.cxx
-swat_kernel_SOURCES    = $(top_srcdir)/swat_kernel.cxx
-swat_wav_dump_SOURCES  = $(top_srcdir)/swat_wav_dump.cxx
-swat_sph_dump_SOURCES  = $(top_srcdir)/swat_sph_dump.cxx
-swat_sf_dump_SOURCES   = $(top_srcdir)/swat_sf_dump.cxx
-swat_coverage_SOURCES  = $(top_srcdir)/swat_coverage.cxx
+swat_SOURCES           = $(swat_src)/swat.cxx
+swat_sim_SOURCES       = $(swat_src)/swat_sim.cxx
+swat_find_SOURCES      = $(swat_src)/swat_find.cxx
+swat_alm_SOURCES       = $(swat_src)/swat_alm.cxx
+swat_gen_SOURCES       = $(swat_src)/swat_gen.cxx
+swat_prob_SOURCES      = $(swat_src)/swat_prob.cxx
+swat_kernel_SOURCES    = $(swat_src)/swat_kernel.cxx
+swat_wav_dump_SOURCES  = $(swat_src)/swat_wav_dump.cxx
+swat_sph_dump_SOURCES  = $(swat_src)/swat_sph_dump.cxx
+swat_sf_dump_SOURCES   = $(swat_src)/swat_sf_dump.cxx
+swat_coverage_SOURCES  = $(swat_src)/swat_coverage.cxx
 
 #________________________________________________________________
 
