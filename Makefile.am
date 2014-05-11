@@ -4,7 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 AM_COLOR_TESTS = always
 
 AM_LDFLAGS = -L${ROOTLIBDIR} ${ROOTLIBS} ${ROOTAUXLIBS} -lHistPainter $(FFTW_LIBS)
-AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(top_srcdir)/swat
+AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(top_srcdir)
 
 
 # Add the line below to AM_LDFLAGS for Boost programm options.
@@ -13,10 +13,10 @@ AM_CPPFLAGS = -I${ROOTINCDIR} ${ROOTCFLAGS} ${ROOTAUXCLAGS} -I$(top_srcdir)/swat
 lib_LTLIBRARIES =
 CLEANFILES =
 EXTRA_DIST =
-swat_inc = $(top_srcdir)/swat/swat
-swat_src = $(top_srcdir)/swat/libs
-healpix_inc = $(top_srcdir)/swat/swat/healpix
-healpix_src = $(top_srcdir)/swat/libs/healpix
+swat_inc = $(top_srcdir)/swat
+swat_src = $(top_srcdir)/libs
+healpix_inc = $(top_srcdir)/swat/healpix
+healpix_src = $(top_srcdir)/libs/healpix
 
 #________________________________________________________________
 
